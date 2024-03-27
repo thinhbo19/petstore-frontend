@@ -12,13 +12,17 @@ function App() {
 
   return (
     <div className="container">
-      {currentPath !== "/login" && currentPath !== "/dashboard" && <Navbar />}{" "}
+      {currentPath !== "/login" &&
+        currentPath !== "/dashboard/addSpecies" &&
+        currentPath !== "/dashboard" && <Navbar />}
       <Routes>
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<AdminScreen />} />
       </Routes>
-      {currentPath !== "/login" && currentPath !== "/dashboard" && <Footer />}
+      {currentPath !== "/login" &&
+        currentPath !== "/dashboard/addSpecies" &&
+        currentPath !== "/dashboard" && <Footer />}
       <ScrollButton />
     </div>
   );

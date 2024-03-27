@@ -22,14 +22,21 @@
   flex-direction: column;
   row-gap: 1rem;
   list-style: none;
+  margin: 0;
+  padding: 0 0 0 10px;
+  text-align: center;
 }
 .nav__link__admin {
   font-size: 1.5rem;
   color: var(--title-bold);
   font-weight: var(--font-bold);
+  text-decoration: none;
 }
 
 .nav__link__admin:hover {
+  color: hsl(43, 100%, 68%);
+}
+.nav__link__admin.active {
   color: hsl(43, 100%, 68%);
 }
 

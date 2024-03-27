@@ -3,12 +3,13 @@ import "./Navbar.css";
 import Logo from "../../../assets/logo.svg";
 import Logout from "../../../assets/log-out.svg";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { setLogout } from "../../../services/useSlice";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigation = useNavigate();
+  const location = useLocation();
 
   const HandleLogout = () => {
     dispatch(setLogout());
@@ -25,33 +26,43 @@ const Navbar = () => {
           <div className="nav__menu__admin">
             <ul className="nav__list__admin">
               <li className="nav__item__admin">
-                <a href="#Dog" className="nav__link__admin">
-                  asd <i className="icon-home"></i>
+                <a
+                  href="#Species"
+                  className={`nav__link__admin ${
+                    location.hash === "#Species" ? "active" : ""
+                  }`}
+                >
+                  Species
                 </a>
               </li>
               <li className="nav__item">
-                <a href="#About" className="nav__link">
-                  asd <i className="icon-user"></i>
+                <a
+                  href="#Breeds"
+                  className={`nav__link__admin ${
+                    location.hash === "#Breeds" ? "active" : ""
+                  }`}
+                >
+                  Breeds
                 </a>
               </li>
               <li className="nav__item">
-                <a href="#Portfolio" className="nav__link">
-                  asd <i className="icon-layers"></i>
+                <a
+                  href="#Pets"
+                  className={`nav__link__admin ${
+                    location.hash === "#Pets" ? "active" : ""
+                  }`}
+                >
+                  Pets
                 </a>
               </li>
               <li className="nav__item">
-                <a href="#Portfolio" className="nav__link">
-                  asd <i className="icon-layers"></i>
-                </a>
-              </li>
-              <li className="nav__item">
-                <a href="#Portfolio" className="nav__link">
-                  asd <i className="icon-layers"></i>
-                </a>
-              </li>
-              <li className="nav__item">
-                <a href="#Portfolio" className="nav__link">
-                  asd <i className="icon-layers"></i>
+                <a
+                  href="#Users"
+                  className={`nav__link__admin ${
+                    location.hash === "#Users" ? "active" : ""
+                  }`}
+                >
+                  Users
                 </a>
               </li>
             </ul>

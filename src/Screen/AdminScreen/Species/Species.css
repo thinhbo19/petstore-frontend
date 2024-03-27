@@ -1,0 +1,85 @@
+.species__container {
+  min-height: 100vh;
+  position: relative;
+}
+
+.shapes {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+.shape {
+  position: absolute;
+}
+
+.s1 {
+  left: 2%;
+  top: 10%;
+}
+.s2 {
+  left: 18%;
+  top: 30%;
+}
+
+.s3 {
+  left: 5%;
+  bottom: 30%;
+}
+.s4 {
+  left: 2%;
+  bottom: 10%;
+}
+.s5 {
+  left: 44%;
+  bottom: 10%;
+}
+
+.s6 {
+  left: 36%;
+  bottom: 10%;
+}
+
+.s7 {
+  top: 20%;
+  right: 25%;
+}
+
+.s8 {
+  right: 25%;
+  bottom: 20%;
+}
+
+.s9 {
+  right: 2%;
+  top: 10%;
+}
+
+.s10 {
+  top: 45%;
+  right: 11%;
+}
+
+.s11 {
+  bottom: 10%;
+  right: 2%;
+}
+.s12 {
+  width: 50px;
+  bottom: 25%;
+  right: 2%;
+  transform: rotate(40deg);
+}
+.s13 {
+  width: 50px;
+  top: 15%;
+  right: 11%;
+  transform: rotate(-40deg);
+}
+.s14 {
+  width: 50px;
+  top: 45%;
+  left: 11%;
+  transform: rotate(25deg);
+}
