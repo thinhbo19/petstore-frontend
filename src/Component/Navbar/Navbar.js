@@ -26,7 +26,16 @@ const Navbar = () => {
       <div className="nav__container">
         <div className="nav__logo">
           <img src={Logo} alt="" className="nav__img" />
-          <span>PETSTORE</span>
+          <div class="flip-animation">
+            <span>P</span>
+            <span>E</span>
+            <span>T</span>
+            <span>S</span>
+            <span>H</span>
+            <span>O</span>
+            <span>P</span>
+            <span>.</span>
+          </div>
         </div>
 
         <Menu />

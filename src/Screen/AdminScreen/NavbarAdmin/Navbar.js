@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <>
       <aside className="aside">
-        <a href="#Home" className="nav__logo">
+        <a href="#Species" className="nav__logo">
           <img src={Logo} alt="img" />
         </a>
         <nav className="nav">
