@@ -7,18 +7,25 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { apiUrlSpecies } from "../../../services/config";
+import Swal from "sweetalert2";
 
-const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
+const EditForm = ({
+  openEdit,
+  handleCloseEdit,
+  accessToken,
+  fetchData,
+  species,
+}) => {
   const [speciesName, setSpeciesName] = useState("");
-  const Swal = require("sweetalert2");
+
   const handleSpeciesNameChange = (event) => {
     setSpeciesName(event.target.value);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmitEdit = async () => {
     try {
-      await axios.post(
-        `${apiUrlSpecies}/addNewSpecies`,
+      await axios.put(
+        `${apiUrlSpecies}/changeSpecies/${species._id}`,
         { nameSpecies: speciesName },
         {
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -26,22 +33,22 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
       );
       Swal.fire({
         icon: "success",
-        text: "Add successfully",
+        text: "Species updated successfully",
       });
-      setSpeciesName("");
     } catch (error) {
       console.log(error.response.data.message);
       Swal.fire({
-        icon: "warning",
-        text: error.response.data.message,
+        icon: "error",
+        text: "Failed to update species",
       });
     }
     fetchData();
-    handleClose();
+    handleCloseEdit();
   };
+
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add New Species</DialogTitle>
+    <Dialog open={openEdit} onClose={handleCloseEdit}>
+      <DialogTitle>Edit Species</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -54,13 +61,13 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit} color="primary">
-          Add
+        <Button onClick={handleCloseEdit}>Cancel</Button>
+        <Button onClick={handleSubmitEdit} color="primary">
+          Update
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default AddForm;
+export default EditForm;

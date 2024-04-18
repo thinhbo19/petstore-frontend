@@ -15,27 +15,30 @@ table {
   width: 100%;
   border-collapse: collapse;
 }
-
 th,
 td {
-  border: 1px solid #9b9b9b;
+  border: 1px solid #4f4f4f;
   padding: 8px;
   text-align: left;
   text-align: center;
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #5454ed;
   text-align: center;
+  color: #ffffff;
 }
 tr:hover {
   background-color: #f2f2f2;
 }
 
-button {
+.admin__icon {
   padding: 5px 10px;
   margin-right: 5px;
   cursor: pointer;
+}
+.admin__icon:hover {
+  transform: scale(1.1);
 }
 
 .add-species input {

@@ -11,6 +11,8 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddSpeciesForm from "./AddSpeciesForm";
 import EditFormSpecies from "./EditFormSpecies";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
 
 const Species = () => {
   const [speciesList, setSpeciesList] = useState([]);
@@ -194,7 +196,7 @@ const Species = () => {
           </thead>
           <tbody>
             {currentSpecies.map((species, index) => (
-              <tr key={species.id}>
+              <tr key={index}>
                 <td>
                   <input
                     type="checkbox"
@@ -205,13 +207,16 @@ const Species = () => {
                 <td>{index + 1}</td>
                 <td>{species.nameSpecies}</td>
                 <td>
-                  <button onClick={() => handleOpenDialogEdit(species)}>
-                    Edit
-                  </button>
-
-                  <button onClick={() => deleteItem(species._id)}>
-                    Delete
-                  </button>
+                  <FontAwesomeIcon
+                    className="admin__icon"
+                    onClick={() => handleOpenDialogEdit(species)}
+                    icon={faPencil}
+                  />
+                  <FontAwesomeIcon
+                    className="admin__icon"
+                    onClick={() => deleteItem(species._id)}
+                    icon={faTrash}
+                  />
                 </td>
               </tr>
             ))}
