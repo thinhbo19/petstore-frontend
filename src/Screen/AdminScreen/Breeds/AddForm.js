@@ -10,12 +10,16 @@ import axios from "axios";
 import { apiUrlBreeds } from "../../../services/config";
 import MenuItem from "@mui/material/MenuItem";
 import { getAllSpecies } from "../../../services/api";
+import "./Breeds.css";
+import Loading from "../../../Component/Loading/Loading";
 
 const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
   const [speciesList, setSpeciesList] = useState([]);
   const [breedName, setBreedName] = useState("");
-  const [selectedSpeciesId, setSelectedSpeciesId] = useState(null); // State to store selected species ID
+  const [selectedSpeciesId, setSelectedSpeciesId] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const Swal = require("sweetalert2");
+  const [loading, setLoading] = useState(false);
 
   const handleBreedNameChange = (event) => {
     setBreedName(event.target.value);
@@ -23,6 +27,10 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
 
   const handleSelectChange = (event) => {
     setSelectedSpeciesId(event.target.value);
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
   };
 
   useEffect(() => {
@@ -39,30 +47,54 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     try {
-      await axios.post(
-        `${apiUrlBreeds}/addNewBreed`,
-        { nameBreed: breedName, species: selectedSpeciesId },
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
+      const formData = new FormData();
+      formData.append("nameBreed", breedName);
+      formData.append("speciesID", selectedSpeciesId);
+      formData.append("imgBreed", selectedFile);
+
+      await axios.post(`${apiUrlBreeds}/addNewBreed`, formData, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       Swal.fire({
         icon: "success",
         text: "Add successfully",
       });
       setBreedName("");
       setSelectedSpeciesId(null);
+      setSelectedFile(null);
     } catch (error) {
       console.log(error.response.data.message);
       Swal.fire({
         icon: "warning",
         text: error.response.data.message,
       });
+      console.log(error);
     }
     fetchData();
+    setLoading(false);
     handleClose();
   };
+
+  const renderImagePreview = () => {
+    if (selectedFile) {
+      return (
+        <div className="image-preview">
+          <img src={URL.createObjectURL(selectedFile)} alt="Preview" />
+        </div>
+      );
+    }
+    return null;
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -77,6 +109,14 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
           value={breedName}
           onChange={handleBreedNameChange}
         />
+        <div className="file-input-container">
+          <input
+            className="custom-file-input"
+            type="file"
+            onChange={handleFileChange}
+          />
+          {renderImagePreview()}
+        </div>
         <Select
           autoFocus
           margin="dense"

@@ -26,7 +26,7 @@ const Navbar = () => {
       <div className="nav__container">
         <div className="nav__logo">
           <img src={Logo} alt="" className="nav__img" />
-          <div class="flip-animation">
+          <div className="flip-animation">
             <span>P</span>
             <span>E</span>
             <span>T</span>

@@ -57,6 +57,16 @@ const Navbar = () => {
               </li>
               <li className="nav__item">
                 <a
+                  href="#Category"
+                  className={`nav__link__admin ${
+                    location.hash === "#Category" ? "active" : ""
+                  }`}
+                >
+                  Category
+                </a>
+              </li>
+              <li className="nav__item">
+                <a
                   href="#Brands"
                   className={`nav__link__admin ${
                     location.hash === "#Brands" ? "active" : ""
@@ -67,22 +77,12 @@ const Navbar = () => {
               </li>
               <li className="nav__item">
                 <a
-                  href="#Food"
+                  href="#Product"
                   className={`nav__link__admin ${
-                    location.hash === "#Food" ? "active" : ""
+                    location.hash === "#Product" ? "active" : ""
                   }`}
                 >
-                  Food
-                </a>
-              </li>
-              <li className="nav__item">
-                <a
-                  href="#Toys"
-                  className={`nav__link__admin ${
-                    location.hash === "#Toys" ? "active" : ""
-                  }`}
-                >
-                  Toys
+                  Product
                 </a>
               </li>
               <li className="nav__item">

@@ -21,6 +21,7 @@ const Login = ({ setLoading }) => {
   const [showPassword, setShowPassword] = useState(false); // State để hiển thị hoặc ẩn mật khẩu
   const dispatch = useDispatch();
   const navigation = useNavigate();
+  console.log(email);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,14 +47,15 @@ const Login = ({ setLoading }) => {
       } else {
         Swal.fire({
           title: "Error!",
-          text: "Wrong email or email!",
+          text: "Wrong email or pass!",
           icon: "error",
         });
       }
     } catch (error) {
+      console.log(error);
       Swal.fire({
         title: "Error!",
-        text: "Wrong email or email!",
+        text: error.response.data.message,
         icon: "error",
       });
     }

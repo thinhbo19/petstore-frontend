@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiUrlBreeds, apiUrlSpecies } from "./config";
+import { apiUrlBreeds, apiUrlSpecies, apiUrlPets } from "./config";
 
 export const getAllSpecies = async (accessToken) => {
   try {
@@ -23,7 +23,29 @@ export const getAllBreeds = async (accessToken) => {
     });
     return res.data.petBreed;
   } catch (error) {
-    console.error("Error fetching species:", error);
+    console.error("Error fetching breed:", error);
+    throw error;
+  }
+};
+export const getAllPets = async () => {
+  try {
+    const res = await axios.get(`${apiUrlPets}/allPets`);
+    return res.data.pets;
+  } catch (error) {
+    console.error("Error fetching pets:", error);
+    throw error;
+  }
+};
+export const getCurrentPets = async (pid, accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlPets}/current/${pid}`, {
+      // headers: {
+      //   Authorization: `Bearer ${accessToken}`,
+      // },
+    });
+    return res.data.pet;
+  } catch (error) {
+    console.error("Error fetching pets:", error);
     throw error;
   }
 };

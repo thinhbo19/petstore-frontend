@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-import { apiUrlSpecies } from "../../../services/config";
+import { apiUrlBreeds } from "../../../services/config";
 import Swal from "sweetalert2";
 
 const EditForm = ({
@@ -14,32 +14,30 @@ const EditForm = ({
   handleCloseEdit,
   accessToken,
   fetchData,
-  species,
+  breeds,
 }) => {
-  const [speciesName, setSpeciesName] = useState("");
-
-  const handleSpeciesNameChange = (event) => {
-    setSpeciesName(event.target.value);
+  const [breedName, setBreedName] = useState("");
+  const handleNameChange = (event) => {
+    setBreedName(event.target.value);
   };
 
   const handleSubmitEdit = async () => {
     try {
-      await axios.put(
-        `${apiUrlSpecies}/changeSpecies/${species._id}`,
-        { nameSpecies: speciesName },
+      await axios.patch(
+        `${apiUrlBreeds}/changeBreed/${breeds._id}`,
+        { nameBreed: breedName },
         {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
       Swal.fire({
         icon: "success",
-        text: "Species updated successfully",
+        text: "Breeds updated successfully",
       });
     } catch (error) {
-      console.log(error.response.data.message);
       Swal.fire({
         icon: "error",
-        text: "Failed to update species",
+        text: "Failed to update Breeds",
       });
     }
     fetchData();
@@ -48,16 +46,16 @@ const EditForm = ({
 
   return (
     <Dialog open={openEdit} onClose={handleCloseEdit}>
-      <DialogTitle>Edit Species</DialogTitle>
+      <DialogTitle>Edit Breed</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           margin="dense"
-          label="Species Name"
+          label="Breed Name"
           type="text"
           fullWidth
-          value={speciesName}
-          onChange={handleSpeciesNameChange}
+          value={breedName}
+          onChange={handleNameChange}
         />
       </DialogContent>
       <DialogActions>

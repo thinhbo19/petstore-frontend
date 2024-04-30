@@ -6,8 +6,8 @@ import Pets from "./Pets/Pets";
 import Breeds from "./Breeds/Breeds";
 import Users from "./Users/Users";
 import Brands from "./Brand/Brands";
-import Food from "./Food/Food";
-import Toys from "./Toys/Toys";
+import Food from "./Category/Category";
+import Product from "./Product/Product";
 
 const AdminScreen = () => {
   return (
@@ -17,9 +17,9 @@ const AdminScreen = () => {
         <Species />
         <Breeds />
         <Pets />
-        <Brands />
         <Food />
-        <Toys />
+        <Brands />
+        <Product />
         <Users />
       </main>
     </div>

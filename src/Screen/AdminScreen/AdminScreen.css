@@ -84,3 +84,27 @@ tr:hover {
 .swal-popup {
   z-index: 10000 !important; /* Set a higher z-index value */
 }
+
+.img__field {
+  width: 120px;
+}
+.img__td {
+  width: 50%;
+  height: 50%;
+}
+.file-input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+.image-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  margin: 10px;
+}
+.image-preview img {
+  width: 50%;
+}

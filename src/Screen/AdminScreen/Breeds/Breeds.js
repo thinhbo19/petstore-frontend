@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Breeds.css";
-import { getAllBreeds, getAllSpecies } from "../../../services/api";
+import { getAllBreeds } from "../../../services/api";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,20 +11,25 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddForm from "./AddForm";
 import EditForm from "./EditForm";
+import axios from "axios";
+import { apiUrlBreeds } from "../../../services/config";
 
 const Breeds = () => {
   const [breedList, setBreedList] = useState([]);
   const accessToken = useSelector(selectAccessToken);
-  const [speciesPerPage] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [PerPage] = useState(5);
   const Swal = require("sweetalert2");
+  const [currentPage, setCurrentPage] = useState(1);
   const [openDialog, setOpenDialog] = useState(false);
   const [openDialogEdit, setOpenDialogEdit] = useState(false);
-
+  const [selected, setSelected] = useState(null);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
-  const handleOpenDialogEdit = (species) => {
+  const handleOpenDialogEdit = (breeds) => {
     setOpenDialogEdit(true);
+    setSelected(breeds);
   };
   const handleCloseDialogEdit = () => setOpenDialogEdit(false);
 
@@ -34,27 +39,108 @@ const Breeds = () => {
   const fetchData = async () => {
     try {
       const breedData = await getAllBreeds(accessToken);
-      const speciesData = await getAllSpecies(accessToken);
-      const breedWithSpeciesName = breedData.map((breed) => {
-        const matchedSpecies = speciesData.find(
-          (species) => species._id === breed.species
-        );
-        if (matchedSpecies) {
-          return {
-            ...breed,
-            speciesName: matchedSpecies.nameSpecies,
-          };
-        }
-        return breed;
-      });
-      setBreedList(breedWithSpeciesName.reverse());
+      setBreedList(breedData.reverse());
     } catch (error) {
       console.log(error);
     }
   };
+  const deleteItem = async (bid) => {
+    const confirmResult = await Swal.fire({
+      text: "You want to delete?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    });
+    if (!confirmResult.isConfirmed) {
+      return;
+    }
+    try {
+      await axios.delete(`${apiUrlBreeds}/${bid}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      Swal.fire({
+        icon: "success",
+        text: "Delete successfully",
+      });
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const deleteManyItem = async () => {
+    if (selectedIds.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        text: "Please select items to delete",
+      });
+      return;
+    }
 
-  const indexOfLastSpecies = currentPage * speciesPerPage;
-  const indexOfFirstSpecies = indexOfLastSpecies - speciesPerPage;
+    const confirmResult = await Swal.fire({
+      text: "You want to delete selected items?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    });
+
+    if (!confirmResult.isConfirmed) {
+      return;
+    }
+
+    try {
+      await Promise.all(
+        selectedIds.map(async (bid) => {
+          await axios.delete(`${apiUrlBreeds}/${bid}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+        })
+      );
+
+      Swal.fire({
+        icon: "success",
+        text: "Delete successfully",
+      });
+      setSelectedIds([]);
+      setSelectAll(false);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleSelect = (event) => {
+    const id = event.target.getAttribute("data-id");
+    const isChecked = event.target.checked;
+    let newSelectedIds = [...selectedIds];
+
+    if (isChecked) {
+      newSelectedIds.push(id);
+    } else {
+      newSelectedIds = newSelectedIds.filter((selectedId) => selectedId !== id);
+    }
+    setSelectedIds(newSelectedIds);
+  };
+  const handleSelectAll = (event) => {
+    const isChecked = event.target.checked;
+    setSelectAll(isChecked);
+    const ids = [];
+    const checkboxes = document.querySelectorAll(
+      "tbody input[type='checkbox']"
+    );
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = isChecked;
+      ids.push(checkbox.getAttribute("data-id"));
+    });
+    setSelectedIds(isChecked ? ids : []);
+  };
+
+  const indexOfLastSpecies = currentPage * PerPage;
+  const indexOfFirstSpecies = indexOfLastSpecies - PerPage;
   const currentSpecies = breedList.slice(
     indexOfFirstSpecies,
     indexOfLastSpecies
@@ -72,11 +158,11 @@ const Breeds = () => {
             </Fab>
           </Box>
           <Box sx={{ "& > :not(style)": { m: 1 } }}>
-            {/* {selectedIds.length >= 2 && ( */}
-            <Fab color="primary" aria-label="delete">
-              <DeleteIcon />
-            </Fab>
-            {/* )} */}
+            {selectedIds.length >= 2 && (
+              <Fab color="primary" aria-label="delete" onClick={deleteManyItem}>
+                <DeleteIcon />
+              </Fab>
+            )}
           </Box>
         </div>
         <AddForm
@@ -90,14 +176,20 @@ const Breeds = () => {
           handleCloseEdit={handleCloseDialogEdit}
           accessToken={accessToken}
           fetchData={fetchData}
+          breeds={selected}
         />
         <table>
           <thead>
             <tr>
               <th>
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  checked={selectAll}
+                  onChange={handleSelectAll}
+                />
               </th>
               <th>ID</th>
+              <th>Avatar</th>
               <th>Name</th>
               <th>Species</th>
               <th>Action</th>
@@ -107,20 +199,27 @@ const Breeds = () => {
             {currentSpecies.map((breeds, index) => (
               <tr key={index}>
                 <td>
-                  <input type="checkbox" />
+                  <input
+                    type="checkbox"
+                    data-id={breeds._id}
+                    onChange={handleSelect}
+                  />
                 </td>
                 <td>{index + 1}</td>
+                <td className="img__field">
+                  <img className="img__td" src={breeds.imgBreed} alt="img" />
+                </td>
                 <td>{breeds.nameBreed}</td>
-                <td>{breeds.speciesName}</td>
+                <td>{breeds.petSpecies.nameSpecies}</td>
                 <td>
                   <FontAwesomeIcon
                     className="admin__icon"
-                    // onClick={() => handleOpenDialogEdit(species)}
+                    onClick={() => handleOpenDialogEdit(breeds)}
                     icon={faPencil}
                   />
                   <FontAwesomeIcon
                     className="admin__icon"
-                    // onClick={() => deleteItem(species._id)}
+                    onClick={() => deleteItem(breeds._id)}
                     icon={faTrash}
                   />
                 </td>
@@ -130,7 +229,7 @@ const Breeds = () => {
         </table>
         <div className="pagination">
           {Array.from({
-            length: Math.ceil(breedList.length / speciesPerPage),
+            length: Math.ceil(breedList.length / PerPage),
           }).map((_, index) => (
             <button
               key={index}

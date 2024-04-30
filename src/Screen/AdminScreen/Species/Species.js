@@ -127,6 +127,7 @@ const Species = () => {
     });
     setSelectedIds(isChecked ? ids : []);
   };
+
   const handleSelect = (event) => {
     const id = event.target.getAttribute("data-id");
     const isChecked = event.target.checked;
