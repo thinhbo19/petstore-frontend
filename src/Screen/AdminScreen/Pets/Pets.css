@@ -108,3 +108,7 @@ textarea {
 .exit-btn:hover {
   background-color: #ff0000;
 }
+
+.custom-swal-container {
+  z-index: 9999;
+}

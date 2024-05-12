@@ -82,6 +82,29 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
+
+    // Kiểm tra các trường nhập có rỗng không
+    if (
+      !productName ||
+      !selectedId ||
+      !selectedFile ||
+      !age ||
+      !gender ||
+      !description ||
+      !price
+    ) {
+      Swal.fire({
+        icon: "warning",
+        text: "Please fill in all fields",
+        customClass: {
+          container: "custom-swal-container",
+        },
+      });
+
+      setLoading(false);
+      return; // Dừng hàm nếu có trường rỗng
+    }
+
     try {
       const formData = new FormData();
       formData.append("namePet", productName);
@@ -117,10 +140,11 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
         icon: "warning",
         text: error.response.data.message,
       });
+    } finally {
+      fetchData();
+      setLoading(false);
+      handleClose();
     }
-    fetchData();
-    setLoading(false);
-    handleClose();
   };
 
   const renderImagePreview = () => {
@@ -204,6 +228,7 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
           margin="dense"
           label="Description"
           type="text"
+          multiline
           fullWidth
           value={description}
           onChange={handleDescriptionChange}

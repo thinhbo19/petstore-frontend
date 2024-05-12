@@ -69,7 +69,7 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
       setSelectedSpeciesId(null);
       setSelectedFile(null);
     } catch (error) {
-      console.log(error.response.data.message);
+      // console.log(error.response.data.message);
       Swal.fire({
         icon: "warning",
         text: error.response.data.message,
