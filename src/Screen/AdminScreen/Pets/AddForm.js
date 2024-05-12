@@ -10,7 +10,7 @@ import axios from "axios";
 import { apiUrlPets } from "../../../services/config";
 import MenuItem from "@mui/material/MenuItem";
 import Loading from "../../../Component/Loading/Loading";
-import { getAllBreeds } from "../../../services/api";
+import { getAllBreeds } from "../../../services/apiPet";
 
 const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
   const [breedList, setBreedList] = useState([]);

@@ -9,7 +9,7 @@ import Select from "@mui/material/Select";
 import axios from "axios";
 import { apiUrlBreeds } from "../../../services/config";
 import MenuItem from "@mui/material/MenuItem";
-import { getAllSpecies } from "../../../services/api";
+import { getAllSpecies } from "../../../services/apiPet";
 import "./Breeds.css";
 import Loading from "../../../Component/Loading/Loading";
 

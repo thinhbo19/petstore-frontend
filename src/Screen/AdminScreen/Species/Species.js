@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Species.css";
-import { getAllSpecies } from "../../../services/api";
+import { getAllSpecies } from "../../../services/apiPet";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
 import axios from "axios";

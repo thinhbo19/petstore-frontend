@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Pets.css";
-import { getAllPets } from "../../../services/api";
+import { getAllPets } from "../../../services/apiPet";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
