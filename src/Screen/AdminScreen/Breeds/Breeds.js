@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import "./Breeds.css";
+import React, { useState, useEffect } from "react";
 import { getAllBreeds } from "../../../services/apiPet";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
@@ -149,7 +149,7 @@ const Breeds = () => {
 
   return (
     <section className="Breeds maincontainer section" id="Breeds">
-      <div className="breeds__container">
+      <div className="breeds__container ">
         <h2 className="section_title">Breeds Management</h2>
         <div className="action__from">
           <Box sx={{ "& > :not(style)": { m: 1 } }}>

@@ -21,7 +21,6 @@ const Login = ({ setLoading }) => {
   const [showPassword, setShowPassword] = useState(false); // State để hiển thị hoặc ẩn mật khẩu
   const dispatch = useDispatch();
   const navigation = useNavigate();
-  console.log(email);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +37,7 @@ const Login = ({ setLoading }) => {
         dispatch(setLogin(true));
         dispatch(setAccessToken(response.data.accessToken));
         setTimeout(() => {
-          if (response.data.userData.role === "user") {
+          if (response.data.userData.role === "User") {
             navigation("/");
           } else {
             navigation("/dashboard");
