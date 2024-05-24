@@ -32,3 +32,20 @@ export const patchIsBlockedUser = async (accessToken, uid, isBlocked) => {
     throw error;
   }
 };
+export const patchChangeRole = async (accessToken, uid) => {
+  try {
+    const res = await axios.patch(
+      `${apiUrlUser}/changeRole`,
+      { userId: uid },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};

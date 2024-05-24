@@ -12,7 +12,7 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  border: 2px solid #868484;
+  border: 3px solid #868484;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -24,18 +24,6 @@
 .round-checkbox:checked {
   background-color: rgb(255, 6, 6);
   border-color: rgb(243, 0, 0);
-}
-
-.round-checkbox:checked::before {
-  content: "";
-  display: block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: white;
-  position: absolute;
-  top: 3px;
-  left: 3px;
 }
 
 .round-checkbox-role {
@@ -56,14 +44,15 @@
   border-color: green;
 }
 
-.round-checkbox-role:checked::before {
-  content: "";
-  display: block;
-  width: 10px;
-  height: 10px;
+.round-checkbox-user {
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: white;
-  position: absolute;
-  top: 3px;
-  left: 3px;
+  border: 3px solid #868484;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: none;
+  cursor: pointer;
+  position: relative;
 }

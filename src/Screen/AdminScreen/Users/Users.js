@@ -1,19 +1,20 @@
 import "./Users.css";
 import React, { useState, useEffect } from "react";
-import NoAvatar from "../../../assets/avartar.jpg";
-import { getAllUsers, patchIsBlockedUser } from "../../../services/appiUser";
+import {
+  getAllUsers,
+  patchChangeRole,
+  patchIsBlockedUser,
+} from "../../../services/appiUser";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
-import Box from "@mui/material/Box";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Box } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddForm from "./AddForm";
-import EditForm from "./EditForm";
 import axios from "axios";
-import { apiUrlBreeds } from "../../../services/config";
+import { apiUrlUser } from "../../../services/config";
 
 const Users = () => {
   const [userList, setUserList] = useState([]);
@@ -21,10 +22,23 @@ const Users = () => {
   const [PerPage] = useState(5);
   const Swal = require("sweetalert2");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectAll, setSelectAll] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [filteredUserList, setFilteredUserList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    if (!searchTerm) {
+      setFilteredUserList(userList);
+    } else {
+      // Nếu có từ khóa tìm kiếm, lọc danh sách người dùng dựa trên từ khóa
+      const filteredUsers = userList.filter((user) =>
+        user.username.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredUserList(filteredUsers);
+    }
     fetchData();
-  }, [accessToken]);
+  }, [accessToken, searchTerm, userList]);
 
   const fetchData = async () => {
     try {
@@ -35,12 +49,7 @@ const Users = () => {
 
   const handleChangeIsBlocked = async (userId, currentStatus) => {
     try {
-      const updatedUser = await patchIsBlockedUser(
-        accessToken,
-        userId,
-        currentStatus
-      );
-
+      await patchIsBlockedUser(accessToken, userId, currentStatus);
       const updatedUserList = userList.map((user) =>
         user._id === userId ? { ...user, isBlocked: !currentStatus } : user
       );
@@ -51,10 +60,119 @@ const Users = () => {
       Swal.fire("Error", "Failed to update user status", "error");
     }
   };
+  const handleChangeRole = async (userId) => {
+    try {
+      await patchChangeRole(accessToken, userId);
+      fetchData();
+      Swal.fire("Success", "Change role user successfully", "success");
+    } catch (error) {
+      console.error("Error updating user role:", error);
+      Swal.fire("Error", "Failed to update user role", "error");
+    }
+  };
+  const handleSelect = (event) => {
+    const id = event.target.getAttribute("data-id");
+    const isChecked = event.target.checked;
+    let newSelectedIds = [...selectedIds];
+
+    if (isChecked) {
+      newSelectedIds.push(id);
+    } else {
+      newSelectedIds = newSelectedIds.filter((selectedId) => selectedId !== id);
+    }
+    setSelectedIds(newSelectedIds);
+  };
+  const handleSelectAll = (event) => {
+    const isChecked = event.target.checked;
+    setSelectAll(isChecked);
+    const ids = [];
+    const checkboxes = document.querySelectorAll(
+      "tbody input[type='checkbox']"
+    );
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = isChecked;
+      ids.push(checkbox.getAttribute("data-id"));
+    });
+    setSelectedIds(isChecked ? ids : []);
+  };
+  const deleteItem = async (uid) => {
+    const confirmResult = await Swal.fire({
+      text: "You want to delete?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    });
+    if (!confirmResult.isConfirmed) {
+      return;
+    }
+    try {
+      await axios.delete(`${apiUrlUser}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: { uid: uid },
+      });
+      Swal.fire({
+        icon: "success",
+        text: "Delete successfully",
+      });
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const deleteManyItem = async () => {
+    if (selectedIds.length === 0) {
+      Swal.fire({
+        icon: "warning",
+        text: "Please select items to delete",
+      });
+      return;
+    }
+
+    const confirmResult = await Swal.fire({
+      text: "You want to delete selected items?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
+    });
+
+    if (!confirmResult.isConfirmed) {
+      return;
+    }
+
+    try {
+      await Promise.all(
+        selectedIds.map(async (uid) => {
+          await axios.delete(`${apiUrlUser}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            data: { uid: uid },
+          });
+        })
+      );
+
+      Swal.fire({
+        icon: "success",
+        text: "Delete successfully",
+      });
+      setSelectedIds([]);
+      setSelectAll(false);
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const indexOfLastSpecies = currentPage * PerPage;
   const indexOfFirstSpecies = indexOfLastSpecies - PerPage;
-  const currentUser = userList.slice(indexOfFirstSpecies, indexOfLastSpecies);
+  const currentUser = filteredUserList.slice(
+    indexOfFirstSpecies,
+    indexOfLastSpecies
+  );
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
@@ -62,21 +180,27 @@ const Users = () => {
       <div className="Users__container grip">
         <h2 className="section_title">Users</h2>
         <div className="action__from">
-          <Box sx={{ "& > :not(style)": { m: 1 } }}>
-            <Fab
-              color="primary"
-              aria-label="add"
-              // onClick={handleOpenDialog}
-            >
-              <AddIcon />
-            </Fab>
+          <Box
+            sx={{
+              "& > :not(style)": { m: 2, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              label="Search"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              sx={{ flexGrow: 1 }}
+            />
           </Box>
           <Box sx={{ "& > :not(style)": { m: 1 } }}>
-            {/* {selectedIds.length >= 2 && (
+            {selectedIds.length >= 2 && (
               <Fab color="primary" aria-label="delete" onClick={deleteManyItem}>
                 <DeleteIcon />
               </Fab>
-            )} */}
+            )}
           </Box>
         </div>
 
@@ -86,8 +210,8 @@ const Users = () => {
               <th>
                 <input
                   type="checkbox"
-                  // checked={selectAll}
-                  // onChange={handleSelectAll}
+                  checked={selectAll}
+                  onChange={handleSelectAll}
                 />
               </th>
               <th>ID</th>
@@ -107,7 +231,7 @@ const Users = () => {
                   <input
                     type="checkbox"
                     data-id={users._id}
-                    // onChange={handleSelect}
+                    onChange={handleSelect}
                   />
                 </td>
                 <td>{index + 1}</td>
@@ -124,11 +248,13 @@ const Users = () => {
                 <td>
                   <input
                     type="checkbox"
-                    className="round-checkbox-role"
-                    checked={users.role}
-                    onChange={() =>
-                      handleChangeIsBlocked(users._id, users.isBlocked)
+                    className={
+                      users.role === "Admin"
+                        ? "round-checkbox-role"
+                        : "round-checkbox-user"
                     }
+                    checked={users.role}
+                    onChange={() => handleChangeRole(users._id)}
                   />
                 </td>
                 <td>
@@ -149,7 +275,7 @@ const Users = () => {
                 <td>
                   <FontAwesomeIcon
                     className="admin__icon"
-                    // onClick={() => deleteItem(breeds._id)}
+                    onClick={() => deleteItem(users._id)}
                     icon={faTrash}
                   />
                 </td>

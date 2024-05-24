@@ -6,6 +6,7 @@ import { selectAccessToken } from "../../../services/useSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
 import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -16,6 +17,8 @@ import { apiUrlBreeds } from "../../../services/config";
 
 const Breeds = () => {
   const [breedList, setBreedList] = useState([]);
+  const [filteredUserList, setFilteredUserList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const accessToken = useSelector(selectAccessToken);
   const [PerPage] = useState(5);
   const Swal = require("sweetalert2");
@@ -34,8 +37,21 @@ const Breeds = () => {
   const handleCloseDialogEdit = () => setOpenDialogEdit(false);
 
   useEffect(() => {
+    if (!searchTerm) {
+      setFilteredUserList(breedList);
+    } else {
+      const filteredUsers = breedList.filter(
+        (breed) =>
+          breed.nameBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          breed.petSpecies.nameSpecies
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+      );
+      setFilteredUserList(filteredUsers);
+    }
     fetchData();
-  }, [accessToken]);
+  }, [accessToken, searchTerm, breedList]);
+
   const fetchData = async () => {
     try {
       const breedData = await getAllBreeds(accessToken);
@@ -141,7 +157,7 @@ const Breeds = () => {
 
   const indexOfLastSpecies = currentPage * PerPage;
   const indexOfFirstSpecies = indexOfLastSpecies - PerPage;
-  const currentSpecies = breedList.slice(
+  const currentSpecies = filteredUserList.slice(
     indexOfFirstSpecies,
     indexOfLastSpecies
   );
@@ -152,6 +168,21 @@ const Breeds = () => {
       <div className="breeds__container ">
         <h2 className="section_title">Breeds Management</h2>
         <div className="action__from">
+          <Box
+            sx={{
+              "& > :not(style)": { m: 2, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              label="Search"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              sx={{ flexGrow: 1 }}
+            />
+          </Box>
           <Box sx={{ "& > :not(style)": { m: 1 } }}>
             <Fab color="primary" aria-label="add" onClick={handleOpenDialog}>
               <AddIcon />
