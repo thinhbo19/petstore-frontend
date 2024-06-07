@@ -7,6 +7,7 @@ import ScrollButton from "./Component/ScrollButton/ScrollButton";
 import Footer from "./Component/Footer/Footer";
 import AdminScreen from "./Screen/AdminScreen/AdminScreen";
 import EditPetPage from "./Screen/AdminScreen/Pets/EditPet";
+import Pets from "./Screen/Pets/Pets";
 
 function extractPidFromPathname(pathname) {
   const parts = pathname.split("/");
@@ -25,17 +26,22 @@ function App() {
       {currentPath !== `/edit/${pid}` &&
         currentPath !== "/login" &&
         currentPath !== "/dashboard/addSpecies" &&
-        currentPath !== "/dashboard" && <Navbar />}
+        currentPath !== "/dashboard" &&
+        currentPath !== "/dashboard/statistical" && <Navbar />}
       <Routes>
         <Route path="/login" element={<LoginSignup />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Home/Dogs" element={<Pets />} />
+        <Route path="/Home/Cats" element={<Pets />} />
+        <Route path="/Home/Cats/:bid" element={<Pets />} />
         <Route path="/dashboard" element={<AdminScreen />} />
         <Route path="/edit/:pid" element={<EditPetPage />} />
       </Routes>
       {currentPath !== `/edit/${pid}` &&
         currentPath !== "/login" &&
         currentPath !== "/dashboard/addSpecies" &&
-        currentPath !== "/dashboard" && <Footer />}
+        currentPath !== "/dashboard" &&
+        currentPath !== "/dashboard/statistical" && <Footer />}
       <ScrollButton />
     </div>
   );

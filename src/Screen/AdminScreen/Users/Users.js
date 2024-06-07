@@ -1,7 +1,6 @@
 import "./Users.css";
 import React, { useState, useEffect } from "react";
 import {
-  getAllUsers,
   patchChangeRole,
   patchIsBlockedUser,
 } from "../../../services/appiUser";
@@ -16,8 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { apiUrlUser } from "../../../services/config";
 
-const Users = () => {
-  const [userList, setUserList] = useState([]);
+const Users = ({ userList, setUserList, fetchData }) => {
   const accessToken = useSelector(selectAccessToken);
   const [PerPage] = useState(5);
   const Swal = require("sweetalert2");
@@ -31,21 +29,13 @@ const Users = () => {
     if (!searchTerm) {
       setFilteredUserList(userList);
     } else {
-      // Nếu có từ khóa tìm kiếm, lọc danh sách người dùng dựa trên từ khóa
       const filteredUsers = userList.filter((user) =>
         user.username.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredUserList(filteredUsers);
     }
     fetchData();
-  }, [accessToken, searchTerm, userList]);
-
-  const fetchData = async () => {
-    try {
-      const userData = await getAllUsers(accessToken);
-      setUserList(userData);
-    } catch (error) {}
-  };
+  }, [searchTerm, userList]);
 
   const handleChangeIsBlocked = async (userId, currentStatus) => {
     try {
@@ -54,12 +44,15 @@ const Users = () => {
         user._id === userId ? { ...user, isBlocked: !currentStatus } : user
       );
       setUserList(updatedUserList);
+
+      fetchData();
       Swal.fire("Success", "User status updated successfully", "success");
     } catch (error) {
       console.error("Error updating user status:", error);
       Swal.fire("Error", "Failed to update user status", "error");
     }
   };
+
   const handleChangeRole = async (userId) => {
     try {
       await patchChangeRole(accessToken, userId);

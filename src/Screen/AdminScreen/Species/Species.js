@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./Species.css";
-import { getAllSpecies } from "../../../services/apiPet";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
 import axios from "axios";
 import { apiUrlSpecies } from "../../../services/config";
 import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,8 +14,7 @@ import EditFormSpecies from "./EditFormSpecies";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPencil } from "@fortawesome/free-solid-svg-icons";
 
-const Species = () => {
-  const [speciesList, setSpeciesList] = useState([]);
+const Species = ({ speciesList, fetchData }) => {
   const accessToken = useSelector(selectAccessToken);
   const [speciesPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,6 +24,8 @@ const Species = () => {
   const [selectedSpecies, setSelectedSpecies] = useState(null);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredList, setFilteredList] = useState([]);
 
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
@@ -35,16 +36,16 @@ const Species = () => {
   const handleCloseDialogEdit = () => setOpenDialogEdit(false);
 
   useEffect(() => {
-    fetchData();
-  }, [speciesPerPage, accessToken]);
-  const fetchData = async () => {
-    try {
-      const data = await getAllSpecies(accessToken);
-      setSpeciesList(data.reverse());
-    } catch (error) {
-      console.log(error);
+    if (!searchTerm) {
+      setFilteredList(speciesList);
+    } else {
+      const filteredUsers = speciesList.filter((species) =>
+        species.nameSpecies.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredList(filteredUsers);
     }
-  };
+  }, [searchTerm, speciesList]);
+
   const deleteItem = async (sid) => {
     const confirmResult = await Swal.fire({
       text: "You want to delete?",
@@ -143,7 +144,7 @@ const Species = () => {
 
   const indexOfLastSpecies = currentPage * speciesPerPage;
   const indexOfFirstSpecies = indexOfLastSpecies - speciesPerPage;
-  const currentSpecies = speciesList.slice(
+  const currentSpecies = filteredList.slice(
     indexOfFirstSpecies,
     indexOfLastSpecies
   );
@@ -154,6 +155,21 @@ const Species = () => {
       <div className="species__container grip">
         <h2 className="section_title">Species Management</h2>
         <div className="action__from">
+          <Box
+            sx={{
+              "& > :not(style)": { m: 2, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              label="Search"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              sx={{ flexGrow: 1 }}
+            />
+          </Box>
           <Box sx={{ "& > :not(style)": { m: 1 } }}>
             <Fab color="primary" aria-label="add" onClick={handleOpenDialog}>
               <AddIcon />

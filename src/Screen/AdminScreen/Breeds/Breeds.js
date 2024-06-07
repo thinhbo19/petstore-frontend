@@ -1,6 +1,5 @@
 import "./Breeds.css";
 import React, { useState, useEffect } from "react";
-import { getAllBreeds } from "../../../services/apiPet";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,9 +14,8 @@ import EditForm from "./EditForm";
 import axios from "axios";
 import { apiUrlBreeds } from "../../../services/config";
 
-const Breeds = () => {
-  const [breedList, setBreedList] = useState([]);
-  const [filteredUserList, setFilteredUserList] = useState([]);
+const Breeds = ({ speciesList, breedList, fetchData }) => {
+  const [filteredUserList, setFilteredList] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const accessToken = useSelector(selectAccessToken);
   const [PerPage] = useState(5);
@@ -38,28 +36,19 @@ const Breeds = () => {
 
   useEffect(() => {
     if (!searchTerm) {
-      setFilteredUserList(breedList);
+      setFilteredList(breedList);
     } else {
-      const filteredUsers = breedList.filter(
+      const filteredBreeds = breedList.filter(
         (breed) =>
           breed.nameBreed.toLowerCase().includes(searchTerm.toLowerCase()) ||
           breed.petSpecies.nameSpecies
             .toLowerCase()
             .includes(searchTerm.toLowerCase())
       );
-      setFilteredUserList(filteredUsers);
+      setFilteredList(filteredBreeds);
     }
-    fetchData();
-  }, [accessToken, searchTerm, breedList]);
+  }, [searchTerm, breedList]);
 
-  const fetchData = async () => {
-    try {
-      const breedData = await getAllBreeds(accessToken);
-      setBreedList(breedData.reverse());
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const deleteItem = async (bid) => {
     const confirmResult = await Swal.fire({
       text: "You want to delete?",
@@ -201,6 +190,7 @@ const Breeds = () => {
           handleClose={handleCloseDialog}
           accessToken={accessToken}
           fetchData={fetchData}
+          speciesList={speciesList}
         />
         <EditForm
           openEdit={openDialogEdit}

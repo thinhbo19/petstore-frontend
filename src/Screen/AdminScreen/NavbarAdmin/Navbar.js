@@ -95,6 +95,17 @@ const Navbar = () => {
                   Users
                 </a>
               </li>
+              <li className="nav__item">
+                <a
+                  href="dashboard/statistical"
+                  // className={`nav__link__admin ${
+                  //   location.hash === "#Users" ? "active" : ""
+                  // }`}
+                  className="nav__link__admin"
+                >
+                  Statistical
+                </a>
+              </li>
             </ul>
           </div>
         </nav>

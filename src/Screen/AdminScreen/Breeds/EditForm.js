@@ -34,6 +34,7 @@ const EditForm = ({
         icon: "success",
         text: "Breeds updated successfully",
       });
+      setBreedName("");
     } catch (error) {
       Swal.fire({
         icon: "error",

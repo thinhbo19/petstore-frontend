@@ -9,12 +9,16 @@ import Select from "@mui/material/Select";
 import axios from "axios";
 import { apiUrlBreeds } from "../../../services/config";
 import MenuItem from "@mui/material/MenuItem";
-import { getAllSpecies } from "../../../services/apiPet";
 import "./Breeds.css";
 import Loading from "../../../Component/Loading/Loading";
 
-const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
-  const [speciesList, setSpeciesList] = useState([]);
+const AddForm = ({
+  open,
+  handleClose,
+  accessToken,
+  fetchData,
+  speciesList,
+}) => {
   const [breedName, setBreedName] = useState("");
   const [selectedSpeciesId, setSelectedSpeciesId] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -34,17 +38,8 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
   };
 
   useEffect(() => {
-    fetchDataSpecies();
+    fetchData();
   }, [accessToken]);
-
-  const fetchDataSpecies = async () => {
-    try {
-      const data = await getAllSpecies(accessToken);
-      setSpeciesList(data.reverse());
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleSubmit = async () => {
     setLoading(true);

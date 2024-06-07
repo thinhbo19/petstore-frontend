@@ -12,8 +12,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Loading from "../../../Component/Loading/Loading";
 import { getAllBreeds } from "../../../services/apiPet";
 
-const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
-  const [breedList, setBreedList] = useState([]);
+const AddForm = ({ open, handleClose, accessToken, breedList, fetchData }) => {
+  // const [breedList, setBreedList] = useState([]);
   const [productName, setProductName] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -67,18 +67,18 @@ const AddForm = ({ open, handleClose, accessToken, fetchData }) => {
   const handleCharacteristicChange = (event) => {
     setCharacteristic(event.target.value);
   };
-  useEffect(() => {
-    fetchDataBreed();
-  }, [accessToken]);
+  // useEffect(() => {
+  //   fetchDataBreed();
+  // }, [accessToken]);
 
-  const fetchDataBreed = async () => {
-    try {
-      const data = await getAllBreeds(accessToken);
-      setBreedList(data.reverse());
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchDataBreed = async () => {
+  //   try {
+  //     const data = await getAllBreeds(accessToken);
+  //     setBreedList(data.reverse());
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     setLoading(true);

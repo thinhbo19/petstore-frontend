@@ -14,13 +14,9 @@ export const getAllSpecies = async (accessToken) => {
     throw error;
   }
 };
-export const getAllBreeds = async (accessToken) => {
+export const getAllBreeds = async () => {
   try {
-    const res = await axios.get(`${apiUrlBreeds}/getAllBreed`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const res = await axios.get(`${apiUrlBreeds}/getAllBreed`);
     return res.data.petBreed;
   } catch (error) {
     console.error("Error fetching breed:", error);

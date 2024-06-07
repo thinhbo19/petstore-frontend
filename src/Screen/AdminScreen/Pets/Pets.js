@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Pets.css";
-import { getAllPets } from "../../../services/apiPet";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,38 +9,46 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddForm from "./AddForm";
+import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { apiUrlPets } from "../../../services/config";
 
-const Pets = () => {
-  const [pettList, setPetList] = useState([]);
+const Pets = ({ breedList, pettList, fetchData }) => {
   const [PerPage] = useState(5);
   const accessToken = useSelector(selectAccessToken);
   const Swal = require("sweetalert2");
   const [currentPage, setCurrentPage] = useState(1);
   const [openDialog, setOpenDialog] = useState(false);
-  const [selected, setSelected] = useState(null);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredList, setFilteredList] = useState([]);
 
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
-
   useEffect(() => {
-    fetchData();
-  }, []);
-  const fetchData = async () => {
-    try {
-      const petData = await getAllPets();
-      setPetList(petData.reverse());
-    } catch (error) {
-      console.log(error);
+    if (!searchTerm) {
+      setFilteredList(pettList);
+    } else {
+      const filtered = pettList.filter(
+        (pet) =>
+          pet.namePet.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          pet.petBreed.nameBreed
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          pet.petBreed.nameSpecies
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+      );
+      setFilteredList(filtered);
     }
-  };
+    fetchData();
+  }, [searchTerm, pettList]);
+
   const indexOfLastSpecies = currentPage * PerPage;
   const indexOfFirstSpecies = indexOfLastSpecies - PerPage;
-  const current = pettList.slice(indexOfFirstSpecies, indexOfLastSpecies);
+  const current = filteredList.slice(indexOfFirstSpecies, indexOfLastSpecies);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const deleteItem = async (pid) => {
@@ -143,6 +150,21 @@ const Pets = () => {
       <div className="pets__container">
         <h2 className="section_title">Pets</h2>
         <div className="action__from">
+          <Box
+            sx={{
+              "& > :not(style)": { m: 2, width: "25ch" },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <TextField
+              label="Search"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              sx={{ flexGrow: 1 }}
+            />
+          </Box>
           <Box sx={{ "& > :not(style)": { m: 1 } }}>
             <Fab color="primary" aria-label="add" onClick={handleOpenDialog}>
               <AddIcon />
@@ -160,6 +182,7 @@ const Pets = () => {
           open={openDialog}
           handleClose={handleCloseDialog}
           accessToken={accessToken}
+          breedList={breedList}
           fetchData={fetchData}
         />
         <table>
@@ -204,7 +227,7 @@ const Pets = () => {
                 <td>{pets.age}</td>
                 <td>{pets.gender}</td>
                 <td>{pets.price.toLocaleString()}</td>
-                <td>{pets.sold ? "Sold" : "Not Sold"}</td>
+                <td>{pets.sold ? "Sold" : "Still for sale"}</td>
                 <td>
                   <Link to={`/edit/${pets._id}`}>
                     <FontAwesomeIcon className="admin__icon" icon={faPencil} />
