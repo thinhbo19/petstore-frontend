@@ -1,9 +1,0 @@
-.petlist__container {
-  width: 100%;
-  min-height: 100vh;
-}
-.petlist__container .petlist__main {
-  height: 100vh;
-  padding: 7rem 10rem 10rem 10rem;
-  /* background-color: black; */
-}

@@ -40,7 +40,6 @@ const AdminScreen = () => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     fetchData();
   }, [accessToken]);

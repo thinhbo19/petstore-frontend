@@ -23,6 +23,24 @@ export const getAllBreeds = async () => {
     throw error;
   }
 };
+export const getBreedBySpecies = async (species) => {
+  try {
+    const res = await axios.get(`${apiUrlBreeds}/getBreedBySpecies/${species}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching breed:", error);
+    throw error;
+  }
+};
+export const getPetByBreed = async (breed) => {
+  try {
+    const res = await axios.get(`${apiUrlPets}/getPetByBreed/${breed}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching breed:", error);
+    throw error;
+  }
+};
 export const getAllPets = async () => {
   try {
     const res = await axios.get(`${apiUrlPets}/allPets`);
