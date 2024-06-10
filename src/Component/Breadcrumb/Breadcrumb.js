@@ -6,7 +6,6 @@ import "./Breadcrumb.css";
 function ActiveLastBreadcrumb() {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
-
   return (
     <div className="breadcrumbs-container">
       <Breadcrumbs aria-label="breadcrumb">

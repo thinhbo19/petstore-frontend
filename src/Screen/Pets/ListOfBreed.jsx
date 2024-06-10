@@ -3,6 +3,7 @@ import "./ListOfBreed.css";
 import { getBreedBySpecies } from "../../services/apiPet";
 import { Link, useLocation } from "react-router-dom";
 import Loading from "../../Component/Loading/Loading";
+import FilterBreed from "../../Component/Filter/FilterBreed";
 
 const Pets = () => {
   const [species, setSpecies] = useState("");
@@ -41,8 +42,9 @@ const Pets = () => {
 
   return (
     <div className="petlist__container">
+      <FilterBreed namePath={species} setBreedList={setBreedList} />
       <div className="petlist__main">
-        {breedList.length > 0 ? (
+        {breedList && breedList.length > 0 ? (
           breedList.map((breed, index) => (
             <Link
               key={breed._id}

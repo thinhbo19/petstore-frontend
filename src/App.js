@@ -11,8 +11,7 @@ import EditPetPage from "./Screen/AdminScreen/Pets/EditPet";
 import ListOfBreed from "./Screen/Pets/ListOfBreed";
 import ActiveLastBreadcrumb from "./Component/Breadcrumb/Breadcrumb";
 import ListOfPet from "./Screen/Pets/ListOfPet";
-import Filter from "./Component/Filter/Filter";
-import { getAllBreeds } from "./services/apiPet";
+import { getAllPets } from "./services/apiPet";
 
 function extractPidFromPathname(pathname) {
   const parts = pathname.split("/");
@@ -24,33 +23,30 @@ function extractPidFromPathname(pathname) {
 }
 
 function App() {
-  const currentPath = useLocation().pathname;
-  const [lengthPath, setLengthPath] = useState(0);
+  const location = useLocation();
+  const currentPath = location.pathname;
   const pid = extractPidFromPathname(currentPath);
-  const [namePath, setNamePath] = useState("");
   const [speciesList, setSpeciesList] = useState([]);
+  const [breedList, setBreedList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const breedData = await getAllBreeds();
+        const petData = await getAllPets();
         const species = [
-          ...new Set(breedData.map((breed) => breed.petSpecies.nameSpecies)),
+          ...new Set(petData.map((pet) => pet.petBreed.nameSpecies)),
+        ];
+        const breeds = [
+          ...new Set(petData.map((pet) => pet.petBreed.nameBreed)),
         ];
         setSpeciesList(species);
+        setBreedList(breeds);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    const parts = currentPath.split("/");
-    const species = parts[parts.length - 1];
-    setLengthPath(parts.length);
-    setNamePath(species);
-  }, [currentPath]);
 
   const NohowNavbarAndFooter =
     currentPath !== `/edit/${pid}` &&
@@ -63,26 +59,32 @@ function App() {
     currentPath === "/Home" && currentPath === "/" && currentPath === "login";
 
   const isSubPageOfHome = currentPath.startsWith("/Home/");
-
-  const showFilter = speciesList.includes(namePath);
-
   return (
     <div className="container">
       {NohowNavbarAndFooter && <Navbar />}
       {noShowBreadcrumb && <ActiveLastBreadcrumb />}
       {isSubPageOfHome && <ActiveLastBreadcrumb />}
-      {showFilter && <Filter namePath={namePath} />}
-      {lengthPath === 4 && <Filter namePath={namePath} />}
       <Routes>
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/" element={<Home />} />
         {speciesList.map((species) => (
-          <React.Fragment key={species}>
-            <Route path={`/Home/${species}`} element={<ListOfBreed />} />
-            <Route path={`/Home/${species}/:breed`} element={<ListOfPet />} />
-          </React.Fragment>
+          <Route
+            key={species}
+            path={`/Home/${species}`}
+            element={<ListOfBreed />}
+          />
         ))}
+
+        {speciesList.map((species) =>
+          breedList.map((breed) => (
+            <Route
+              key={`${species}-${breed}`}
+              path={`/Home/${species}/${breed}`}
+              element={<ListOfPet />}
+            />
+          ))
+        )}
         <Route path="/dashboard" element={<AdminScreen />} />
         <Route path="/edit/:pid" element={<EditPetPage />} />
       </Routes>

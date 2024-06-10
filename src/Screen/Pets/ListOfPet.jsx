@@ -3,6 +3,7 @@ import "./ListOfPet.css";
 import { getPetByBreed } from "../../services/apiPet";
 import { Link, useLocation } from "react-router-dom";
 import Loading from "../../Component/Loading/Loading";
+import FilterPet from "../../Component/Filter/FilterPet";
 
 const ListOfPet = () => {
   const [breed, setBreed] = useState("");
@@ -22,6 +23,7 @@ const ListOfPet = () => {
       setLoading(true);
       try {
         const data = await getPetByBreed(breed);
+        console.log(data);
         setPetList(data.reverse());
       } catch (error) {
         console.log(error);
@@ -43,6 +45,7 @@ const ListOfPet = () => {
 
   return (
     <div className="petlist__container">
+      <FilterPet namePath={breed} />
       <div className="petlist__main">
         {petList.length > 0 ? (
           petList.map((pet) => (

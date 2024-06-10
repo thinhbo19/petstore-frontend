@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./Navbar.css";
 import Dropdown from "./Dropdown";
+import DropdownForPet from "./DropdownForPet";
 
 const Menu = ({ breedList }) => {
   const homeItems = [
@@ -21,18 +22,17 @@ const Menu = ({ breedList }) => {
     { label: "Contact", link: "/spa" },
   ];
 
-  const dogItems = breedList
-    .filter((breed) => breed.petSpecies.nameSpecies === "Dog")
-    .map((breed) => ({
+  const speciesMap = breedList.reduce((acc, breed) => {
+    const speciesName = breed.petSpecies.nameSpecies;
+    if (!acc[speciesName]) {
+      acc[speciesName] = [];
+    }
+    acc[speciesName].push({
       label: breed.nameBreed,
-      link: `/Home/Dog/${breed.nameBreed}`,
-    }));
-  const catItems = breedList
-    .filter((breed) => breed.petSpecies.nameSpecies === "Cat")
-    .map((breed) => ({
-      label: breed.nameBreed,
-      link: `/Home/Cat/${breed.nameBreed}`,
-    }));
+      link: `/Home/${speciesName}/${breed.nameBreed}`,
+    });
+    return acc;
+  }, {});
 
   const voucherItems = [];
 
@@ -47,16 +47,10 @@ const Menu = ({ breedList }) => {
         <Dropdown items={homeItems} />
       </li>
       <li className="nav__list">
-        <Link className="nav__link" to="Home/Dog">
-          DOG <FontAwesomeIcon className="nav__icon__down" icon={faDog} />
+        <Link className="nav__link" to="#">
+          PETS <FontAwesomeIcon className="nav__icon__down" icon={faDog} />
         </Link>
-        <Dropdown items={dogItems} />
-      </li>
-      <li className="nav__list">
-        <Link className="nav__link" to="Home/Cat">
-          CAT <FontAwesomeIcon className="nav__icon__down" icon={faCat} />
-        </Link>
-        <Dropdown items={catItems} />
+        <DropdownForPet speciesMap={speciesMap} />{" "}
       </li>
       <li className="nav__list">
         <Link className="nav__link" to="/">

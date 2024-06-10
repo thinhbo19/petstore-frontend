@@ -9,7 +9,7 @@ import "../../Screen/Pets/ListOfBreed.css";
 import { Link } from "react-router-dom";
 import { getAllBreeds } from "../../services/apiPet";
 
-const Filter = ({ namePath }) => {
+const FilterPet = ({ namePath }) => {
   const [showFilter, setShowFilter] = useState(false);
   const filterRef = useRef(null);
   const [petList, setPetList] = useState([]);
@@ -72,6 +72,16 @@ const Filter = ({ namePath }) => {
         ref={filterRef}
         className={`filter-panel ${showFilter ? "show" : ""}`}
       >
+        <form className="filter-form">
+          <div className="filter-field">
+            <Link className="link-filter">Filter by price</Link>
+          </div>
+        </form>
+        <form className="filter-form">
+          <div className="filter-field">
+            <Link className="link-filter">Sorting filter</Link>
+          </div>
+        </form>
         {Object.keys(filterListState).map((species, index) => (
           <form key={index} className="filter-form">
             <div className="filter-field">
@@ -108,4 +118,4 @@ const Filter = ({ namePath }) => {
   );
 };
 
-export default Filter;
+export default FilterPet;

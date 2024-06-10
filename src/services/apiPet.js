@@ -63,3 +63,14 @@ export const getCurrentPets = async (pid, accessToken) => {
     throw error;
   }
 };
+export const sortingBreed = async (namePath, sortType) => {
+  try {
+    const res = await axios.get(
+      `${apiUrlBreeds}/sortBreed/${namePath}?sort=${sortType}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error sorting breeds:", error);
+    throw error;
+  }
+};
