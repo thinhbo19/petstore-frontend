@@ -8,8 +8,10 @@ import {
 import "../../Screen/Pets/ListOfBreed.css";
 import { Link } from "react-router-dom";
 import { getAllBreeds } from "../../services/apiPet";
+import SortingForPet from "./SortingForPet";
+import PriceFilter from "./PriceFilter";
 
-const FilterPet = ({ namePath }) => {
+const FilterPet = ({ namePath, setPetsList }) => {
   const [showFilter, setShowFilter] = useState(false);
   const filterRef = useRef(null);
   const [petList, setPetList] = useState([]);
@@ -72,15 +74,20 @@ const FilterPet = ({ namePath }) => {
         ref={filterRef}
         className={`filter-panel ${showFilter ? "show" : ""}`}
       >
+        <SortingForPet
+          namePath={namePath}
+          setPetsList={setPetsList}
+          setShowFilter={setShowFilter}
+        />
         <form className="filter-form">
-          <div className="filter-field">
-            <Link className="link-filter">Filter by price</Link>
+          <div>
+            <h3>Filter by price</h3>
           </div>
-        </form>
-        <form className="filter-form">
-          <div className="filter-field">
-            <Link className="link-filter">Sorting filter</Link>
-          </div>
+          <PriceFilter
+            namePath={namePath}
+            setPetsList={setPetsList}
+            setShowFilter={setShowFilter}
+          />
         </form>
         {Object.keys(filterListState).map((species, index) => (
           <form key={index} className="filter-form">

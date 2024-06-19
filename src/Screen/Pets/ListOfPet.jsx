@@ -7,9 +7,8 @@ import FilterPet from "../../Component/Filter/FilterPet";
 
 const ListOfPet = () => {
   const [breed, setBreed] = useState("");
-  const [petList, setPetList] = useState([]);
+  const [petsList, setPetsList] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const currentPath = useLocation().pathname;
 
   useEffect(() => {
@@ -23,8 +22,7 @@ const ListOfPet = () => {
       setLoading(true);
       try {
         const data = await getPetByBreed(breed);
-        console.log(data);
-        setPetList(data.reverse());
+        setPetsList(data.reverse());
       } catch (error) {
         console.log(error);
       } finally {
@@ -45,10 +43,10 @@ const ListOfPet = () => {
 
   return (
     <div className="petlist__container">
-      <FilterPet namePath={breed} />
+      <FilterPet namePath={breed} setPetsList={setPetsList} />
       <div className="petlist__main">
-        {petList.length > 0 ? (
-          petList.map((pet) => (
+        {petsList.length > 0 ? (
+          petsList.map((pet) => (
             <Link
               key={pet._id}
               to={`/Home/${pet.petBreed.nameSpecies}/${pet.petBreed.nameBreed}/${pet.namePet}`}

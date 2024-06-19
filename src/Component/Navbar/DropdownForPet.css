@@ -3,8 +3,9 @@
   position: absolute;
   top: 150%;
   left: -100px;
+  border-radius: 20px;
   background-color: #f19f6d;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 10px 15px rgba(0, 0, 0, 0.1);
   padding: 10px 0;
   z-index: 1000;
   min-width: 700px;
@@ -31,8 +32,16 @@
   padding: 10px;
 }
 
-.dropdown-section h4 {
-  margin: 0 0 10px;
+.dropdown-section .h4 {
+  margin: 0 0 110px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: bolder;
+  font-size: 1rem;
+  color: #000;
+}
+.dropdown-section .h4:hover {
+  text-decoration: underline;
 }
 
 .dropdown-section ul {

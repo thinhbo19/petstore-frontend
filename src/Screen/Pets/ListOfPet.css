@@ -63,3 +63,14 @@
   font-size: 16px;
   color: #333;
 }
+
+/* price filter */
+.price-display {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.price-display span {
+  font-size: 16px;
+}

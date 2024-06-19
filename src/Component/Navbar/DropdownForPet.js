@@ -8,7 +8,9 @@ const DropdownForPet = ({ speciesMap }) => {
       <div className="dropdown-for-pet">
         {Object.keys(speciesMap).map((species) => (
           <div className="dropdown-section" key={species}>
-            <h4>{species}</h4>
+            <Link to={`/Home/${species}`} className="h4">
+              {species}
+            </Link>
             <ul>
               {speciesMap[species].map((item) => (
                 <li key={item.link}>

@@ -74,3 +74,26 @@ export const sortingBreed = async (namePath, sortType) => {
     throw error;
   }
 };
+export const sortingPets = async (namePath, sortType) => {
+  try {
+    const res = await axios.get(
+      `${apiUrlPets}/sortPet/${namePath}?sort=${sortType}`
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error sorting breeds:", error);
+    throw error;
+  }
+};
+
+export const filterPetsByPrice = async (minPrice, maxPrice, breed) => {
+  try {
+    const response = await axios.get(`${apiUrlPets}/filterPrice/${breed}`, {
+      params: { minPrice, maxPrice },
+    });
+    return response;
+  } catch (error) {
+    console.error("Failed to fetch pets by price:", error);
+    throw error;
+  }
+};
