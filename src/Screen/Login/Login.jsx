@@ -12,13 +12,18 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { apiUrlUser } from "../../services/config";
-import { setAdmin, setLogin, setAccessToken } from "../../services/useSlice";
+import {
+  setAdmin,
+  setLogin,
+  setAccessToken,
+  setUID,
+} from "../../services/useSlice";
 import { useDispatch } from "react-redux";
 
 const Login = ({ setLoading }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State để hiển thị hoặc ẩn mật khẩu
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigation = useNavigate();
 
@@ -33,14 +38,17 @@ const Login = ({ setLoading }) => {
       const response = await axios.post(`${apiUrlUser}/login`, loginData);
       setLoading(true);
       if (response.status === 200) {
+        dispatch(setUID(response.data.userData._id));
         dispatch(setAdmin(response.data.userData.role));
         dispatch(setLogin(true));
         dispatch(setAccessToken(response.data.accessToken));
         setTimeout(() => {
           if (response.data.userData.role === "User") {
             navigation("/");
-          } else {
+          } else if (response.data.userData.role === "Admin") {
             navigation("/dashboard");
+          } else {
+            navigation("/CustomerMessages");
           }
         }, 1200);
       } else {

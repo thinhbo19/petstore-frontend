@@ -1,9 +1,6 @@
 import "./Users.css";
 import React, { useState, useEffect } from "react";
-import {
-  patchChangeRole,
-  patchIsBlockedUser,
-} from "../../../services/appiUser";
+import { patchChangeRole, patchIsBlockedUser } from "../../../services/apiUser";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "../../../services/useSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,7 +32,7 @@ const Users = ({ userList, setUserList, fetchData }) => {
       setFilteredUserList(filteredUsers);
     }
     fetchData();
-  }, [searchTerm, userList]);
+  }, [searchTerm, userList, filteredUserList]);
 
   const handleChangeIsBlocked = async (userId, currentStatus) => {
     try {
@@ -53,9 +50,9 @@ const Users = ({ userList, setUserList, fetchData }) => {
     }
   };
 
-  const handleChangeRole = async (userId) => {
+  const handleChangeRole = async (userId, newRole) => {
     try {
-      await patchChangeRole(accessToken, userId);
+      await patchChangeRole(accessToken, userId, newRole);
       fetchData();
       Swal.fire("Success", "Change role user successfully", "success");
     } catch (error) {
@@ -239,16 +236,18 @@ const Users = ({ userList, setUserList, fetchData }) => {
                 <td>{users.email}</td>
                 <td>{users.mobile}</td>
                 <td>
-                  <input
-                    type="checkbox"
-                    className={
-                      users.role === "Admin"
-                        ? "round-checkbox-role"
-                        : "round-checkbox-user"
+                  <select
+                    onChange={(event) =>
+                      handleChangeRole(users._id, event.target.value)
                     }
-                    checked={users.role}
-                    onChange={() => handleChangeRole(users._id)}
-                  />
+                    name="userRole"
+                    value={users.role}
+                    id="userRole"
+                  >
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                    <option value="CSD">CSD</option>
+                  </select>
                 </td>
                 <td>
                   {users.role === "Admin" ? (

@@ -12,10 +12,20 @@ import ListOfBreed from "./Screen/Pets/ListOfBreed";
 import ActiveLastBreadcrumb from "./Component/Breadcrumb/Breadcrumb";
 import ListOfPet from "./Screen/Pets/ListOfPet";
 import { getAllPets } from "./services/apiPet";
+import Mess from "./Screen/CSDSreen/Mess";
+import ChatBox from "./Component/ChatBox/ChatBox";
 
 function extractPidFromPathname(pathname) {
   const parts = pathname.split("/");
   const pidIndex = parts.findIndex((part) => part === "edit");
+  if (pidIndex !== -1 && pidIndex < parts.length - 1) {
+    return parts[pidIndex + 1];
+  }
+  return null;
+}
+function extractUidFromPathname(pathname) {
+  const parts = pathname.split("/");
+  const pidIndex = parts.findIndex((part) => part === "CustomerMessages");
   if (pidIndex !== -1 && pidIndex < parts.length - 1) {
     return parts[pidIndex + 1];
   }
@@ -26,9 +36,9 @@ function App() {
   const location = useLocation();
   const currentPath = location.pathname;
   const pid = extractPidFromPathname(currentPath);
+  const uid = extractUidFromPathname(currentPath);
   const [speciesList, setSpeciesList] = useState([]);
   const [breedList, setBreedList] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,7 +63,9 @@ function App() {
     currentPath !== "/login" &&
     currentPath !== "/dashboard/addSpecies" &&
     currentPath !== "/dashboard" &&
-    currentPath !== "/dashboard/statistical";
+    currentPath !== "/dashboard/statistical" &&
+    currentPath !== `/CustomerMessages/${uid}` &&
+    currentPath !== "/CustomerMessages";
 
   const noShowBreadcrumb =
     currentPath === "/Home" && currentPath === "/" && currentPath === "login";
@@ -68,6 +80,8 @@ function App() {
         <Route path="/login" element={<LoginSignup />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/" element={<Home />} />
+        <Route path="/CustomerMessages" element={<Mess />} />
+        <Route path="/CustomerMessages/:uid" element={<Mess />} />
         {speciesList.map((species) => (
           <Route
             key={species}
@@ -89,6 +103,7 @@ function App() {
         <Route path="/edit/:pid" element={<EditPetPage />} />
       </Routes>
       {NohowNavbarAndFooter && <Footer />}
+      {NohowNavbarAndFooter && <ChatBox />}
       <ScrollButton />
     </div>
   );

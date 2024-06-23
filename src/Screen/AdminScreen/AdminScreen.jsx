@@ -13,7 +13,7 @@ import { selectAccessToken } from "../../services/useSlice";
 import { getAllSpecies } from "../../services/apiPet";
 import { getAllBreeds } from "../../services/apiPet";
 import { getAllPets } from "../../services/apiPet";
-import { getAllUsers } from "../../services/appiUser";
+import { getAllUsers } from "../../services/apiUser";
 const AdminScreen = () => {
   const accessToken = useSelector(selectAccessToken);
   const [speciesList, setSpeciesList] = useState([]);
