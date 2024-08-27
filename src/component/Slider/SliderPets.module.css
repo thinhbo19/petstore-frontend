@@ -1,0 +1,42 @@
+.sliderContainer {
+  margin: 20px 0;
+}
+
+.slideItem {
+  padding: 10px;
+  text-align: center;
+}
+
+.sliderLink {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+  margin: 10px;
+  z-index: 100;
+}
+.sliderLink:hover {
+  transform: scale(1.05);
+}
+
+.sliderImage {
+  width: 100%;
+  height: 280px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sliderContent {
+  margin-top: 10px;
+}
+
+.petName {
+  margin: 5px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.petPrice {
+  color: red;
+  font-weight: bold;
+  font-size: 14px;
+}

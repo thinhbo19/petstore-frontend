@@ -1,0 +1,118 @@
+@import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
+.nav__main {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav__main.hide {
+  transform: translateY(-100%);
+}
+
+.nav__main.show {
+  transform: translateY(0);
+}
+
+.nav__container {
+  border-radius: 20px;
+}
+
+.nav__img {
+  width: 60px;
+}
+
+.flip-animation {
+  display: flex;
+  justify-content: center;
+  transform: translate3d(0, 0, 0);
+}
+
+.flip-animation > span {
+  font-size: 1.4rem;
+  color: #000000;
+  animation: flipping 2s infinite;
+  font-weight: bolder;
+}
+
+.flip-animation > span:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.flip-animation > span:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.flip-animation > span:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.flip-animation > span:nth-child(4) {
+  animation-delay: 0.8s;
+}
+
+.flip-animation > span:nth-child(5) {
+  animation-delay: 1s;
+}
+
+.flip-animation > span:nth-child(6) {
+  animation-delay: 1.2s;
+}
+.flip-animation > span:nth-child(7) {
+  animation-delay: 1.2s;
+}
+
+@keyframes flipping {
+  0%,
+  80% {
+    transform: rotateY(360deg);
+  }
+}
+
+.btn__pages {
+  border: none;
+  background-color: transparent;
+  font-size: 1.2rem;
+  font-weight: bolder;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 20px;
+  text-decoration: none;
+  position: relative;
+  z-index: 100;
+  color: #000;
+  transition: ease-in-out 0.4s all;
+}
+
+.btn__pages:hover {
+  background-color: #dfdfdf;
+}
+
+.popover-pet {
+  position: absolute;
+  width: 500px;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: black;
+  border: 1px solid #ddd;
+  background: #eaeaea;
+  box-shadow: 5px 5px 20px #7f7f7f, -5px -5px 20px #ffffff;
+  padding: 15px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popover-pet::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px;
+  border-style: solid;
+  border-color: transparent transparent rgb(0, 0, 0) transparent;
+}

@@ -1,0 +1,28 @@
+/* Thiết lập kiểu thanh cuộn cho phần nội dung */
+html {
+  overflow: auto; /* Kích hoạt thanh cuộn khi nội dung vượt qua kích thước của phần tử cha */
+  overflow-x: hidden;
+}
+
+/* Thiết lập kiểu thanh cuộn cho thanh cuộn chính */
+html::-webkit-scrollbar {
+  width: 5px; /* Độ rộng của thanh cuộn */
+}
+
+/* Thiết lập kiểu thanh cuộn cho thanh cuộn chính trên Chrome, Safari và Opera */
+html::-webkit-scrollbar-thumb {
+  background-color: #888; /* Màu nền của thanh cuộn */
+  border-radius: 6px; /* Độ cong viền của thanh cuộn */
+}
+
+/* Thiết lập kiểu thanh cuộn cho thanh cuộn chính trên Firefox */
+html::-moz-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+
+/* Thiết lập kiểu thanh cuộn cho thanh cuộn chính trên Edge và Internet Explorer */
+html::-ms-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
