@@ -24,11 +24,6 @@ const Login = ({ loading, handleSubmit }) => {
     setShowPassword(!showPassword);
   };
 
-  const handleAddActive = () => {
-    const container = document.getElementById("wrapper");
-    container.classList.add("active");
-  };
-
   return (
     <div className="form-container sign-in">
       <form>

@@ -20,11 +20,6 @@ const SignUp = ({ handleSignUp }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRemoveActive = () => {
-    const container = document.getElementById("wrapper");
-    container.classList.remove("active");
-  };
-
   return (
     <div className="form-container sign-up">
       <form>
@@ -70,7 +65,9 @@ const SignUp = ({ handleSignUp }) => {
         />
 
         <div className="link-signin-signup-forgot">
-          <button className="link-signup">Sign in now</button>
+          <Link href="/login" className="link-signup">
+            Sign in now
+          </Link>
         </div>
         <button
           onClick={() => handleSignUp(username, phoneNumber, email, password)}

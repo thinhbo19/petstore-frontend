@@ -85,6 +85,8 @@ const LoginSignup = () => {
         text: error.response?.data?.message || "An error occurred.",
         icon: "error",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,56 +111,58 @@ const LoginSignup = () => {
         title: "Oops...",
         html: errors.join("<br>"),
       });
-      return;
-    }
-    const SignUpData = {
-      username: username,
-      mobile: phoneNumber,
-      email: email,
-      password: password,
-    };
-    try {
-      const response = await axios.post(`${apiUrlUser}/register`, SignUpData);
-      if (response.status === 200) {
-        Swal.fire({
-          title: "Conratulation!",
-          text: "You have successfully registered an account!",
-          icon: "success",
-        });
-        const userId = response.data.data._id;
-        await createChat(userId);
-        setTimeout(() => {
-          const container = document.getElementById("wrapper");
-          container.classList.remove("active");
-        }, 2200);
-      } else {
-        console.error("Login failed");
-      }
-    } catch (error) {
-      if (error.response) {
-        console.error("Server Error:", error.response.data);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: error.response.data.message,
-        });
-      } else if (error.request) {
-        console.error("Network Error:", error.request);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Network Error. Please check your internet connection.",
-        });
-      } else {
-        console.error("Client Error:", error.message);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "An unexpected error occurred. Please try again later.",
-        });
-      }
-    } finally {
       setLoading(false);
+      return;
+    } else {
+      try {
+        const SignUpData = {
+          username: username,
+          mobile: phoneNumber,
+          email: email,
+          password: password,
+        };
+        const response = await axios.post(`${apiUrlUser}/register`, SignUpData);
+        if (response.status === 200) {
+          Swal.fire({
+            title: "Conratulation!",
+            text: "You have successfully registered an account!",
+            icon: "success",
+          });
+          const userId = response.data.data._id;
+          await createChat(userId);
+          setTimeout(() => {
+            const container = document.getElementById("wrapper");
+            container.classList.remove("active");
+          }, 2200);
+        } else {
+          console.error("Login failed");
+        }
+      } catch (error) {
+        if (error.response) {
+          console.error("Server Error:", error.response.data);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: error.response.data.message,
+          });
+        } else if (error.request) {
+          console.error("Network Error:", error.request);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Network Error. Please check your internet connection.",
+          });
+        } else {
+          console.error("Client Error:", error.message);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "An unexpected error occurred. Please try again later.",
+          });
+        }
+      } finally {
+        setLoading(false);
+      }
     }
   };
 

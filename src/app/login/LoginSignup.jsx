@@ -69,7 +69,6 @@ const LoginSignup = () => {
         });
       }
     } catch (error) {
-      console.log(error);
       Swal.fire({
         title: "Error!",
         text: error.response?.data?.message || "An error occurred.",
@@ -101,6 +100,7 @@ const LoginSignup = () => {
         title: "Oops...",
         html: errors.join("<br>"),
       });
+      setLoading(false);
       return;
     }
     const SignUpData = {
