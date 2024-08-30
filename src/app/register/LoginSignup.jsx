@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import "./Login.css";
+import "../../styles/Login.css";
 import Login from "./Login";
 import SignUp from "./Signup";
 import ImageToggle from "../../../public/dog.jpg";
@@ -174,11 +174,15 @@ const LoginSignup = () => {
     <div className="loginregisterForm">
       <div className="wrapper" id="wrapper">
         <Login
-          handleRemoveActive={handleRemoveActive}
+          handleAddActive={handleAddActive}
           loading={loading}
           handleSubmit={handleSubmit}
         />
-        <SignUp loading={loading} handleSignUp={handleSignUp} />
+        <SignUp
+          handleRemoveActive={handleRemoveActive}
+          loading={loading}
+          handleSignUp={handleSignUp}
+        />
         <div className="toggle-container">
           <div
             className="toggle"

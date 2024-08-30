@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import "./Login.css";
+import "../../styles/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -15,7 +15,7 @@ export const metadata = {
   title: "Login",
 };
 
-const Login = ({ loading, handleSubmit }) => {
+const Login = ({ loading, handleSubmit, handleAddActive }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -64,7 +64,11 @@ const Login = ({ loading, handleSubmit }) => {
           <Link className="link-forgot" href="#">
             Forget Your Password?
           </Link>
-          <Link className="link-signup" href="/register">
+          <Link
+            onClick={() => handleAddActive()}
+            className="link-signup"
+            href="/register"
+          >
             Register now
           </Link>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import "./Login.css";
+import "../../styles/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -14,7 +14,7 @@ export const metadata = {
   title: "Sign up",
 };
 
-const SignUp = ({ handleSignUp }) => {
+const SignUp = ({ handleSignUp, handleRemoveActive }) => {
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -65,7 +65,11 @@ const SignUp = ({ handleSignUp }) => {
         />
 
         <div className="link-signin-signup-forgot">
-          <Link href="/login" className="link-signup">
+          <Link
+            onClick={() => handleRemoveActive()}
+            href="/login"
+            className="link-signup"
+          >
             Sign in now
           </Link>
         </div>
