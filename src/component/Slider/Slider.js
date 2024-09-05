@@ -21,6 +21,7 @@ export default function SliderImg() {
     autoplay: true,
     autoplaySpeed: 1400,
   };
+
   return (
     <div className="slider-container">
       <Slider className="slider__main" {...settings}>
