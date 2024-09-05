@@ -6,3 +6,10 @@
   height: 600px;
   width: 100%;
 }
+
+@media (max-width: 650px) {
+  #slidercss img {
+    height: 400px;
+    width: 100%;
+  }
+}

@@ -23,6 +23,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .home__section.services {
   height: 60vh;
   margin-top: 2rem;
@@ -33,6 +34,7 @@
   align-items: center;
   background-color: #f1f1f1;
 }
+
 .intro__container {
   padding: 20px;
   max-width: 600px;
@@ -43,6 +45,7 @@
   text-align: center;
   background-color: #dad6d6;
 }
+
 .intro__container .intro__icon__main .intro__icon {
   margin: 0 16px 0 0;
 }
@@ -84,4 +87,60 @@
 }
 .services__item p {
   font-size: 0.8rem;
+}
+
+@media (max-width: 650px) {
+  .home__section.slider {
+    height: 80vh;
+  }
+  .home__section.intro {
+    height: 40vh;
+  }
+  .intro__container {
+    max-width: 400px;
+    height: 250px;
+  }
+  .intro__container h1 {
+    font-size: 1.3rem;
+  }
+  .intro__container p {
+    font-size: 1rem;
+  }
+  .intro__icon {
+    font-size: 1.2rem;
+  }
+
+  .services__item img {
+    width: 3rem;
+    height: 3rem;
+  }
+  .services__item h4 {
+    font-size: 0.8rem;
+  }
+  .services__item p {
+    font-size: 0.7rem;
+  }
+
+  .hotline__btn {
+    padding: 10px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 550px) {
+  .services__item img {
+    width: 2rem;
+    height: 2rem;
+  }
+  .services__item h4 {
+    font-size: 0.8rem;
+  }
+  .services__item p {
+    font-size: 0.7rem;
+  }
+
+  .hotline__btn {
+    padding: 10px;
+    font-size: 1rem;
+  }
 }
