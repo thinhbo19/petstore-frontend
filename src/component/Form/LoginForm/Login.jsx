@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import "../../styles/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -8,22 +7,26 @@ import {
   faLinkedin,
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Sign up",
+  title: "Login",
 };
 
-const SignUp = ({ handleSignUp, handleRemoveActive }) => {
-  const [username, setUsername] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+const Login = ({ loading, handleSubmit, handleAddActive, handleAddForgot }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
-    <div className="form-container sign-up">
-      <form>
-        <h1>Create Account</h1>
+    <div className="form-container sign-in">
+      <form onSubmit={(e) => handleSubmit(e, email, password)}>
+        <h1>Sign In</h1>
         <div className="social-icons">
           <Link href="#" className="icon">
             <FontAwesomeIcon icon={faFacebook} />
@@ -38,19 +41,7 @@ const SignUp = ({ handleSignUp, handleRemoveActive }) => {
             <FontAwesomeIcon icon={faGoogle} />
           </Link>
         </div>
-        <span>or use your email for registration</span>
-        <input
-          type="text"
-          placeholder="Your Name"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Phone Number"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
+        <span>or use your email password</span>
         <input
           type="email"
           placeholder="Email"
@@ -58,29 +49,30 @@ const SignUp = ({ handleSignUp, handleRemoveActive }) => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-
+        <FontAwesomeIcon
+          icon={showPassword ? faEye : faEyeSlash}
+          className="password-toggle-icon"
+          onClick={togglePasswordVisibility}
+        />
         <div className="link-signin-signup-forgot">
-          <Link
-            onClick={() => handleRemoveActive()}
-            href="/login"
-            className="link-signup"
-          >
-            Sign in now
-          </Link>{" "}
+          <p onClick={() => handleAddForgot()} className="link-forgot">
+            Forget Your Password?
+          </p>
+          <p onClick={() => handleAddActive()} className="link-signup">
+            Register now
+          </p>
         </div>
-        <button
-          onClick={() => handleSignUp(username, phoneNumber, email, password)}
-        >
-          Sign Up
+        <button type="submit">
+          {loading ? "currently logged......." : "Sign In"}
         </button>
       </form>
     </div>
   );
 };
 
-export default SignUp;
+export default Login;

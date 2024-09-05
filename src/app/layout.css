@@ -1,3 +1,8 @@
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
 /* Thiết lập kiểu thanh cuộn cho phần nội dung */
 html {
   overflow: auto; /* Kích hoạt thanh cuộn khi nội dung vượt qua kích thước của phần tử cha */

@@ -1,16 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
 
 export const metadata = {
   title: "ForgotPass",
 };
 
-const ForgotPass = ({ handleSubmit }) => {
+const ForgotPass = ({ handleSubmitForgot, handleRemoveForgot }) => {
   const [email, setEmail] = useState("");
 
   return (
-    <div className="form-container sign-in">
+    <div className="form-container forgot">
       <form>
         <h1>Enter email</h1>
         <span>Please, entered your email to reset password</span>
@@ -22,9 +21,11 @@ const ForgotPass = ({ handleSubmit }) => {
         />
 
         <div className="link-signin-signup-forgot">
-          <Link href="/login">Sign In?</Link>
+          <p className="link-forgot" onClick={() => handleRemoveForgot()}>
+            Sign In?
+          </p>
         </div>
-        <button onClick={() => handleSubmit(email)}>Confirm</button>
+        <button onClick={() => handleSubmitForgot(email)}>Confirm</button>
       </form>
     </div>
   );

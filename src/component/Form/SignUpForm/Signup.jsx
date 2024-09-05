@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import "../../styles/Login.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -9,6 +8,7 @@ import {
   faGoogle,
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export const metadata = {
   title: "Sign up",
@@ -19,10 +19,18 @@ const SignUp = ({ handleSignUp, handleRemoveActive }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="form-container sign-up">
-      <form>
+      <form
+        onSubmit={(e) =>
+          handleSignUp(e, username, phoneNumber, email, password)
+        }
+      >
         <h1>Create Account</h1>
         <div className="social-icons">
           <Link href="#" className="icon">
@@ -58,26 +66,23 @@ const SignUp = ({ handleSignUp, handleRemoveActive }) => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <FontAwesomeIcon
+          icon={showPassword ? faEye : faEyeSlash}
+          className="password-toggle-icon-signup"
+          onClick={togglePasswordVisibility}
+        />
 
         <div className="link-signin-signup-forgot">
-          <Link
-            onClick={() => handleRemoveActive()}
-            href="/login"
-            className="link-signup"
-          >
+          <p onClick={() => handleRemoveActive()} className="link-signup">
             Sign in now
-          </Link>
+          </p>
         </div>
-        <button
-          onClick={() => handleSignUp(username, phoneNumber, email, password)}
-        >
-          Sign Up
-        </button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );

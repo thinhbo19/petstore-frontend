@@ -5,8 +5,8 @@ import ImageToggle from "../../../../public/dog.jpg";
 import axios from "axios";
 import Loading from "@/src/component/Loading/Loading";
 import { apiUrlUser } from "@/src/services/config";
-import ResetPass from "./ResetPass";
 import { useRouter } from "next/navigation";
+import ResetPass from "@/src/component/Form/ResetPass/ResetPass";
 
 const LoginSignup = ({ token }) => {
   const Swal = require("sweetalert2");

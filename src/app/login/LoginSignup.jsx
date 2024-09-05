@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import "../../styles/Login.css";
-import Login from "./Login";
-import SignUp from "./Signup";
 import ImageToggle from "../../../public/dog.jpg";
 import axios from "axios";
 import {
@@ -16,6 +14,9 @@ import { useRouter } from "next/navigation";
 import Loading from "@/src/component/Loading/Loading";
 import { createChat } from "../../services/apiChat";
 import { apiUrlUser } from "@/src/services/config";
+import ForgotPass from "@/src/component/Form/ForgotPass/ForgotPass";
+import Login from "@/src/component/Form/LoginForm/Login";
+import SignUp from "@/src/component/Form/SignUpForm/Signup";
 
 const LoginSignup = () => {
   const dispatch = useDispatch();
@@ -26,13 +27,25 @@ const LoginSignup = () => {
   const handleAddActive = () => {
     const container = document.getElementById("wrapper");
     container.classList.add("active");
+    handleRemoveForgot();
   };
   const handleRemoveActive = () => {
     const container = document.getElementById("wrapper");
     container.classList.remove("active");
   };
+  const handleAddForgot = () => {
+    const container = document.getElementById("wrapper");
+    container.classList.add("active-forgot");
+    handleRemoveActive();
+  };
+  const handleRemoveForgot = () => {
+    const container = document.getElementById("wrapper");
+    container.classList.remove("active-forgot");
+  };
 
-  const handleSubmit = async (email, password) => {
+  const handleSubmit = async (e, email, password) => {
+    e.preventDefault();
+
     setLoading(true);
     const loginData = {
       email: email,
@@ -79,7 +92,8 @@ const LoginSignup = () => {
     }
   };
 
-  const handleSignUp = async (username, phoneNumber, email, password) => {
+  const handleSignUp = async (e, username, phoneNumber, email, password) => {
+    e.preventDefault();
     setLoading(true);
     const errors = [];
     if (username === "") {
@@ -154,6 +168,38 @@ const LoginSignup = () => {
     }
   };
 
+  const handleSubmitForgot = async (e, email) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${apiUrlUser}/forgotpassword?email=${email}`
+      );
+      if (response.status === 200) {
+        Swal.fire({
+          title: "Successfully!",
+          text: response.data.message,
+          icon: "success",
+        });
+      }
+      if (response.status === 500) {
+        Swal.fire({
+          title: "Error!",
+          text: "Email is not register",
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: error.response?.data?.message || "An error occurred.",
+        icon: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -163,6 +209,7 @@ const LoginSignup = () => {
       <div className="wrapper" id="wrapper">
         <Login
           handleAddActive={handleAddActive}
+          handleAddForgot={handleAddForgot}
           loading={loading}
           handleSubmit={handleSubmit}
         />
@@ -171,6 +218,11 @@ const LoginSignup = () => {
           loading={loading}
           handleSignUp={handleSignUp}
         />
+        <ForgotPass
+          handleSubmitForgot={handleSubmitForgot}
+          handleRemoveForgot={handleRemoveForgot}
+        />
+
         <div className="toggle-container">
           <div
             className="toggle"

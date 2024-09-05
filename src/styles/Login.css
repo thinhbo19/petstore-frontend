@@ -93,10 +93,19 @@
 .password-toggle-icon {
   position: absolute;
   right: 35px;
-  top: 65%;
+  top: 63%;
   transform: translateY(-50%);
   cursor: pointer;
 }
+
+.password-toggle-icon-signup {
+  position: absolute;
+  right: 35px;
+  top: 80%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 .password-toggle-icon-forgot {
   position: absolute;
   right: 35px;
@@ -104,6 +113,7 @@
   transform: translateY(-50%);
   cursor: pointer;
 }
+
 .sign-in {
   left: 0;
   width: 50%;
@@ -114,7 +124,18 @@
   transform: translateX(100%);
 }
 
+.wrapper.active-forgot .sign-in {
+  transform: translateX(100%);
+}
+
 .sign-up {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+}
+
+.forgot {
   left: 0;
   width: 50%;
   opacity: 0;
@@ -123,6 +144,13 @@
 
 .wrapper.active .sign-up {
   transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: move 0.6s;
+}
+
+.wrapper.active-forgot .forgot {
+  transform: translateX(0%);
   opacity: 1;
   z-index: 5;
   animation: move 0.6s;
@@ -156,23 +184,30 @@
   height: 40px;
   transition: 0.8s ease;
 }
+
 .social-icons a:hover {
   border: 2px solid #bfe7f6;
   transform: scale(1.09);
 }
+
 .link-signin-signup-forgot {
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
+
 .link-signin-signup-forgot .link-forgot:hover,
 .link-signin-signup-forgot .link-signup:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
+
 .link-signin-signup-forgot .link-signup {
   color: rgb(48, 20, 232);
   display: none;
+  padding: 0;
+  margin: 0;
 }
 
 .toggle-container {
@@ -205,6 +240,7 @@
   transform: translateX(0);
   transition: all 0.6s ease-in-out;
 }
+
 .toggle h1 {
   font-size: 2.5rem;
 }
@@ -249,6 +285,9 @@
   .password-toggle-icon-forgot {
     top: 59%;
   }
+  .password-toggle-icon-signup {
+    top: 78%;
+  }
 }
 
 @media (max-width: 640px) {
@@ -262,6 +301,9 @@
     display: none;
   }
   .wrapper.active .sign-up {
+    transform: translateX(0%);
+  }
+  .wrapper.active-forgot .forgot {
     transform: translateX(0%);
   }
   .form-container {
