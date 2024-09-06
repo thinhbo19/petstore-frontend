@@ -20,7 +20,11 @@ import { Avatar } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { handleChangePage } from "@/src/hooks/useChangePage";
 import { useDispatch, useSelector } from "react-redux";
-import { selectIsLoggedIn, setLogout } from "@/src/services/Redux/useSlice";
+import {
+  selectAdmin,
+  selectIsLoggedIn,
+  setLogout,
+} from "@/src/services/Redux/useSlice";
 import { handleLogin, handleLogout } from "@/src/hooks/useLogout";
 
 const Search = styled("div")(({ theme }) => ({
@@ -67,6 +71,7 @@ const Header = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const login = useSelector(selectIsLoggedIn);
+  const admin = useSelector(selectAdmin);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [leftMenuAnchorEl, setLeftMenuAnchorEl] = React.useState(null);
@@ -121,14 +126,25 @@ const Header = () => {
       onClose={handleMenuClose}
     >
       {login === true ? (
-        <>
-          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
-          <MenuItem onClick={handleMenuClose}>Order History</MenuItem>
-          <MenuItem onClick={() => handleLogout(dispatch, router, setLogout)}>
+        [
+          <MenuItem key="profile" onClick={handleMenuClose}>
+            Profile
+          </MenuItem>,
+          admin === "Admin" && (
+            <MenuItem key="dashboard" onClick={handleMenuClose}>
+              Dashboard
+            </MenuItem>
+          ),
+          <MenuItem key="order-history" onClick={handleMenuClose}>
+            Order History
+          </MenuItem>,
+          <MenuItem
+            key="logout"
+            onClick={() => handleLogout(dispatch, router, setLogout)}
+          >
             Log Out
-          </MenuItem>
-        </>
+          </MenuItem>,
+        ]
       ) : (
         <MenuItem onClick={() => handleLogin(router)}>Sign In</MenuItem>
       )}
@@ -283,6 +299,7 @@ const Header = () => {
             <Image
               src={LogoWeb}
               alt="Logo"
+              priority
               style={{ display: { xs: "none", sm: "block" } }}
             />
             <Box
