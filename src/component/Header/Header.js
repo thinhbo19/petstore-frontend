@@ -10,13 +10,18 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Image from "next/image";
 import LogoWeb from "../../../public/logo.svg";
 import { Avatar } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { handleChangePage } from "@/src/hooks/useChangePage";
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsLoggedIn, setLogout } from "@/src/services/Redux/useSlice";
+import { handleLogin, handleLogout } from "@/src/hooks/useLogout";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,6 +64,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Header = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const login = useSelector(selectIsLoggedIn);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [leftMenuAnchorEl, setLeftMenuAnchorEl] = React.useState(null);
@@ -95,15 +103,6 @@ const Header = () => {
     setLeftMenuAnchorEl(null);
   };
 
-  const handleChangePage = (item) => {
-    switch (item) {
-      case "More":
-        break;
-      default:
-        console.log("Invalid item");
-    }
-  };
-
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -121,8 +120,18 @@ const Header = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {login === true ? (
+        <>
+          <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Dashboard</MenuItem>
+          <MenuItem onClick={handleMenuClose}>Order History</MenuItem>
+          <MenuItem onClick={() => handleLogout(dispatch, router, setLogout)}>
+            Log Out
+          </MenuItem>
+        </>
+      ) : (
+        <MenuItem onClick={() => handleLogin(router)}>Sign In</MenuItem>
+      )}
     </Menu>
   );
 
@@ -158,10 +167,18 @@ const Header = () => {
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
-            <MailIcon />
+            <ShoppingCartIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>Cart</p>
+      </MenuItem>
+      <MenuItem>
+        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+          <Badge badgeContent={4} color="error">
+            <FavoriteIcon />
+          </Badge>
+        </IconButton>
+        <p>Favorite Lists</p>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -195,10 +212,30 @@ const Header = () => {
       open={isLeftMenuOpen}
       onClose={handleLeftMenuClose}
     >
-      <MenuItem onClick={handleLeftMenuClose}>Home</MenuItem>
-      <MenuItem onClick={handleLeftMenuClose}>Pets</MenuItem>
-      <MenuItem onClick={handleLeftMenuClose}>Voucher</MenuItem>
-      <MenuItem onClick={handleLeftMenuClose}>More</MenuItem>
+      <MenuItem
+        onClick={() => handleChangePage(router, "home")}
+        sx={{ fontWeight: "bold" }}
+      >
+        HOME
+      </MenuItem>
+      <MenuItem
+        onClick={() => handleChangePage(router, "pets")}
+        sx={{ fontWeight: "bold" }}
+      >
+        PETS
+      </MenuItem>
+      <MenuItem
+        onClick={() => handleChangePage(router, "voucher")}
+        sx={{ fontWeight: "bold" }}
+      >
+        VOUCHER
+      </MenuItem>
+      <MenuItem
+        onClick={() => handleChangePage(router, "more")}
+        sx={{ fontWeight: "bold" }}
+      >
+        MORE
+      </MenuItem>
     </Menu>
   );
 
@@ -252,14 +289,34 @@ const Header = () => {
               sx={{
                 display: { xs: "none", sm: "flex" },
                 alignItems: "center",
-                flexGrow: 1,
+                flexGrow: 2,
                 gap: 2,
               }}
             >
-              <MenuItem>Home</MenuItem>
-              <MenuItem>Pets</MenuItem>
-              <MenuItem>Voucher</MenuItem>
-              <MenuItem>More</MenuItem>
+              <MenuItem
+                onClick={() => handleChangePage(router, "home")}
+                sx={{ fontWeight: "bold" }}
+              >
+                HOME
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleChangePage(router, "pets")}
+                sx={{ fontWeight: "bold" }}
+              >
+                PETS
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleChangePage(router, "voucher")}
+                sx={{ fontWeight: "bold" }}
+              >
+                VOUCHER
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleChangePage(router, "more")}
+                sx={{ fontWeight: "bold" }}
+              >
+                MORE
+              </MenuItem>
             </Box>
           </Box>
 
@@ -281,7 +338,20 @@ const Header = () => {
                 color="inherit"
               >
                 <Badge badgeContent={4} color="error">
-                  <MailIcon />
+                  <ShoppingCartIcon
+                    onClick={() => handleChangePage(router, "cart")}
+                  />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
+                <Badge badgeContent={4} color="error">
+                  <FavoriteIcon
+                    onClick={() => handleChangePage(router, "favorite")}
+                  />
                 </Badge>
               </IconButton>
               <IconButton
@@ -290,7 +360,9 @@ const Header = () => {
                 color="inherit"
               >
                 <Badge badgeContent={17} color="error">
-                  <NotificationsIcon />
+                  <NotificationsIcon
+                    onClick={() => handleChangePage(router, "notification")}
+                  />
                 </Badge>
               </IconButton>
               <IconButton
