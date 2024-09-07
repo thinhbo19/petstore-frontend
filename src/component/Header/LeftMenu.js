@@ -4,6 +4,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import { handleChangePage } from "@/src/hooks/useChangePage";
 
+const options = ["HOME", "ABOUT US", "NEWS", "PETS", "VOUCHER", "MORE"];
+const ITEM_HEIGHT = 48;
+
 const LeftMenu = ({
   leftMenuAnchorEl,
   isLeftMenuOpen,
@@ -17,41 +20,35 @@ const LeftMenu = ({
       anchorEl={leftMenuAnchorEl}
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "left",
+        horizontal: "center",
       }}
       id={leftMenuId}
       keepMounted
       transformOrigin={{
         vertical: "top",
-        horizontal: "left",
+        horizontal: "center",
       }}
       open={isLeftMenuOpen}
       onClose={handleLeftMenuClose}
+      slotProps={{
+        paper: {
+          style: {
+            maxHeight: ITEM_HEIGHT * 4.5,
+            width: "20ch",
+          },
+        },
+      }}
     >
-      <MenuItem
-        onClick={() => handleChangePage(router, "home")}
-        sx={{ fontWeight: "bold" }}
-      >
-        HOME
-      </MenuItem>
-      <MenuItem
-        onClick={() => handleChangePage(router, "pets")}
-        sx={{ fontWeight: "bold" }}
-      >
-        PETS
-      </MenuItem>
-      <MenuItem
-        onClick={() => handleChangePage(router, "voucher")}
-        sx={{ fontWeight: "bold" }}
-      >
-        VOUCHER
-      </MenuItem>
-      <MenuItem
-        onClick={() => handleChangePage(router, "more")}
-        sx={{ fontWeight: "bold" }}
-      >
-        MORE
-      </MenuItem>
+      {options.map((option) => (
+        <MenuItem
+          sx={{ fontWeight: "bold" }}
+          key={option}
+          selected={option === "Pyxis"}
+          onClick={() => handleChangePage(router, option)}
+        >
+          {option}
+        </MenuItem>
+      ))}
     </Menu>
   );
 };

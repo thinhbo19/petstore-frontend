@@ -1,9 +1,15 @@
 export const handleChangePage = (router, item) => {
   switch (item) {
-    case "home":
+    case "HOME":
       router.push("/");
       break;
-    case "pets":
+    case "ABOUT US":
+      router.push("/about-us");
+      break;
+    case "NEWS":
+      router.push("/news");
+      break;
+    case "PETS":
       router.push("/shop");
       break;
     case "voucher":

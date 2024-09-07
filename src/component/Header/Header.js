@@ -10,8 +10,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { useSelector } from "react-redux";
-import { selectAdmin, selectIsLoggedIn } from "@/src/services/Redux/useSlice";
 import SearchBar from "./SearchBar";
 import MenuItems from "./MenuItems";
 import MobileMenu from "./MobileMenu";
@@ -21,12 +19,55 @@ import { handleChangePage } from "@/src/hooks/useChangePage";
 import { useRouter } from "next/navigation";
 import LogoWeb from "../../../public/logo.svg";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { selectAccessToken } from "@/src/services/Redux/useSlice";
+import { getCurrentUser } from "@/src/services/apiUser";
+import { Menu, MenuItem } from "@mui/material";
+import CartMenu from "./Popover/CartMenu";
+import FavoriteMenu from "./Popover/FavoriteMenu";
+import NotificationMenu from "./Popover/NotificationMenu";
 
 const Header = () => {
   const router = useRouter();
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const [leftMenuAnchorEl, setLeftMenuAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [leftMenuAnchorEl, setLeftMenuAnchorEl] = useState(null);
+  const accessToken = useSelector(selectAccessToken);
+  const [avatar, setAvatar] = useState(null);
+
+  const [anchorElCart, setAnchorElCart] = useState(null);
+  const [anchorElFavorite, setAnchorElFavorite] = useState(null);
+  const [anchorElNotification, setAnchorElNotification] = useState(null);
+
+  const handleMenuCartOpen = (event) => {
+    setAnchorElCart(event.currentTarget);
+  };
+
+  const handleMenuCartClose = () => {
+    setAnchorElCart(null);
+  };
+  const handleMenuFavoriteOpen = (event) => {
+    setAnchorElFavorite(event.currentTarget);
+  };
+
+  const handleMenuFavoriteClose = () => {
+    setAnchorElFavorite(null);
+  };
+  const handleMenuNotificationOpen = (event) => {
+    setAnchorElNotification(event.currentTarget);
+  };
+
+  const handleMenuNotificationClose = () => {
+    setAnchorElNotification(null);
+  };
+
+  const openCart = Boolean(anchorElCart);
+  const openFavorite = Boolean(anchorElFavorite);
+  const openNotification = Boolean(anchorElNotification);
+
+  const cartMenuId = "primary-shopping-cart-menu";
+  const favoriteMenuId = "primary-favorite-menu";
+  const notificationMenuId = "primary-notification-menu";
 
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollTop, setLastScrollTop] = useState(0);
@@ -36,6 +77,16 @@ const Header = () => {
   const isLeftMenuOpen = Boolean(leftMenuAnchorEl);
 
   const mobileMenuId = "primary-search-account-menu-mobile";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (accessToken) {
+        const res = await getCurrentUser(accessToken);
+        setAvatar(res.Avatar);
+      }
+    };
+    fetchData();
+  }, [accessToken]);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -117,36 +168,31 @@ const Header = () => {
 
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
+                onClick={handleMenuCartOpen}
                 size="large"
-                aria-label="show 4 new mails"
                 color="inherit"
               >
                 <Badge badgeContent={4} color="error">
-                  <ShoppingCartIcon
-                    onClick={() => handleChangePage(router, "cart")}
-                  />
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+
+              <IconButton
+                size="large"
+                onClick={handleMenuFavoriteOpen}
+                color="inherit"
+              >
+                <Badge badgeContent={4} color="error">
+                  <FavoriteIcon />
                 </Badge>
               </IconButton>
               <IconButton
                 size="large"
-                aria-label="show 4 new mails"
-                color="inherit"
-              >
-                <Badge badgeContent={4} color="error">
-                  <FavoriteIcon
-                    onClick={() => handleChangePage(router, "favorite")}
-                  />
-                </Badge>
-              </IconButton>
-              <IconButton
-                size="large"
-                aria-label="show 17 new notifications"
+                onClick={handleMenuNotificationOpen}
                 color="inherit"
               >
                 <Badge badgeContent={17} color="error">
-                  <NotificationsIcon
-                    onClick={() => handleChangePage(router, "notification")}
-                  />
+                  <NotificationsIcon />
                 </Badge>
               </IconButton>
               <IconButton
@@ -158,7 +204,7 @@ const Header = () => {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
               >
-                <Avatar src="/static/images/avatar/1.jpg" />
+                <Avatar src={avatar} />
               </IconButton>
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -177,6 +223,7 @@ const Header = () => {
         </Toolbar>
       </AppBar>
       <MobileMenu
+        avatar={avatar}
         mobileMenuId={mobileMenuId}
         mobileMoreAnchorEl={mobileMoreAnchorEl}
         isMobileMenuOpen={isMobileMenuOpen}
@@ -192,6 +239,25 @@ const Header = () => {
         leftMenuAnchorEl={leftMenuAnchorEl}
         isLeftMenuOpen={isLeftMenuOpen}
         handleLeftMenuClose={handleLeftMenuClose}
+      />
+
+      <CartMenu
+        anchorElCart={anchorElCart}
+        cartMenuId={cartMenuId}
+        openCart={openCart}
+        handleMenuCartClose={handleMenuCartClose}
+      />
+      <FavoriteMenu
+        anchorElFavorite={anchorElFavorite}
+        favoriteMenuId={favoriteMenuId}
+        openFavorite={openFavorite}
+        handleMenuFavoriteClose={handleMenuFavoriteClose}
+      />
+      <NotificationMenu
+        anchorElNotification={anchorElNotification}
+        notificationMenuId={notificationMenuId}
+        openNotification={openNotification}
+        handleMenuNotificationClose={handleMenuNotificationClose}
       />
     </Box>
   );

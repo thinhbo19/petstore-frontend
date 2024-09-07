@@ -14,6 +14,21 @@ export const getAllUsers = async (accessToken) => {
     throw error;
   }
 };
+
+export const getCurrentUser = async (accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlUser}/current`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.rs;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};
+
 export const getUsersForChat = async (accessToken, uid) => {
   try {
     const res = await axios.get(`${apiUrlUser}/userCurrent/?_id=${uid}`, {
