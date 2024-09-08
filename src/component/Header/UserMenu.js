@@ -9,6 +9,9 @@ import {
   setLogout,
 } from "@/src/services/Redux/useSlice";
 import { handleLogin, handleLogout } from "@/src/hooks/useLogout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
   const router = useRouter();
@@ -21,7 +24,7 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "top",
+        vertical: "bottom",
         horizontal: "right",
       }}
       id={menuId}
@@ -32,11 +35,39 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
+      slotProps={{
+        paper: {
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&::before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 20,
+              width: 25,
+              height: 25,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        },
+      }}
     >
       {login === true ? (
         [
           <MenuItem key="profile" onClick={handleMenuClose}>
-            Profile
+            <AccountCircleIcon /> Profile
           </MenuItem>,
           admin === "Admin" && (
             <MenuItem key="dashboard" onClick={handleMenuClose}>
@@ -44,13 +75,13 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
             </MenuItem>
           ),
           <MenuItem key="order-history" onClick={handleMenuClose}>
-            Order History
+            <LibraryBooksIcon /> Order History
           </MenuItem>,
           <MenuItem
             key="logout"
             onClick={() => handleLogout(dispatch, router, setLogout)}
           >
-            Log Out
+            <LogoutIcon /> Log Out
           </MenuItem>,
         ]
       ) : (

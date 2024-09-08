@@ -1,9 +1,14 @@
 import Footer from "@/src/component/Footer/Footer";
+import Header from "@/src/component/Header/Header";
 import ScrollButton from "@/src/component/ScrollButton/ScrollButton";
+import { getAllCat, getAllDog } from "@/src/services/apiPet";
 
-export default function UserLayout({ children }) {
+export default async function UserLayout({ children }) {
+  const dogs = await getAllDog();
+  const cats = await getAllCat();
   return (
     <>
+      <Header allDog={dogs} allCat={cats} />
       {children}
       <Footer />
       <ScrollButton />

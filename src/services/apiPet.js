@@ -18,7 +18,6 @@ export const getAllBreeds = async () => {
     throw error;
   }
 };
-
 export const getBreedBySpecies = async (species) => {
   try {
     const res = await axios.get(`${apiUrlBreeds}/getBreedBySpecies/${species}`);
@@ -28,6 +27,22 @@ export const getBreedBySpecies = async (species) => {
   }
 };
 
+export const getAllDog = async () => {
+  try {
+    const res = await axios.get(`${apiUrlBreeds}/getBreedByNameSpecies/Dog`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getAllCat = async () => {
+  try {
+    const res = await axios.get(`${apiUrlBreeds}/getBreedByNameSpecies/Cat`);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
 export const getPetByBreed = async (breed) => {
   try {
     const res = await axios.get(`${apiUrlPets}/getPetByBreed/${breed}`);
@@ -60,7 +75,6 @@ export const getCurrentPetsByName = async (name) => {
     throw error;
   }
 };
-
 export const sortingBreed = async (namePath, sortType) => {
   try {
     const res = await axios.get(

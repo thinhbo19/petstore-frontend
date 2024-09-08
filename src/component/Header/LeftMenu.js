@@ -4,7 +4,16 @@ import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import { handleChangePage } from "@/src/hooks/useChangePage";
 
-const options = ["HOME", "ABOUT US", "NEWS", "PETS", "VOUCHER", "MORE"];
+const options = [
+  "Home",
+  "About Us",
+  "Spa&Hotel Services",
+  "Warranty Policy",
+  "News",
+  "Pets",
+  "Voucher",
+  "Product",
+];
 const ITEM_HEIGHT = 48;
 
 const LeftMenu = ({
@@ -34,7 +43,7 @@ const LeftMenu = ({
         paper: {
           style: {
             maxHeight: ITEM_HEIGHT * 4.5,
-            width: "20ch",
+            width: "25ch",
           },
         },
       }}

@@ -1,1 +1,13 @@
+.link__species {
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
+.link__breed {
+  text-decoration: none;
+  color: black;
+}

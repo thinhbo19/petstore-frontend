@@ -52,7 +52,7 @@ const CartMenu = ({
       }}
     >
       <MenuItem sx={{ alignItems: "center", gap: 1.5 }}>
-        <Image src={TextImage} width={100} height={100} />
+        <Image src={TextImage} width={100} height={100} alt="" />
         <Box
           sx={{
             display: "flex",

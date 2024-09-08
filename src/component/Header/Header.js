@@ -1,4 +1,6 @@
+"use client";
 import React, { useEffect, useState } from "react";
+import "../../styles/Header.css";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -15,55 +17,76 @@ import MenuItems from "./MenuItems";
 import MobileMenu from "./MobileMenu";
 import UserMenu from "./UserMenu";
 import LeftMenu from "./LeftMenu";
-import { handleChangePage } from "@/src/hooks/useChangePage";
 import { useRouter } from "next/navigation";
 import LogoWeb from "../../../public/logo.svg";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
 import { getCurrentUser } from "@/src/services/apiUser";
-import { Menu, MenuItem } from "@mui/material";
 import CartMenu from "./Popover/CartMenu";
 import FavoriteMenu from "./Popover/FavoriteMenu";
 import NotificationMenu from "./Popover/NotificationMenu";
+import HomeMenu from "./Popover/HomeMenu";
+import PetsMenu from "./Popover/PetsMenu";
 
-const Header = () => {
+const Header = ({ allDog, allCat }) => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [leftMenuAnchorEl, setLeftMenuAnchorEl] = useState(null);
   const accessToken = useSelector(selectAccessToken);
   const [avatar, setAvatar] = useState(null);
+  const [anchorElHome, setAnchorElHome] = useState(null);
+  const [anchorElPets, setAnchorElPets] = useState(null);
 
   const [anchorElCart, setAnchorElCart] = useState(null);
   const [anchorElFavorite, setAnchorElFavorite] = useState(null);
   const [anchorElNotification, setAnchorElNotification] = useState(null);
 
+  const handleMenuHomeOpen = (event) => {
+    setAnchorElHome(event.currentTarget);
+  };
+  const handleMenuHomeClose = () => {
+    setAnchorElHome(null);
+  };
+
+  const handleMenuPetsOpen = (event) => {
+    setAnchorElPets(event.currentTarget);
+  };
+  const handleMenuPetsClose = () => {
+    setAnchorElPets(null);
+  };
+
   const handleMenuCartOpen = (event) => {
     setAnchorElCart(event.currentTarget);
   };
-
   const handleMenuCartClose = () => {
     setAnchorElCart(null);
   };
+
   const handleMenuFavoriteOpen = (event) => {
     setAnchorElFavorite(event.currentTarget);
   };
-
   const handleMenuFavoriteClose = () => {
     setAnchorElFavorite(null);
   };
+
   const handleMenuNotificationOpen = (event) => {
     setAnchorElNotification(event.currentTarget);
   };
-
   const handleMenuNotificationClose = () => {
     setAnchorElNotification(null);
   };
 
+  const openHome = Boolean(anchorElHome);
+  const openPets = Boolean(anchorElPets);
+
   const openCart = Boolean(anchorElCart);
   const openFavorite = Boolean(anchorElFavorite);
   const openNotification = Boolean(anchorElNotification);
+
+  const homeMenuId = "primary-home-menu";
+  const petsMenuId = "primary-pets-menu";
 
   const cartMenuId = "primary-shopping-cart-menu";
   const favoriteMenuId = "primary-favorite-menu";
@@ -160,7 +183,10 @@ const Header = () => {
               priority
               style={{ display: { xs: "none", sm: "block" } }}
             />
-            <MenuItems />
+            <MenuItems
+              handleMenuHomeOpen={handleMenuHomeOpen}
+              handleMenuPetsOpen={handleMenuPetsOpen}
+            />
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -258,6 +284,21 @@ const Header = () => {
         notificationMenuId={notificationMenuId}
         openNotification={openNotification}
         handleMenuNotificationClose={handleMenuNotificationClose}
+      />
+      <HomeMenu
+        anchorElHome={anchorElHome}
+        homeMenuId={homeMenuId}
+        openHome={openHome}
+        handleMenuHomeClose={handleMenuHomeClose}
+      />
+
+      <PetsMenu
+        allDog={allDog}
+        allCat={allCat}
+        anchorElPets={anchorElPets}
+        petsMenuId={petsMenuId}
+        openPets={openPets}
+        handleMenuPetsClose={handleMenuPetsClose}
       />
     </Box>
   );

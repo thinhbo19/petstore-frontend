@@ -3,19 +3,34 @@ export const handleChangePage = (router, item) => {
     case "HOME":
       router.push("/");
       break;
-    case "ABOUT US":
+    case "About Us":
       router.push("/about-us");
       break;
-    case "NEWS":
+    case "Spa&Hotel Services":
+      router.push("/spa-services");
+      break;
+    case "Warranty Policy":
+      router.push("/warranty-policy");
+      break;
+    case "0% Installment Policy":
+      router.push("/installment-policy");
+      break;
+    case "Contact":
+      router.push("/contact");
+      break;
+    case "News":
       router.push("/news");
       break;
-    case "PETS":
+    case "Pets":
       router.push("/shop");
       break;
-    case "voucher":
+    case "Voucher":
       router.push("/voucher");
       break;
-    case "more":
+    case "More":
+      router.push("/shop");
+      break;
+    case "Product":
       router.push("/shop");
       break;
     case "notification":

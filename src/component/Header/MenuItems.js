@@ -4,7 +4,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import { handleChangePage } from "@/src/hooks/useChangePage";
 
-const MenuItems = () => {
+const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
   const router = useRouter();
 
   return (
@@ -16,26 +16,20 @@ const MenuItems = () => {
         gap: 2,
       }}
     >
-      <MenuItem
-        onClick={() => handleChangePage(router, "home")}
-        sx={{ fontWeight: "bold" }}
-      >
+      <MenuItem onClick={handleMenuHomeOpen} sx={{ fontWeight: "bold" }}>
         HOME
       </MenuItem>
-      <MenuItem
-        onClick={() => handleChangePage(router, "pets")}
-        sx={{ fontWeight: "bold" }}
-      >
+      <MenuItem onClick={handleMenuPetsOpen} sx={{ fontWeight: "bold" }}>
         PETS
       </MenuItem>
       <MenuItem
-        onClick={() => handleChangePage(router, "voucher")}
+        onClick={() => handleChangePage(router, "Voucher")}
         sx={{ fontWeight: "bold" }}
       >
         VOUCHER
       </MenuItem>
       <MenuItem
-        onClick={() => handleChangePage(router, "more")}
+        onClick={() => handleChangePage(router, "More")}
         sx={{ fontWeight: "bold" }}
       >
         MORE
