@@ -1,5 +1,4 @@
-const backendUrl =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const apiUrlUser = `${backendUrl}/api/user`;
 export const apiUrlSpecies = `${backendUrl}/api/petSpecies`;
