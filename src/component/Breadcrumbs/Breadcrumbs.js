@@ -25,7 +25,7 @@ const BreadcrumbsComponent = ({ pathName }) => {
           e.preventDefault();
           router.push("/");
         }}
-        sx={{ textDecoration: "none" }} // Tắt gạch dưới
+        sx={{ textDecoration: "none" }}
       >
         <Typography
           sx={{

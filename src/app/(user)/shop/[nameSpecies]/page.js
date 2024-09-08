@@ -1,10 +1,5 @@
 import "../../../../styles/shop.css";
-import {
-  getAllBreeds,
-  getAllCat,
-  getAllDog,
-  getBreedBySpecies,
-} from "@/src/services/apiPet";
+import { getAllBreeds, getAllCat, getAllDog } from "@/src/services/apiPet";
 import ShopForm from "@/src/component/ShopComponent/ShopForm";
 
 export async function generateStaticParams() {
