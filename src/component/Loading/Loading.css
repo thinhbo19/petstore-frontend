@@ -356,6 +356,20 @@
   }
 }
 
+@media (max-width: 860px) {
+  .wheel-and-hamster {
+    left: 30%;
+    transform: translateX(50%);
+  }
+}
+
+@media (max-width: 600px) {
+  .wheel-and-hamster {
+    left: 25%;
+    transform: translateX(50%);
+  }
+}
+
 @media (max-width: 560px) {
   .wheel-and-hamster {
     position: absolute;
@@ -365,14 +379,16 @@
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 450px) {
   .wheel-and-hamster {
-    left: 30%;
+    left: 10%;
+    transform: translateX(50%);
   }
 }
 
 @media (max-width: 380px) {
   .wheel-and-hamster {
-    left: 2%;
+    left: 5%;
+    transform: translateX(50%);
   }
 }

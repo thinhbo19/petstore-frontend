@@ -9,7 +9,6 @@ export const getAllSpecies = async () => {
     throw error;
   }
 };
-
 export const getAllBreeds = async () => {
   try {
     const res = await axios.get(`${apiUrlBreeds}/getAllBreed`);
@@ -26,7 +25,6 @@ export const getBreedBySpecies = async (species) => {
     throw error;
   }
 };
-
 export const getAllDog = async () => {
   try {
     const res = await axios.get(`${apiUrlBreeds}/getBreedByNameSpecies/Dog`);

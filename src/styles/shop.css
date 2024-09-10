@@ -9,6 +9,19 @@
   color: black;
 }
 
+.price {
+  color: red;
+  text-align: left;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.price::after {
+  content: "₫";
+  margin-left: 4px;
+}
+
 @media (max-width: 380px) {
   .name__item {
     font-size: 1rem;

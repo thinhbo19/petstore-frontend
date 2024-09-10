@@ -13,14 +13,24 @@ const BreadcrumbsComponent = () => {
     .map((part, index, array) => {
       const href = "/" + array.slice(0, index + 1).join("/");
       return {
-        label: part,
+        label: part.replace(/-/g, " "),
         href: href,
       };
     });
 
   return (
     <Breadcrumbs
-      sx={{ marginBottom: "15px", marginTop: "6rem", marginLeft: "2rem" }}
+      sx={{
+        marginBottom: "15px",
+        marginTop: "6rem",
+        marginLeft: "2rem",
+        fontSize: {
+          xs: "0.75rem",
+          sm: "0.875rem",
+          md: "1rem",
+          lg: "1.125rem",
+        },
+      }}
       aria-label="breadcrumb"
     >
       <Link
@@ -36,6 +46,12 @@ const BreadcrumbsComponent = () => {
           sx={{
             fontWeight: "bold",
             textTransform: "uppercase",
+            fontSize: {
+              xs: "0.75rem",
+              sm: "0.875rem",
+              md: "1rem",
+              lg: "1.125rem",
+            },
           }}
           color="textPrimary"
         >
@@ -51,12 +67,18 @@ const BreadcrumbsComponent = () => {
             e.preventDefault();
             router.push(link.href);
           }}
-          sx={{ textDecoration: "none" }} // Tắt gạch dưới
+          sx={{ textDecoration: "none" }}
         >
           <Typography
             sx={{
               fontWeight: "bold",
               textTransform: "uppercase",
+              fontSize: {
+                xs: "0.75rem",
+                sm: "0.875rem",
+                md: "1rem",
+                lg: "1.125rem",
+              },
             }}
             color="textPrimary"
           >

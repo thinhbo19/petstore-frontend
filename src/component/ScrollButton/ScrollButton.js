@@ -10,7 +10,7 @@ const ScrollButton = () => {
   const handleScroll = () => {
     const scrollTop = window.scrollY;
 
-    if (scrollTop > 3000) {
+    if (scrollTop > 1000) {
       setIsVisible(true);
     } else {
       setIsVisible(false);
