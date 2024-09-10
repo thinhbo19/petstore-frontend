@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Typography,
@@ -9,48 +9,97 @@ import {
   CardMedia,
   Pagination,
 } from "@mui/material";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { generateSlug } from "@/src/services/slugifyConfig";
-import BreadcrumbsComponent from "../Breadcrumbs/Breadcrumbs";
+import "../../styles/shop.css";
+import Link from "next/link";
+import Loading from "../Loading/Loading";
 
 const ShopForm = ({ data }) => {
   const router = useRouter();
-  const pathName = usePathname();
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 20;
+  const [pageDog, setPageDog] = useState(1);
+  const [pageCat, setPageCat] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const containerDogRef = useRef(null);
+  const containerCatRef = useRef(null);
+  const itemsPerPage = 8;
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  }, []);
+
+  useEffect(() => {
+    if (pageDog) {
+      containerDogRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [pageDog]);
+
+  useEffect(() => {
+    if (pageCat) {
+      containerCatRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [pageCat]);
+
+  const handleChangePageDog = (event, newPage) => {
+    setPageDog(newPage);
+  };
+
+  const handleChangePageCat = (event, newPage) => {
+    setPageCat(newPage);
   };
 
   const changePage = (species, breed) => {
     router.push(`/shop/${generateSlug(species)}/${generateSlug(breed)}`);
   };
 
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = page * itemsPerPage;
+  const dogs = data.filter(
+    (breed) => breed.petSpecies.nameSpecies.toLowerCase() === "dog"
+  );
+  const cats = data.filter(
+    (breed) => breed.petSpecies.nameSpecies.toLowerCase() === "cat"
+  );
 
-  const currentBreeds = data.slice(startIndex, endIndex);
+  const startIndexDog = (pageDog - 1) * itemsPerPage;
+  const endIndexDog = pageDog * itemsPerPage;
+  const currentDogs = dogs.slice(startIndexDog, endIndexDog);
+
+  const startIndexCat = (pageCat - 1) * itemsPerPage;
+  const endIndexCat = pageCat * itemsPerPage;
+  const currentCats = cats.slice(startIndexCat, endIndexCat);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Box
       sx={{
-        padding: 15,
+        padding: 1,
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
         alignItems: "center",
       }}
     >
-      <Box sx={{ maxWidth: "1400px", width: "100%" }}>
-        <BreadcrumbsComponent pathName={pathName} />
+      {/* Section for Dogs */}
+      <Box
+        ref={containerDogRef}
+        sx={{ maxWidth: "1400px", width: "100%", marginBottom: 4 }}
+      >
+        <div className="all__item">
+          <Link href="/shop/dog" className="link__all__item">
+            ALL DOGS
+          </Link>
+        </div>
         <Grid container spacing={2} justifyContent="center">
-          {currentBreeds.map((breed) => (
+          {currentDogs.map((breed) => (
             <Grid
               item
-              xs={12}
-              sm={6}
+              xs={6} // 2 items per row on phone screens
+              sm={4} // 3 items per row on tablet screens
               md={3}
+              lg={2} // 5 items per row on large screens
               key={breed._id}
               display="flex"
               justifyContent="center"
@@ -72,6 +121,7 @@ const ShopForm = ({ data }) => {
                     height="280"
                     image={breed.imgBreed[0]}
                     alt={breed.nameBreed}
+                    loading="lazy"
                   />
                 )}
                 <CardContent>
@@ -80,6 +130,14 @@ const ShopForm = ({ data }) => {
                     variant="h5"
                     component="div"
                     align="center"
+                    sx={{
+                      fontSize: {
+                        xs: "1rem", // small font size for extra small screens
+                        sm: "1.2rem", // slightly larger font size for small screens
+                        md: "1.5rem", // medium font size for medium screens
+                        lg: "1.8rem", // larger font size for large screens
+                      },
+                    }}
                   >
                     {breed.nameBreed}
                   </Typography>
@@ -97,9 +155,90 @@ const ShopForm = ({ data }) => {
         </Grid>
         <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
           <Pagination
-            count={Math.ceil(data.length / itemsPerPage)}
-            page={page}
-            onChange={handleChangePage}
+            count={Math.ceil(dogs.length / itemsPerPage)}
+            page={pageDog}
+            onChange={handleChangePageDog}
+            color="primary"
+          />
+        </Box>
+      </Box>
+
+      {/* Section for Cats */}
+      <Box
+        ref={containerCatRef}
+        sx={{ maxWidth: "1400px", width: "100%", marginBottom: 4 }}
+      >
+        <div className="all__item">
+          <Link href="/shop/cat" className="link__all__item">
+            ALL CATS
+          </Link>
+        </div>
+        <Grid container spacing={2} justifyContent="center">
+          {currentCats.map((breed) => (
+            <Grid
+              item
+              xs={6} // 2 items per row on phone screens
+              sm={4} // 3 items per row on tablet screens
+              md={3}
+              lg={2} // 5 items per row on large screens
+              key={breed._id}
+              display="flex"
+              justifyContent="center"
+              sx={{
+                transition: "transform 0.3s ease",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                  cursor: "pointer",
+                },
+              }}
+              onClick={() =>
+                changePage(breed.petSpecies.nameSpecies, breed.nameBreed)
+              }
+            >
+              <Card sx={{ maxWidth: 300 }}>
+                {breed.imgBreed && breed.imgBreed.length > 0 && (
+                  <CardMedia
+                    component="img"
+                    height="280"
+                    image={breed.imgBreed[0]}
+                    alt={breed.nameBreed}
+                    loading="lazy"
+                  />
+                )}
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    align="center"
+                    sx={{
+                      fontSize: {
+                        xs: "1rem", // small font size for extra small screens
+                        sm: "1.2rem", // slightly larger font size for small screens
+                        md: "1.5rem", // medium font size for medium screens
+                        lg: "1.8rem", // larger font size for large screens
+                      },
+                    }}
+                  >
+                    {breed.nameBreed}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    align="center"
+                  >
+                    Species: {breed.petSpecies.nameSpecies}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
+          <Pagination
+            count={Math.ceil(cats.length / itemsPerPage)}
+            page={pageCat}
+            onChange={handleChangePageCat}
             color="primary"
           />
         </Box>

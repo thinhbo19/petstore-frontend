@@ -1,8 +1,16 @@
-.shop__container {
-  max-width: 100%;
-  margin: 5rem 0 0 0;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.all__item {
+  width: 100%;
+  text-align: center;
+  margin: 5px 0 25px 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.link__all__item {
+  color: black;
+}
+
+@media (max-width: 380px) {
+  .name__item {
+    font-size: 1rem;
+  }
 }

@@ -364,3 +364,15 @@
     transform: translateX(50%);
   }
 }
+
+@media (max-width: 860px) {
+  .wheel-and-hamster {
+    left: 30%;
+  }
+}
+
+@media (max-width: 380px) {
+  .wheel-and-hamster {
+    left: 2%;
+  }
+}

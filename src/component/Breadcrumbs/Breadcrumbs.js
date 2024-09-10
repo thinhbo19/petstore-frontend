@@ -1,9 +1,11 @@
+"use client";
 import React from "react";
 import { Link, Typography, Breadcrumbs } from "@mui/material";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-const BreadcrumbsComponent = ({ pathName }) => {
+const BreadcrumbsComponent = () => {
   const router = useRouter();
+  const pathName = usePathname();
 
   const breadcrumbsLinks = pathName
     .split("/")
@@ -17,7 +19,10 @@ const BreadcrumbsComponent = ({ pathName }) => {
     });
 
   return (
-    <Breadcrumbs sx={{ marginBottom: "15px" }} aria-label="breadcrumb">
+    <Breadcrumbs
+      sx={{ marginBottom: "15px", marginTop: "6rem", marginLeft: "2rem" }}
+      aria-label="breadcrumb"
+    >
       <Link
         color="inherit"
         href="/"
