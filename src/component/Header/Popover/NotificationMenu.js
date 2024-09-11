@@ -15,6 +15,7 @@ const NotificationMenu = ({
 }) => {
   return (
     <Menu
+      sx={{ zIndex: "100000" }}
       anchorEl={anchorElNotification}
       id={notificationMenuId}
       keepMounted

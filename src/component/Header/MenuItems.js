@@ -14,6 +14,7 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
         alignItems: "center",
         flexGrow: 2,
         gap: 2,
+        zIndex: "100000",
       }}
     >
       <MenuItem onClick={handleMenuHomeOpen} sx={{ fontWeight: "bold" }}>

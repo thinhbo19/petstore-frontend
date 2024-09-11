@@ -26,6 +26,7 @@ const LeftMenu = ({
 
   return (
     <Menu
+      sx={{ zIndex: "100000" }}
       anchorEl={leftMenuAnchorEl}
       anchorOrigin={{
         vertical: "bottom",

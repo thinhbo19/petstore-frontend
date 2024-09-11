@@ -152,7 +152,7 @@ const Header = ({ allDog, allCat }) => {
   }, [lastScrollTop]);
 
   return (
-    <Box sx={{ flexGrow: 1, zIndex: "100000" }}>
+    <Box sx={{ flexGrow: 1, zIndex: "1000" }}>
       <AppBar
         position="static"
         sx={{

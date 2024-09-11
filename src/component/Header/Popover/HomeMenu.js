@@ -14,6 +14,7 @@ const HomeMenu = ({
 
   return (
     <Menu
+      sx={{ zIndex: "100000" }}
       anchorEl={anchorElHome}
       id={homeMenuId}
       keepMounted

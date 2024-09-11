@@ -15,6 +15,7 @@ const CartMenu = ({
 }) => {
   return (
     <Menu
+      sx={{ zIndex: "100000" }}
       anchorEl={anchorElCart}
       id={cartMenuId}
       keepMounted

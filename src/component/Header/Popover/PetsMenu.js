@@ -25,6 +25,7 @@ const PetsMenu = ({
 
   return (
     <Menu
+      sx={{ zIndex: "100000" }}
       anchorEl={anchorElPets}
       id={petsMenuId}
       keepMounted

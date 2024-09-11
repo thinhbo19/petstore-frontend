@@ -1,5 +1,9 @@
 import PetDetailComponent from "@/src/component/PetDetailComponent/PetDetailComponent";
-import { getAllPets, getCurrentPetsByName } from "@/src/services/apiPet";
+import {
+  getAllPets,
+  getCurrentPetsByName,
+  getPetByBreed,
+} from "@/src/services/apiPet";
 import formatPetName from "@/src/services/formatPetName";
 
 export async function generateStaticParams() {
@@ -13,5 +17,14 @@ export default async function PetDetailPage({ params }) {
   const { petName } = params;
   const petData = await getCurrentPetsByName(formatPetName(petName));
 
-  return <PetDetailComponent petName={petName} petData={petData.pet} />;
+  const breedData = await getPetByBreed(petData.pet.petBreed.nameBreed);
+
+  console.log(petData.pet.petBreed.nameBreed);
+  return (
+    <PetDetailComponent
+      petName={petName}
+      petData={petData.pet}
+      similarProducts={breedData}
+    />
+  );
 }

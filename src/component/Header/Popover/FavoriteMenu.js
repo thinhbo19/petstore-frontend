@@ -15,6 +15,7 @@ const FavoriteMenu = ({
 }) => {
   return (
     <Menu
+      sx={{ zIndex: "100000" }}
       anchorEl={anchorElFavorite}
       id={favoriteMenuId}
       keepMounted

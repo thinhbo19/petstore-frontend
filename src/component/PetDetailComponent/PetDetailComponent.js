@@ -9,8 +9,9 @@ import PetDescription from "./PetDescription";
 import PetReviews from "./PetReviews";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import SimilarProducts from "./SimilarProducts";
 
-const PetDetailComponent = ({ petName, petData }) => {
+const PetDetailComponent = ({ petName, petData, similarProducts }) => {
   const formattedName = formatPetName(petName);
   const description = petData?.description;
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,7 @@ const PetDetailComponent = ({ petName, petData }) => {
   }
 
   return (
-    <Box sx={{ padding: { xs: 4, sm: 4, md: 4, lg: "0 100px 32px 100px" } }}>
+    <Box sx={{ padding: { xs: 1, sm: 1, md: 1, lg: "0 100px 32px 100px" } }}>
       {/* Pet Information */}
       <PetInfo petData={petData} />
 
@@ -94,7 +95,7 @@ const PetDetailComponent = ({ petName, petData }) => {
       </Collapse>
 
       {/* Similar Products */}
-      {/* <SimilarProducts similarProducts={similarProducts} /> */}
+      <SimilarProducts similarProducts={similarProducts} />
     </Box>
   );
 };

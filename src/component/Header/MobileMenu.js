@@ -35,6 +35,7 @@ const MobileMenu = ({
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
+      sx={{ zIndex: "100000" }}
     >
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton

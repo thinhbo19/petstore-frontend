@@ -63,6 +63,7 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
           },
         },
       }}
+      sx={{ zIndex: "100000" }}
     >
       {login === true ? (
         [
