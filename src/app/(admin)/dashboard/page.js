@@ -1,9 +1,5 @@
-import Navbar from "@/src/component/NavbarAdmin/Navbar";
+const AdminPage = () => {
+  return;
+};
 
-export default function DashboardPage() {
-  return (
-    <div className="admincontainer">
-      <Navbar />
-    </div>
-  );
-}
+export default AdminPage;

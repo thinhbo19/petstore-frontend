@@ -51,6 +51,7 @@ const HomeMenu = ({
         },
       }}
     >
+      <MenuItem onClick={() => handleChangePage(router, "HOME")}>Home</MenuItem>
       <MenuItem onClick={() => handleChangePage(router, "About Us")}>
         About Us
       </MenuItem>

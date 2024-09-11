@@ -28,7 +28,7 @@ export const handleChangePage = (router, item) => {
       router.push("/voucher");
       break;
     case "More":
-      router.push("/shop");
+      router.push("/shop/accessory");
       break;
     case "Product":
       router.push("/shop");
