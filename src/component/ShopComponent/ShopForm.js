@@ -132,10 +132,10 @@ const ShopForm = ({ data }) => {
                     align="center"
                     sx={{
                       fontSize: {
-                        xs: "1rem", // small font size for extra small screens
-                        sm: "1.2rem", // slightly larger font size for small screens
-                        md: "1.5rem", // medium font size for medium screens
-                        lg: "1.8rem", // larger font size for large screens
+                        xs: "1rem",
+                        sm: "1rem",
+                        md: "1rem",
+                        lg: "1rem",
                       },
                     }}
                   >
@@ -213,10 +213,10 @@ const ShopForm = ({ data }) => {
                     align="center"
                     sx={{
                       fontSize: {
-                        xs: "1rem", // small font size for extra small screens
-                        sm: "1.2rem", // slightly larger font size for small screens
-                        md: "1.5rem", // medium font size for medium screens
-                        lg: "1.8rem", // larger font size for large screens
+                        xs: "1rem",
+                        sm: "1rem",
+                        md: "1rem",
+                        lg: "1rem",
                       },
                     }}
                   >
@@ -294,10 +294,10 @@ const ShopForm = ({ data }) => {
                     align="center"
                     sx={{
                       fontSize: {
-                        xs: "1rem", // small font size for extra small screens
-                        sm: "1.2rem", // slightly larger font size for small screens
-                        md: "1.5rem", // medium font size for medium screens
-                        lg: "1.8rem", // larger font size for large screens
+                        xs: "1rem",
+                        sm: "1rem",
+                        md: "1rem",
+                        lg: "1rem",
                       },
                     }}
                   >
@@ -375,10 +375,10 @@ const ShopForm = ({ data }) => {
                     align="center"
                     sx={{
                       fontSize: {
-                        xs: "1rem", // small font size for extra small screens
-                        sm: "1.2rem", // slightly larger font size for small screens
-                        md: "1.5rem", // medium font size for medium screens
-                        lg: "1.8rem", // larger font size for large screens
+                        xs: "1rem",
+                        sm: "1rem",
+                        md: "1rem",
+                        lg: "1rem",
                       },
                     }}
                   >

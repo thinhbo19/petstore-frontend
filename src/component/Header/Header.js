@@ -152,7 +152,7 @@ const Header = ({ allDog, allCat }) => {
   }, [lastScrollTop]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, zIndex: "100000" }}>
       <AppBar
         position="static"
         sx={{
@@ -164,6 +164,7 @@ const Header = ({ allDog, allCat }) => {
           top: 0,
           transition: "top 0.3s",
           top: showHeader ? "0" : "-100px",
+          zIndex: "100000",
         }}
       >
         <Toolbar>
