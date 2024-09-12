@@ -70,7 +70,7 @@ const TableData = ({
             <TableCell>{item.petBreed.nameBreed}</TableCell>
             <TableCell>{item.age}</TableCell>
             <TableCell>{item.gender}</TableCell>
-            <TableCell>{item.price.toLocaleString()}</TableCell>
+            <TableCell>{item.price?.toLocaleString()}</TableCell>
             <TableCell>
               <IconButton color="primary" onClick={() => onEdit(item._id)}>
                 <EditIcon />

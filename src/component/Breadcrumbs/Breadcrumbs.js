@@ -27,8 +27,8 @@ const BreadcrumbsComponent = () => {
         fontSize: {
           xs: "0.75rem",
           sm: "0.875rem",
-          md: "1rem",
-          lg: "1.125rem",
+          md: "0.875rem",
+          lg: "1rem",
         },
       }}
       aria-label="breadcrumb"
@@ -49,8 +49,8 @@ const BreadcrumbsComponent = () => {
             fontSize: {
               xs: "0.75rem",
               sm: "0.875rem",
-              md: "1rem",
-              lg: "1.125rem",
+              md: "0.875rem",
+              lg: "1rem",
             },
           }}
           color="textPrimary"
@@ -76,8 +76,8 @@ const BreadcrumbsComponent = () => {
               fontSize: {
                 xs: "0.75rem",
                 sm: "0.875rem",
-                md: "1rem",
-                lg: "1.125rem",
+                md: "0.875rem",
+                lg: "1rem",
               },
             }}
             color="textPrimary"

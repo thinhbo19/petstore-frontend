@@ -99,7 +99,7 @@ const DrawerPet = ({
             onChange={handlePriceChange}
             valueLabelDisplay="auto"
             min={0}
-            max={10000000} // Thay đổi giá trị tối đa nếu cần
+            max={20000000} // Thay đổi giá trị tối đa nếu cần
             aria-labelledby="price-slider"
           />
           <Typography>

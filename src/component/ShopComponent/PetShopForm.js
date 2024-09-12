@@ -32,9 +32,9 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
   const [loading, setLoading] = useState(true);
   const [likedPets, setLikedPets] = useState(new Set());
   const containerRef = useRef(null);
-  const itemsPerPage = 30;
+  const itemsPerPage = 18;
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 10000000]);
+  const [priceRange, setPriceRange] = useState([0, 20000000]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [optionMenu, setOptionMenu] = useState("Sort Options");
 

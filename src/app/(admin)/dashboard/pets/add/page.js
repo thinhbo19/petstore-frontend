@@ -15,10 +15,10 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { apiUrlPets } from "@/src/services/config";
+import { apiUrlBreeds, apiUrlPets } from "@/src/services/config";
 import Image from "next/image";
 import { Editor } from "@tinymce/tinymce-react";
-import { getAllDog, getAllCat } from "@/src/services/apiPet";
+import { getAllDog, getAllCat, getAllPets } from "@/src/services/apiPet";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
 
@@ -27,8 +27,10 @@ const AddPetsPage = () => {
   const [name, setName] = useState("");
   const [species, setSpecies] = useState("");
   const [breed, setBreed] = useState([]);
+  const [nameBreed, setNameBreed] = useState("");
   const [idBreed, setIdBreed] = useState("");
   const [age, setAge] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [gender, setGender] = useState("");
   const [price, setPrice] = useState("");
   const [deworming, setDeworming] = useState("");
@@ -63,15 +65,45 @@ const AddPetsPage = () => {
     fetchData();
   }, [species]);
 
+  useEffect(() => {
+    const hanldeCreateCode = async () => {
+      if (idBreed) {
+        try {
+          const res = await axios.get(
+            `${apiUrlBreeds}/getCurrentBreed/${idBreed}`
+          );
+          const breedName = res.data.breed.nameBreed;
+          const initials = breedName
+            .split(" ")
+            .map((word) => word[0])
+            .join("")
+            .toUpperCase();
+
+          const index = breed.length + 1;
+          const code = `${initials}${index}`;
+
+          setNameBreed(code);
+        } catch (error) {
+          console.error("Error creating breed code:", error);
+        }
+      }
+    };
+    hanldeCreateCode();
+  }, [idBreed]);
+
   const handleSubmit = async () => {
     setLoading(true);
     setSuccess(false);
     setError(null);
 
+    const resData = await getAllPets();
+
+    const newNamePet = name + " Code " + nameBreed + resData.length;
     const formData = new FormData();
-    formData.append("namePet", name);
+    formData.append("namePet", newNamePet);
     formData.append("breed", idBreed);
     formData.append("age", age);
+    formData.append("quantity", quantity);
     formData.append("gender", gender);
     formData.append("price", price);
     formData.append("deworming", deworming);
@@ -88,7 +120,7 @@ const AddPetsPage = () => {
         },
       });
       setSuccess(true);
-      setTimeout(() => router.push("/dashboard/pets"), 1000);
+      // setTimeout(() => router.push("/dashboard/pets"), 1000);
     } catch (err) {
       setError("Failed to add pet. Please try again.");
       console.error(err);
@@ -157,14 +189,14 @@ const AddPetsPage = () => {
             <FormControl fullWidth variant="outlined" margin="normal">
               <InputLabel>Breed</InputLabel>
               <Select
-                value={idBreed} // Lưu id của breed đã chọn
-                onChange={(e) => setIdBreed(e.target.value)} // Khi người dùng chọn, lưu id của breed
+                value={idBreed}
+                onChange={(e) => setIdBreed(e.target.value)}
                 label="Breed"
               >
                 {Array.isArray(breed) &&
                   breed.map((b) => (
                     <MenuItem key={b._id} value={b._id}>
-                      {b.nameBreed} {/* Hiển thị tên breed */}
+                      {b.nameBreed}
                     </MenuItem>
                   ))}
               </Select>
@@ -177,6 +209,15 @@ const AddPetsPage = () => {
               variant="outlined"
               value={age}
               onChange={(e) => setAge(e.target.value)}
+            />
+
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Quantity"
+              variant="outlined"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
             />
           </Box>
         </Grid>
@@ -217,18 +258,18 @@ const AddPetsPage = () => {
               value={vaccination}
               onChange={(e) => setVaccination(e.target.value)}
             />
+
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Characteristic"
+              variant="outlined"
+              value={characteristic}
+              onChange={(e) => setCharacteristic(e.target.value)}
+            />
           </Box>
         </Grid>
       </Grid>
-
-      <TextField
-        fullWidth
-        margin="normal"
-        label="Characteristic"
-        variant="outlined"
-        value={characteristic}
-        onChange={(e) => setCharacteristic(e.target.value)}
-      />
 
       {/* Description */}
       <Box sx={{ marginTop: 2 }}>

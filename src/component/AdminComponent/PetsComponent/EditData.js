@@ -22,7 +22,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import { getCurrentPets } from "@/src/services/apiPet";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
-import DeleteIcon from "@mui/icons-material/Delete"; // Import the DeleteIcon component
 
 const EditPetsData = ({ petId }) => {
   const accessToken = useSelector(selectAccessToken);
@@ -30,6 +29,7 @@ const EditPetsData = ({ petId }) => {
   const [species, setSpecies] = useState("");
   const [breed, setBreed] = useState("");
   const [age, setAge] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [gender, setGender] = useState("");
   const [price, setPrice] = useState("");
   const [deworming, setDeworming] = useState("");
@@ -37,7 +37,6 @@ const EditPetsData = ({ petId }) => {
   const [characteristic, setCharacteristic] = useState("");
   const [htmlDescription, setHtmlDescription] = useState("");
   const editorRef = useRef(null);
-  const [images, setImages] = useState([]);
   const [currentImages, setCurrentImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -53,6 +52,7 @@ const EditPetsData = ({ petId }) => {
         setSpecies(petData.petBreed.nameSpecies);
         setBreed(petData.petBreed.nameBreed);
         setAge(petData.age);
+        setQuantity(petData.quantity);
         setGender(petData.gender);
         setPrice(petData.price);
         setDeworming(petData.deworming);
@@ -67,45 +67,34 @@ const EditPetsData = ({ petId }) => {
     fetchDataPet();
   }, [petId]);
 
-  const handleImageChange = (event) => {
-    const files = Array.from(event.target.files);
-    setImages(files);
-  };
-
-  const handleDeleteImage = (index) => {
-    setImages((prevImages) => {
-      // Xóa ảnh khỏi danh sách ảnh
-      const newImages = prevImages.filter((_, i) => i !== index);
-      console.log("Updated images:", newImages); // In giá trị mới của images để kiểm tra
-      return newImages;
-    });
-  };
-
   const handleSubmit = async () => {
     setLoading(true);
     setSuccess(false);
     setError(null);
 
-    const formData = new FormData();
-    formData.append("namePet", name);
-    formData.append("age", age);
-    formData.append("gender", gender);
-    formData.append("price", price);
-    formData.append("deworming", deworming);
-    formData.append("vaccination", vaccination);
-    formData.append("characteristic", characteristic);
-    formData.append("description", htmlDescription);
-    images.forEach((image) => formData.append("imgPet", image));
-
     try {
-      await axios.put(`${apiUrlPets}/${petId}`, formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "multipart/form-data",
+      const res = await axios.put(
+        `${apiUrlPets}/${petId}`,
+        {
+          namePet: name,
+          age: age,
+          quantity: quantity,
+          gender: gender,
+          description: htmlDescription,
+          price: price,
+          deworming: deworming,
+          vaccination: vaccination,
+          characteristic: characteristic,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(res);
       setSuccess(true);
-      setTimeout(() => router.push("/dashboard/pets"), 1000);
+      // setTimeout(() => router.push("/dashboard/pets"), 1000);
     } catch (err) {
       setError("Failed to add pet. Please try again.");
       console.error(err);
@@ -117,45 +106,12 @@ const EditPetsData = ({ petId }) => {
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h4" gutterBottom>
-        Add New Pet
+        Edit New Pet
       </Typography>
 
       {/* Image Upload */}
       <Box sx={{ marginBottom: 2 }}>
-        <Button variant="contained" component="label">
-          Upload Images
-          <input
-            type="file"
-            hidden
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-          />
-        </Button>
         <Box sx={{ marginTop: 2, display: "flex", flexWrap: "wrap" }}>
-          {images.length > 0 &&
-            images.map((image, index) => (
-              <Box key={index} sx={{ position: "relative", margin: 1 }}>
-                <Image
-                  src={URL.createObjectURL(image)}
-                  alt={`Image preview ${index}`}
-                  width={100}
-                  height={100}
-                />
-                <IconButton
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    color: "white",
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                  }}
-                  onClick={() => handleDeleteImage(index)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            ))}
           {currentImages.length > 0 &&
             currentImages.map((image, index) => (
               <Box key={index} sx={{ position: "relative", margin: 1 }}>
@@ -165,18 +121,6 @@ const EditPetsData = ({ petId }) => {
                   width={100}
                   height={100}
                 />
-                <IconButton
-                  sx={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                    color: "white",
-                    backgroundColor: "rgba(0, 0, 0, 0.5)",
-                  }}
-                  onClick={() => handleDeleteImage(index)}
-                >
-                  <DeleteIcon />
-                </IconButton>
               </Box>
             ))}
         </Box>
@@ -224,6 +168,14 @@ const EditPetsData = ({ petId }) => {
               value={age}
               onChange={(e) => setAge(e.target.value)}
             />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Quantity"
+              variant="outlined"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+            />
           </Box>
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -263,18 +215,17 @@ const EditPetsData = ({ petId }) => {
               value={vaccination}
               onChange={(e) => setVaccination(e.target.value)}
             />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Characteristic"
+              variant="outlined"
+              value={characteristic}
+              onChange={(e) => setCharacteristic(e.target.value)}
+            />
           </Box>
         </Grid>
       </Grid>
-
-      <TextField
-        fullWidth
-        margin="normal"
-        label="Characteristic"
-        variant="outlined"
-        value={characteristic}
-        onChange={(e) => setCharacteristic(e.target.value)}
-      />
 
       {/* Description */}
       <Box sx={{ marginTop: 2 }}>
