@@ -19,18 +19,12 @@ const BannerSlider = () => {
 
   const banners = [
     {
-      title: "Banner 1",
-      description: "Mô tả cho banner 1",
       imageUrl: Slder1,
     },
     {
-      title: "Banner 2",
-      description: "Mô tả cho banner 2",
       imageUrl: Slder2,
     },
     {
-      title: "Banner 3",
-      description: "Mô tả cho banner 3",
       imageUrl: Slder3,
     },
   ];
@@ -81,37 +75,6 @@ const BannerSlider = () => {
               }}
               priority
             />
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                color: "#fff",
-                textAlign: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-                padding: { xs: "10px", sm: "20px" },
-                borderRadius: "8px",
-                width: { xs: "90%", sm: "70%", md: "50%" }, // Responsive width for text box
-              }}
-            >
-              <Typography
-                variant="h5"
-                sx={{
-                  fontSize: { xs: "1.2rem", sm: "1.5rem", md: "2rem" }, // Responsive font size
-                }}
-              >
-                {banner.title}
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontSize: { xs: "0.8rem", sm: "1rem", md: "1.2rem" }, // Responsive font size for description
-                }}
-              >
-                {banner.description}
-              </Typography>
-            </Box>
           </Box>
         ))}
       </Box>
@@ -121,11 +84,10 @@ const BannerSlider = () => {
         onClick={handlePrev}
         sx={{
           position: "absolute",
-          top: "50%",
+          top: "60%",
           left: { xs: "10px", sm: "20px", md: "30px" }, // Responsive button position
           transform: "translateY(-50%)",
-          color: "#fff",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          color: "black",
           padding: isMobile ? "5px" : isTablet ? "10px" : "15px", // Responsive padding
           fontSize: isMobile ? "1rem" : isTablet ? "1.5rem" : "2rem", // Responsive icon size
           "&:hover": {
@@ -141,11 +103,10 @@ const BannerSlider = () => {
         onClick={handleNext}
         sx={{
           position: "absolute",
-          top: "50%",
+          top: "60%",
           right: { xs: "10px", sm: "20px", md: "30px" }, // Responsive button position
           transform: "translateY(-50%)",
-          color: "#fff",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          color: "black",
           padding: isMobile ? "5px" : isTablet ? "10px" : "15px", // Responsive padding
           fontSize: isMobile ? "1rem" : isTablet ? "1.5rem" : "2rem", // Responsive icon size
           "&:hover": {
