@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import "../../styles/Home.css";
-import Slider from "../Slider/Slider";
+import BannerSlider from "../Slider/Slider";
 import Loading from "../Loading/Loading";
 
 export default function Home() {
@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div className="home__container">
-      <Slider />
+      <BannerSlider />
     </div>
   );
 }
