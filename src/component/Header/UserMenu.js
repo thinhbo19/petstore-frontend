@@ -12,6 +12,7 @@ import { handleLogin, handleLogout } from "@/src/hooks/useLogout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import LogoutIcon from "@mui/icons-material/Logout";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
   const router = useRouter();
@@ -72,6 +73,7 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
           </MenuItem>,
           admin === "Admin" && (
             <MenuItem key="dashboard" onClick={handleMenuClose}>
+              <DashboardIcon />
               Dashboard
             </MenuItem>
           ),

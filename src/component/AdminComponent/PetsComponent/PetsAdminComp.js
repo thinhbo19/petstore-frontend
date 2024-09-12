@@ -2,15 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
-import { getAllBreeds, getAllPets } from "@/src/services/apiPet";
-import { apiUrlBreeds } from "@/src/services/config";
+import { getAllPets } from "@/src/services/apiPet";
+import { apiUrlPets } from "@/src/services/config";
 import axios from "axios";
 import SearchBar from "./SearchBar";
 import TableData from "./TableData";
 import TablePagination from "@mui/material/TablePagination";
-import AddData from "./AddData";
 import Swal from "sweetalert2";
-import EditData from "./EditData";
 import { useRouter } from "next/navigation";
 
 const PetsAdminComp = () => {
@@ -71,7 +69,7 @@ const PetsAdminComp = () => {
       try {
         await Promise.all(
           selectedIds.map((id) =>
-            axios.delete(`${apiUrlBreeds}/${id}`, {
+            axios.delete(`${apiUrlPets}/${id}`, {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
               },
@@ -93,7 +91,7 @@ const PetsAdminComp = () => {
   const handleDelete = async (id) => {
     setLoading(true);
     try {
-      await axios.delete(`${apiUrlBreeds}/${id}`, {
+      await axios.delete(`${apiUrlPets}/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -155,7 +153,7 @@ const PetsAdminComp = () => {
   return (
     <div style={{ padding: "20px" }}>
       <div style={{ marginBottom: "20px" }}>
-        <h2 style={{ textTransform: "uppercase" }}>Breed Management</h2>
+        <h2 style={{ textTransform: "uppercase" }}>Pets Management</h2>
       </div>
       <SearchBar
         searchTerm={searchTerm}
