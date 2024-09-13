@@ -42,6 +42,15 @@ export const handleChangePage = (router, item) => {
     case "cart":
       router.push("/cart");
       break;
+    case "profile":
+      router.push("/profile");
+      break;
+    case "dashboard":
+      router.push("/dashboard");
+      break;
+    case "order-history":
+      router.push("/profile/order-history");
+      break;
     default:
       console.log("Invalid item");
   }

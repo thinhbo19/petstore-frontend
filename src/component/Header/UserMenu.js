@@ -13,6 +13,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import { handleChangePage } from "@/src/hooks/useChangePage";
 
 const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
   const router = useRouter();
@@ -68,21 +69,42 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
     >
       {login === true ? (
         [
-          <MenuItem key="profile" onClick={handleMenuClose}>
+          <MenuItem
+            key="profile"
+            onClick={() => {
+              handleChangePage(router, "profile");
+              handleMenuClose;
+            }}
+          >
             <AccountCircleIcon /> Profile
           </MenuItem>,
           admin === "Admin" && (
-            <MenuItem key="dashboard" onClick={handleMenuClose}>
+            <MenuItem
+              key="dashboard"
+              onClick={() => {
+                handleChangePage(router, "dashboard");
+                handleMenuClose;
+              }}
+            >
               <DashboardIcon />
               Dashboard
             </MenuItem>
           ),
-          <MenuItem key="order-history" onClick={handleMenuClose}>
+          <MenuItem
+            key="order-history"
+            onClick={() => {
+              handleChangePage(router, "order-history");
+              handleMenuClose;
+            }}
+          >
             <LibraryBooksIcon /> Order History
           </MenuItem>,
           <MenuItem
             key="logout"
-            onClick={() => handleLogout(dispatch, router, setLogout)}
+            onClick={() => {
+              handleLogout(dispatch, router, setLogout);
+              handleMenuClose;
+            }}
           >
             <LogoutIcon /> Log Out
           </MenuItem>,

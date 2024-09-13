@@ -1,13 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Box, Typography, Link, Grid, Button } from "@mui/material";
-import "../../styles/Home.css";
-import BannerSlider from "../Slider/Slider";
-import Loading from "../Loading/Loading";
+import {
+  Box,
+  Typography,
+  Link as MuiLink,
+  Grid,
+  Button,
+  IconButton,
+} from "@mui/material";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
+import NextLink from "next/link";
+import BannerSlider from "../Slider/Slider";
+import Loading from "../Loading/Loading";
+import Link from "next/link";
+import { generateSlug } from "@/src/services/slugifyConfig";
 
 const features = [
   {
@@ -32,8 +42,9 @@ const features = [
   },
 ];
 
-export default function Home() {
+export default function Home({ dogs, cats }) {
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -46,19 +57,34 @@ export default function Home() {
 
   return (
     <div className="home__container">
+      {/* Cart với hiệu ứng hover */}
+      <NextLink href="/cart" passHref>
+        <IconButton
+          sx={{
+            transition: "transform 0.3s ease",
+            "&:hover": {
+              transform: "scale(1.05)", // Phóng to 1.05 lần khi hover
+            },
+          }}
+        >
+          <ShoppingCartIcon sx={{ fontSize: 30 }} />
+        </IconButton>
+      </NextLink>
+
+      {/* Slider banner */}
       <BannerSlider />
 
-      {/* Box chứa nội dung About Pet House */}
+      {/* Box for About Pet House */}
       <Box
         sx={{
           backgroundColor: "#DAD6D6",
-          borderRadius: "10px", // Bo tròn góc
+          borderRadius: "10px",
           padding: "20px",
           marginTop: "30px",
-          width: "70%", // Chiều rộng 1 nửa
-          maxWidth: "600px", // Giới hạn chiều rộng tối đa
-          margin: "30px auto", // Căn giữa
-          textAlign: "center", // Căn giữa nội dung
+          width: "70%",
+          maxWidth: "600px",
+          margin: "30px auto",
+          textAlign: "center",
         }}
       >
         <Typography variant="h5" gutterBottom>
@@ -72,16 +98,16 @@ export default function Home() {
         <Typography variant="body1" paragraph>
           With a variety of pet dog and cat breeds, we ensure the quality of the
           breed, standard genetic resources and professional breeding process.
-          At Pet House, all the breeds are purebred, well cared for and in good
+          At Pet House, all the breeds are purebred, well cared for, and in good
           health, ready for their new homes.
         </Typography>
-        <Link href="#" variant="body1" underline="hover">
+        <MuiLink href="#" variant="body1" underline="hover">
           Learn more
-        </Link>
+        </MuiLink>
       </Box>
 
+      {/* Feature section */}
       <Box sx={{ backgroundColor: "#F5F5F5", padding: "20px 0" }}>
-        {/* Grid chứa các feature */}
         <Grid container spacing={3} justifyContent="center">
           {features.map((feature, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
@@ -98,7 +124,7 @@ export default function Home() {
           ))}
         </Grid>
 
-        {/* Phần hotline */}
+        {/* Hotline section */}
         <Box sx={{ textAlign: "center", marginTop: "20px" }}>
           <Button
             variant="contained"
@@ -113,6 +139,96 @@ export default function Home() {
             HOTLINE: 0xxx.xxx.xxx
           </Button>
         </Box>
+      </Box>
+
+      {/* Dog Breeds Section */}
+      <Box sx={{ backgroundColor: "#F5F5F5", padding: "20px" }}>
+        <Typography
+          sx={{ fontWeight: "bold" }}
+          variant="h6"
+          textAlign="center"
+          gutterBottom
+        >
+          DOG BREEDS
+        </Typography>
+        <Grid container spacing={2}>
+          {dogs.map((dog, index) => (
+            <Grid item xs={6} sm={6} md={2.4} key={index}>
+              <Link
+                href={`/shop/dog/${generateSlug(dog.nameBreed)}`}
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Box
+                  textAlign="center"
+                  sx={{
+                    padding: "10px",
+                    backgroundColor: "#FFF",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <img
+                    src={dog.imgBreed[0]}
+                    alt={dog.nameBreed}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      aspectRatio: "1/1",
+                      borderRadius: "10px",
+                    }}
+                  />
+                  <Typography variant="body1" mt={1}>
+                    {dog.nameBreed}
+                  </Typography>
+                </Box>
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* Cat Breeds Section */}
+      <Box sx={{ backgroundColor: "#F5F5F5", padding: "20px" }}>
+        <Typography
+          sx={{ fontWeight: "bold" }}
+          variant="h6"
+          textAlign="center"
+          gutterBottom
+        >
+          CAT BREEDS
+        </Typography>
+        <Grid container spacing={2}>
+          {cats.map((cat, index) => (
+            <Grid item xs={6} sm={6} md={2.4} key={index}>
+              <Link
+                href={`/shop/dog/${generateSlug(cat.nameBreed)}`}
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Box
+                  textAlign="center"
+                  sx={{
+                    padding: "10px",
+                    backgroundColor: "#FFF",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <img
+                    src={cat.imgBreed[0]}
+                    alt={cat.nameBreed}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      aspectRatio: "1/1",
+                      borderRadius: "10px",
+                    }}
+                  />
+                  <Typography variant="body1" mt={1}>
+                    {cat.nameBreed}
+                  </Typography>
+                </Box>
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
     </div>
   );

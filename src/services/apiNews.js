@@ -62,3 +62,13 @@ export const getCurrentNews = async (nid) => {
     throw error;
   }
 };
+
+export const getCurrentNewsByName = async (title) => {
+  try {
+    const res = await axios.get(`${apiUrlNews}/current/${title}`);
+    return res.data.news;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};

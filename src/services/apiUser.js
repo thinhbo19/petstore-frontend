@@ -14,7 +14,6 @@ export const getAllUsers = async (accessToken) => {
     throw error;
   }
 };
-
 export const getCurrentUser = async (accessToken) => {
   try {
     const res = await axios.get(`${apiUrlUser}/current`, {
@@ -28,7 +27,6 @@ export const getCurrentUser = async (accessToken) => {
     throw error;
   }
 };
-
 export const getUsersForChat = async (accessToken, uid) => {
   try {
     const res = await axios.get(`${apiUrlUser}/userCurrent/?_id=${uid}`, {
@@ -67,6 +65,25 @@ export const patchChangeRole = async (accessToken, uid, newRole) => {
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};
+
+export const updateUserInfo = async (accessToken, formData, userID) => {
+  try {
+    const res = await axios.patch(
+      `${apiUrlUser}/update?_id=${userID}`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
         },
       }
     );

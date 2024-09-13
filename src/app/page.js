@@ -10,7 +10,7 @@ export default async function HomePage() {
   return (
     <>
       <Header allDog={dogs} allCat={cats} />
-      <Home />
+      <Home dogs={dogs} cats={cats} />
       <Footer />
       <ScrollButton />
     </>

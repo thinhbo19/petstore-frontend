@@ -23,6 +23,7 @@ import Link from "next/link";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import { useDispatch } from "react-redux";
 import { setLogout } from "@/src/services/Redux/useSlice";
+import ArticleIcon from "@mui/icons-material/Article";
 
 const drawerWidth = 240;
 
@@ -90,7 +91,7 @@ export default function AdminLayout({ children }) {
         </List>
         <Divider />
         <List>
-          {["Schedule"].map((text) => (
+          {["News", "Schedule"].map((text) => (
             <ListItem
               button
               key={text}
@@ -98,7 +99,7 @@ export default function AdminLayout({ children }) {
               href={`/dashboard/${generateSlug(text)}`}
             >
               <ListItemIcon>
-                <CalendarMonthIcon />
+                {text === "News" ? <ArticleIcon /> : <CalendarMonthIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>

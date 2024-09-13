@@ -7,6 +7,10 @@ const BreadcrumbsComponent = () => {
   const router = useRouter();
   const pathName = usePathname();
 
+  if (pathName.startsWith("/news/")) {
+    return null; // Không render Breadcrumbs
+  }
+
   const breadcrumbsLinks = pathName
     .split("/")
     .filter((part) => part)
