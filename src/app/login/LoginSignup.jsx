@@ -17,6 +17,8 @@ import { apiUrlUser } from "@/src/services/config";
 import ForgotPass from "@/src/component/Form/ForgotPass/ForgotPass";
 import Login from "@/src/component/Form/LoginForm/Login";
 import SignUp from "@/src/component/Form/SignUpForm/Signup";
+import { getFavorites } from "@/src/services/apiUser";
+import { setFavorites } from "@/src/services/Redux/FavoriteSlice";
 
 const LoginSignup = () => {
   const dispatch = useDispatch();
@@ -42,7 +44,6 @@ const LoginSignup = () => {
     const container = document.getElementById("wrapper");
     container.classList.remove("active-forgot");
   };
-
   const handleSubmit = async (e, email, password) => {
     e.preventDefault();
 
@@ -59,6 +60,8 @@ const LoginSignup = () => {
         dispatch(setAdmin(response.data.userData.role));
         dispatch(setLogin(true));
         dispatch(setAccessToken(response.data.accessToken));
+        const res = await getFavorites(response.data.accessToken);
+        dispatch(setFavorites(res.favorites));
 
         setTimeout(() => {
           if (response.data.userData.role === "User") {

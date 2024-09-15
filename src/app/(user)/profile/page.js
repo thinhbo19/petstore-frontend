@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
 import { getCurrentUser, updateUserInfo } from "@/src/services/apiUser";
 import Swal from "sweetalert2";
+import Loading from "@/src/component/Loading/Loading";
 
 export default function ProfilePage() {
   const accessToken = useSelector(selectAccessToken);
@@ -27,6 +28,8 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogImage, setDialogImage] = useState("");
+
+  const [loadingPPage, setLoadingPage] = useState(true);
 
   const fetchDataUser = async () => {
     if (accessToken) {
@@ -43,6 +46,12 @@ export default function ProfilePage() {
   useEffect(() => {
     fetchDataUser();
   }, [accessToken]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoadingPage(false);
+    }, 500);
+  }, []);
 
   const handleAvatarChange = (event) => {
     const file = event.target.files[0];
@@ -109,6 +118,10 @@ export default function ProfilePage() {
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
+
+  if (loadingPPage) {
+    return <Loading />;
+  }
 
   return (
     <Box

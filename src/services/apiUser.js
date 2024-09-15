@@ -93,3 +93,17 @@ export const updateUserInfo = async (accessToken, formData, userID) => {
     throw error;
   }
 };
+
+export const getFavorites = async (accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlUser}/listfav`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};

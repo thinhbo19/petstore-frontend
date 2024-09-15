@@ -28,6 +28,7 @@ import FavoriteMenu from "./Popover/FavoriteMenu";
 import NotificationMenu from "./Popover/NotificationMenu";
 import HomeMenu from "./Popover/HomeMenu";
 import PetsMenu from "./Popover/PetsMenu";
+import { selectFavorites } from "@/src/services/Redux/FavoriteSlice";
 
 const Header = ({ allDog, allCat }) => {
   const router = useRouter();
@@ -39,6 +40,8 @@ const Header = ({ allDog, allCat }) => {
   const [anchorElHome, setAnchorElHome] = useState(null);
   const [anchorElPets, setAnchorElPets] = useState(null);
 
+  const favoritesData = useSelector(selectFavorites);
+
   const [anchorElCart, setAnchorElCart] = useState(null);
   const [anchorElFavorite, setAnchorElFavorite] = useState(null);
   const [anchorElNotification, setAnchorElNotification] = useState(null);
@@ -49,28 +52,24 @@ const Header = ({ allDog, allCat }) => {
   const handleMenuHomeClose = () => {
     setAnchorElHome(null);
   };
-
   const handleMenuPetsOpen = (event) => {
     setAnchorElPets(event.currentTarget);
   };
   const handleMenuPetsClose = () => {
     setAnchorElPets(null);
   };
-
   const handleMenuCartOpen = (event) => {
     setAnchorElCart(event.currentTarget);
   };
   const handleMenuCartClose = () => {
     setAnchorElCart(null);
   };
-
   const handleMenuFavoriteOpen = (event) => {
     setAnchorElFavorite(event.currentTarget);
   };
   const handleMenuFavoriteClose = () => {
     setAnchorElFavorite(null);
   };
-
   const handleMenuNotificationOpen = (event) => {
     setAnchorElNotification(event.currentTarget);
   };
@@ -209,7 +208,7 @@ const Header = ({ allDog, allCat }) => {
                 onClick={handleMenuFavoriteOpen}
                 color="inherit"
               >
-                <Badge badgeContent={4} color="error">
+                <Badge badgeContent={favoritesData?.length} color="error">
                   <FavoriteIcon />
                 </Badge>
               </IconButton>
@@ -275,6 +274,7 @@ const Header = ({ allDog, allCat }) => {
         handleMenuCartClose={handleMenuCartClose}
       />
       <FavoriteMenu
+        favoritesData={favoritesData}
         anchorElFavorite={anchorElFavorite}
         favoriteMenuId={favoriteMenuId}
         openFavorite={openFavorite}

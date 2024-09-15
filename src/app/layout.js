@@ -1,4 +1,6 @@
 import ReduxProvider from "../component/providers/Redux";
+import { FavoriteProvider } from "../services/Context/FavoriteContext";
+import { UserProvider } from "../services/Context/UserContext";
 import "./layout.css";
 
 export async function generateMetadata({ params, searchParams }) {
@@ -24,14 +26,26 @@ export async function generateMetadata({ params, searchParams }) {
         },
       ],
     },
+    twitter: {
+      card: "summary_large_image",
+      title: "Trang Chủ - Pet Shop",
+      description:
+        "Chào mừng đến với cửa hàng bán thú cưng chính hãng. Chúng tôi cung cấp thú cưng chất lượng cao với giá tốt nhất.",
+      image:
+        "https://res.cloudinary.com/dq1bmcdyc/image/upload/v1722946177/imageLogin_ktbiup.png",
+    },
   };
 }
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <body>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <UserProvider>
+            <FavoriteProvider>{children}</FavoriteProvider>
+          </UserProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

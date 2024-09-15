@@ -10,10 +10,12 @@ import PetReviews from "./PetReviews";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SimilarProducts from "./SimilarProducts";
+import { useSelector } from "react-redux";
+import { selectAccessToken } from "@/src/services/Redux/useSlice";
 
 const PetDetailComponent = ({ petName, petData, similarProducts }) => {
-  const formattedName = formatPetName(petName);
   const description = petData?.description;
+  const accessToken = useSelector(selectAccessToken);
   const [loading, setLoading] = useState(true);
   const [openDescription, setOpenDescription] = useState(false);
   const [openReviews, setOpenReviews] = useState(false);
@@ -35,7 +37,7 @@ const PetDetailComponent = ({ petName, petData, similarProducts }) => {
   return (
     <Box sx={{ padding: { xs: 1, sm: 1, md: 1, lg: "0 100px 32px 100px" } }}>
       {/* Pet Information */}
-      <PetInfo petData={petData} />
+      <PetInfo petData={petData} accessToken={accessToken} />
 
       {/* Description */}
       <Button

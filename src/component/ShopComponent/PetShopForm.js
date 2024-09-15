@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -24,19 +24,49 @@ import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import DrawerPet from "./Sorting/DrawerPet";
 import { sortingPets } from "@/src/services/apiPet";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAccessToken } from "@/src/services/Redux/useSlice";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { apiUrlUser } from "@/src/services/config";
+import { getFavorites } from "@/src/services/apiUser";
+import {
+  addFavorite,
+  removeFavorite,
+} from "@/src/services/Redux/FavoriteSlice";
+
+function isFavorite(product, favorites) {
+  return favorites.some((favorite) => favorite.petID === product._id);
+}
 
 const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
   const router = useRouter();
+  const accessToken = useSelector(selectAccessToken);
+  const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [data, setData] = useState(dataBreed);
   const [loading, setLoading] = useState(true);
-  const [likedPets, setLikedPets] = useState(new Set());
   const containerRef = useRef(null);
   const itemsPerPage = 18;
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 20000000]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [optionMenu, setOptionMenu] = useState("Sort Options");
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    if (accessToken) {
+      const fetchData = async () => {
+        try {
+          const res = await getFavorites(accessToken);
+          setFavorites(res?.favorites);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -62,16 +92,63 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
     );
   };
 
-  const handleLikeClick = (petId) => {
-    setLikedPets((prevLikedPets) => {
-      const updatedLikedPets = new Set(prevLikedPets);
-      if (updatedLikedPets.has(petId)) {
-        updatedLikedPets.delete(petId);
-      } else {
-        updatedLikedPets.add(petId);
+  const handleLikeClick = async (pet) => {
+    if (!accessToken) {
+      Swal.fire({
+        title: "LOGIN",
+        text: "You are not logged in yet!!!",
+        icon: "warning",
+      });
+    } else {
+      const isCurrentlyFavorite = isFavorite(pet, favorites);
+      const updatedFavorites = isCurrentlyFavorite
+        ? favorites.filter((f) => f.petID !== pet._id)
+        : [...favorites, { petID: pet._id, ...pet }];
+
+      setFavorites(updatedFavorites);
+
+      try {
+        const res = await axios.put(
+          `${apiUrlUser}/favoritePet`,
+          {
+            petID: pet._id,
+            imgPet: pet.imgPet[0],
+            namePet: pet.namePet,
+            nameBreed: pet.petBreed.nameBreed,
+            nameSpecies: pet.petBreed.nameSpecies,
+            age: pet.age,
+            gender: pet.gender,
+            price: pet.price,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (
+          res.data.message ===
+          "The pet has been successfully removed from your favorite list"
+        ) {
+          dispatch(removeFavorite(pet._id));
+        } else {
+          dispatch(addFavorite(pet));
+        }
+        Swal.fire({
+          title: "SUCCESSFULLY",
+          text: res.data.message,
+          icon: "success",
+        });
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          title: "ERROR",
+          text: "Something went wrong",
+          icon: "error",
+        });
       }
-      return updatedLikedPets;
-    });
+    }
   };
 
   const filterByPrice = (pets) => {
@@ -113,7 +190,10 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
   const startIndexDog = (page - 1) * itemsPerPage;
   const endIndexDog = page * itemsPerPage;
   const filteredData = filterByPrice(data);
-  const sortedData = sortData(filteredData, optionMenu);
+  const sortedData = useMemo(
+    () => sortData(filteredData, optionMenu),
+    [filteredData, optionMenu]
+  );
   const currentData = sortedData.slice(startIndexDog, endIndexDog);
 
   const toggleDrawer = (open) => (event) => {
@@ -337,13 +417,15 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleLikeClick(pet._id);
+                      handleLikeClick(pet);
                     }}
                   >
                     <FontAwesomeIcon
-                      icon={likedPets.has(pet._id) ? solidHeart : regularHeart}
+                      icon={
+                        isFavorite(pet, favorites) ? solidHeart : regularHeart
+                      }
                       size="lg"
-                      color={likedPets.has(pet._id) ? "red" : "black"}
+                      color={isFavorite(pet, favorites) ? "red" : "black"}
                     />
                   </Box>
                 </Card>

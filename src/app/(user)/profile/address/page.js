@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -16,52 +16,30 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AddLocation } from "@mui/icons-material";
-
-const initialAddresses = [
-  {
-    name: "Nguyễn Văn A",
-    phone: "0901234567",
-    address: "123 Đường ABC, Quận 1, TP.HCM",
-  },
-  {
-    name: "Trần Thị B",
-    phone: "0912345678",
-    address: "456 Đường DEF, Quận 2, TP.HCM",
-  },
-  {
-    name: "Lê Văn C",
-    phone: "0923456789",
-    address: "789 Đường GHI, Quận 3, TP.HCM",
-  },
-  {
-    name: "Nguyễn Văn D",
-    phone: "0934567890",
-    address: "101 Đường JKL, Quận 4, TP.HCM",
-  },
-  {
-    name: "Trần Thị E",
-    phone: "0945678901",
-    address: "202 Đường MNO, Quận 5, TP.HCM",
-  },
-  {
-    name: "Lê Văn F",
-    phone: "0956789012",
-    address: "303 Đường PQR, Quận 6, TP.HCM",
-  },
-];
+import Loading from "@/src/component/Loading/Loading";
 
 export default function AddressPage() {
-  const [addresses, setAddresses] = useState(initialAddresses);
+  const [addresses, setAddresses] = useState([]);
   const [open, setOpen] = useState(false);
   const [newAddress, setNewAddress] = useState({
     name: "",
     phone: "",
     address: "",
   });
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-  const itemsPerRow = 2;
+
+  const [loadingPPage, setLoadingPage] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoadingPage(false);
+    }, 500);
+  }, []);
+
+  if (loadingPPage) {
+    return <Loading />;
+  }
 
   const handleClickOpen = () => {
     setOpen(true);

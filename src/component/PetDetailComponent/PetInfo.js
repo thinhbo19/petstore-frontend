@@ -19,10 +19,97 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getFavorites } from "@/src/services/apiUser";
+import axios from "axios";
+import { apiUrlUser } from "@/src/services/config";
+import {
+  addFavorite,
+  removeFavorite,
+} from "@/src/services/Redux/FavoriteSlice";
+import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 
-const PetInfo = ({ petData }) => {
+function isFavorite(product, favorites) {
+  return favorites.some((favorite) => favorite.petID === product._id);
+}
+
+const PetInfo = ({ petData, accessToken }) => {
   const [mainImage, setMainImage] = useState(petData.imgPet[0]);
+  const [favorites, setFavorites] = useState([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (accessToken) {
+      const fetchData = async () => {
+        try {
+          const res = await getFavorites(accessToken);
+          setFavorites(res?.favorites);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchData();
+    }
+  }, [accessToken]);
+
+  const handleLikeClick = async () => {
+    if (!accessToken) {
+      Swal.fire({
+        title: "LOGIN",
+        text: "You are not logged in yet!!!",
+        icon: "warning",
+      });
+    } else {
+      const isCurrentlyFavorite = isFavorite(petData, favorites);
+      const updatedFavorites = isCurrentlyFavorite
+        ? favorites.filter((f) => f.petID !== petData._id)
+        : [...favorites, { petID: petData._id, ...petData }];
+
+      setFavorites(updatedFavorites);
+      try {
+        const res = await axios.put(
+          `${apiUrlUser}/favoritePet`,
+          {
+            petID: petData._id,
+            imgPet: petData.imgPet[0],
+            namePet: petData.namePet,
+            nameBreed: petData.petBreed.nameBreed,
+            nameSpecies: petData.petBreed.nameSpecies,
+            age: petData.age,
+            gender: petData.gender,
+            price: petData.price,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+
+        if (
+          res.data.message ===
+          "The pet has been successfully removed from your favorite list"
+        ) {
+          dispatch(removeFavorite(petData._id));
+        } else {
+          dispatch(addFavorite(petData));
+        }
+        Swal.fire({
+          title: "SUCCESSFULLY",
+          text: res.data.message,
+          icon: "success",
+        });
+      } catch (error) {
+        console.log(error);
+        Swal.fire({
+          title: "ERROR",
+          text: "Something went wrong",
+          icon: "error",
+        });
+      }
+    }
+  };
 
   const handleImageClick = (image) => {
     setMainImage(image);
@@ -231,7 +318,14 @@ const PetInfo = ({ petData }) => {
                 Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
               </Button>
               <IconButton>
-                <FontAwesomeIcon icon={solidHeart} size="lg" color="red" />
+                <FontAwesomeIcon
+                  icon={
+                    isFavorite(petData, favorites) ? solidHeart : regularHeart
+                  }
+                  size="lg"
+                  color={isFavorite(petData, favorites) ? "red" : "black"}
+                  onClick={() => handleLikeClick()}
+                />
               </IconButton>
             </Box>
           </Box>
