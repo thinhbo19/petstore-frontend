@@ -8,13 +8,13 @@ import {
   Button,
   Dialog,
   DialogContent,
+  CircularProgress,
 } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
 import { getCurrentUser, updateUserInfo } from "@/src/services/apiUser";
 import Swal from "sweetalert2";
-import Loading from "@/src/component/Loading/Loading";
 
 export default function ProfilePage() {
   const accessToken = useSelector(selectAccessToken);
@@ -28,8 +28,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogImage, setDialogImage] = useState("");
-
-  const [loadingPPage, setLoadingPage] = useState(true);
+  const [loadingPage, setLoadingPage] = useState(true);
 
   const fetchDataUser = async () => {
     if (accessToken) {
@@ -76,8 +75,6 @@ export default function ProfilePage() {
 
     try {
       const res = await updateUserInfo(accessToken, formData, userID);
-      console.log(res);
-
       Swal.fire({
         title: "Success!",
         text: "Updated successfully!",
@@ -85,7 +82,6 @@ export default function ProfilePage() {
         confirmButtonText: "OK",
       });
     } catch (error) {
-      console.error("Error updating:", error);
       Swal.fire({
         title: "Error!",
         text: "Failed to update information.",
@@ -119,8 +115,19 @@ export default function ProfilePage() {
     setDialogOpen(false);
   };
 
-  if (loadingPPage) {
-    return <Loading />;
+  if (loadingPage) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (

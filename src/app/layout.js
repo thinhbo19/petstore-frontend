@@ -1,11 +1,9 @@
 import ReduxProvider from "../component/providers/Redux";
-import { FavoriteProvider } from "../services/Context/FavoriteContext";
 import { UserProvider } from "../services/Context/UserContext";
 import "./layout.css";
 
 export async function generateMetadata({ params, searchParams }) {
   const baseUrl = "https://shoesstore-ten.vercel.app";
-
   return {
     title: "Trang Chủ - Pet Shop",
     description:
@@ -42,9 +40,7 @@ export default function RootLayout({ children }) {
     <html lang="vi">
       <body>
         <ReduxProvider>
-          <UserProvider>
-            <FavoriteProvider>{children}</FavoriteProvider>
-          </UserProvider>
+          <UserProvider>{children}</UserProvider>
         </ReduxProvider>
       </body>
     </html>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { apiUrlBrand, apiUrlCategory, apiUrlProduct } from "./config";
+import { apiUrlCategory, apiUrlProduct } from "./config";
 
 export const getAllCategory = async (accessToken) => {
   try {
@@ -65,77 +65,9 @@ export const changeCate = async (accessToken, cateId, nameCategory) => {
   }
 };
 
-export const getAllBrand = async (accessToken) => {
+export const getAllProduct = async () => {
   try {
-    const res = await axios.get(`${apiUrlBrand}/`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return res.data.brands;
-  } catch (error) {
-    console.error("Error fetching species:", error);
-    throw error;
-  }
-};
-
-export const createBrand = async (accessToken, name, category) => {
-  try {
-    const res = await axios.post(
-      `${apiUrlBrand}/addBrand`,
-      { nameBrand: name, category: category },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching species:", error);
-    throw error;
-  }
-};
-
-export const changeBrand = async (accessToken, brandId, nameBrand) => {
-  try {
-    const res = await axios.patch(
-      `${apiUrlBrand}/${brandId}`,
-      { nameBrand: nameBrand },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching species:", error);
-    throw error;
-  }
-};
-
-export const deleteBrand = async (accessToken, brandId) => {
-  try {
-    const res = await axios.delete(`${apiUrlBrand}/${brandId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching species:", error);
-    throw error;
-  }
-};
-
-export const getAllProduct = async (accessToken) => {
-  try {
-    const res = await axios.get(`${apiUrlProduct}/`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const res = await axios.get(`${apiUrlProduct}`);
     return res.data.product;
   } catch (error) {
     console.error("Error fetching species:", error);

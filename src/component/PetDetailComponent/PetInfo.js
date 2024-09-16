@@ -13,6 +13,7 @@ import {
   TableHead,
   TableRow,
   Paper as TablePaper,
+  CircularProgress,
 } from "@mui/material";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,6 +39,7 @@ const PetInfo = ({ petData, accessToken }) => {
   const [mainImage, setMainImage] = useState(petData.imgPet[0]);
   const [favorites, setFavorites] = useState([]);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -61,6 +63,7 @@ const PetInfo = ({ petData, accessToken }) => {
         icon: "warning",
       });
     } else {
+      setLoading(true);
       const isCurrentlyFavorite = isFavorite(petData, favorites);
       const updatedFavorites = isCurrentlyFavorite
         ? favorites.filter((f) => f.petID !== petData._id)
@@ -107,6 +110,8 @@ const PetInfo = ({ petData, accessToken }) => {
           text: "Something went wrong",
           icon: "error",
         });
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -116,7 +121,22 @@ const PetInfo = ({ petData, accessToken }) => {
   };
 
   return (
-    <Paper elevation={8} sx={{ padding: 3, marginBottom: 4 }}>
+    <Paper
+      elevation={8}
+      sx={{ padding: 3, marginBottom: 4, position: "relative" }}
+    >
+      {loading && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            right: "50%",
+            zIndex: "1000",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      )}
       <Grid container spacing={4}>
         {/* Left side: images */}
         <Grid item xs={12} md={6}>

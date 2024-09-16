@@ -13,23 +13,28 @@ import {
   IconButton,
   Grid,
   Pagination,
+  CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { AddLocation } from "@mui/icons-material";
-import Loading from "@/src/component/Loading/Loading";
+import { useSelector } from "react-redux";
+import { selectAccessToken } from "@/src/services/Redux/useSlice";
+import { getCurrentUser } from "@/src/services/apiUser";
+import axios from "axios";
+import { apiUrlUser } from "@/src/services/config";
 
 export default function AddressPage() {
+  const accessToken = useSelector(selectAccessToken);
   const [addresses, setAddresses] = useState([]);
   const [open, setOpen] = useState(false);
-  const [newAddress, setNewAddress] = useState({
-    name: "",
-    phone: "",
-    address: "",
-  });
+  const [newAddress, setNewAddress] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+
   const itemsPerPage = 6;
 
-  const [loadingPPage, setLoadingPage] = useState(true);
+  const [loadingPage, setLoadingPage] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
@@ -37,8 +42,33 @@ export default function AddressPage() {
     }, 500);
   }, []);
 
-  if (loadingPPage) {
-    return <Loading />;
+  useEffect(() => {
+    if (accessToken) {
+      const fetchData = async () => {
+        try {
+          const res = await getCurrentUser(accessToken);
+          setAddresses(res.Address);
+          setName(res.username);
+          setPhone(res.mobile);
+        } catch (error) {}
+      };
+      fetchData();
+    }
+  }, [accessToken]);
+
+  if (loadingPage) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   const handleClickOpen = () => {
@@ -50,27 +80,49 @@ export default function AddressPage() {
   };
 
   const handleChange = (e) => {
-    setNewAddress({
-      ...newAddress,
-      [e.target.name]: e.target.value,
-    });
+    setNewAddress(e.target.value);
   };
 
-  const handleAddAddress = () => {
-    setAddresses([...addresses, newAddress]);
-    setNewAddress({ name: "", phone: "", address: "" });
-    handleClose();
+  const handleAddAddress = async () => {
+    try {
+      const res = await axios.post(
+        `${apiUrlUser}/address`,
+        {
+          address: newAddress,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      console.log(res);
+      setAddresses([...addresses, newAddress]);
+      setNewAddress("");
+
+      handleClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleDeleteAddress = (index) => {
-    setAddresses(addresses.filter((_, i) => i !== index));
+  const handleDeleteAddress = async (index) => {
+    try {
+      await axios.delete(`${apiUrlUser}/address/${index}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setAddresses(addresses.filter((_, i) => i !== index));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
 
-  // Calculate the indexes for slicing the addresses array
   const indexOfLastAddress = currentPage * itemsPerPage;
   const indexOfFirstAddress = indexOfLastAddress - itemsPerPage;
   const currentAddresses = addresses.slice(
@@ -122,14 +174,18 @@ export default function AddressPage() {
               >
                 <DeleteIcon />
               </IconButton>
-              <Typography variant="h6" gutterBottom>
-                {item.name}
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
-                {item.phone}
-              </Typography>
+              {currentAddresses.length > 0 && (
+                <Typography variant="h6" gutterBottom>
+                  {name}
+                </Typography>
+              )}{" "}
+              {currentAddresses.length > 0 && (
+                <Typography variant="body1" color="textSecondary">
+                  {phone}
+                </Typography>
+              )}
               <Typography variant="body2" color="textSecondary">
-                {item.address}
+                {item}
               </Typography>
             </Paper>
           </Grid>
@@ -145,27 +201,6 @@ export default function AddressPage() {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Thêm Địa Chỉ Mới</DialogTitle>
         <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Tên"
-            type="text"
-            fullWidth
-            variant="standard"
-            name="name"
-            value={newAddress.name}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="dense"
-            label="Số Điện Thoại"
-            type="tel"
-            fullWidth
-            variant="standard"
-            name="phone"
-            value={newAddress.phone}
-            onChange={handleChange}
-          />
           <TextField
             margin="dense"
             label="Địa Chỉ"
