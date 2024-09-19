@@ -31,12 +31,12 @@ import axios from "axios";
 import { apiUrlUser } from "@/src/services/config";
 import { getFavorites } from "@/src/services/apiUser";
 import {
-  addFavorite,
-  removeFavorite,
-} from "@/src/services/Redux/FavoriteSlice";
+  addProductFavorite,
+  removeProductFavorite,
+} from "@/src/services/Redux/FavoriteProductSlice";
 
 function isFavorite(product, favorites) {
-  return favorites.some((favorite) => favorite.petID === product._id);
+  return favorites.some((favorite) => favorite.productID === product._id);
 }
 
 const AccessoryComponent = ({ data }) => {
@@ -84,10 +84,10 @@ const AccessoryComponent = ({ data }) => {
   };
 
   const changePage = (accessory) => {
-    router.push(`/shop/accessory/${generateSlug(accessory)}`);
+    router.push(`/accessory/${generateSlug(accessory)}`);
   };
 
-  const handleLikeClick = async (pet) => {
+  const handleLikeClick = async (accessory) => {
     if (!accessToken) {
       Swal.fire({
         title: "LOGIN",
@@ -95,25 +95,22 @@ const AccessoryComponent = ({ data }) => {
         icon: "warning",
       });
     } else {
-      const isCurrentlyFavorite = isFavorite(pet, favorites);
+      const isCurrentlyFavorite = isFavorite(accessory, favorites);
       const updatedFavorites = isCurrentlyFavorite
-        ? favorites.filter((f) => f.petID !== pet._id)
-        : [...favorites, { petID: pet._id, ...pet }];
+        ? favorites.filter((f) => f.productID !== accessory._id)
+        : [...favorites, { productID: accessory._id, ...accessory }];
 
       setFavorites(updatedFavorites);
 
       try {
         const res = await axios.put(
-          `${apiUrlUser}/favoritePet`,
+          `${apiUrlUser}/favoriteProduct`,
           {
-            petID: pet._id,
-            imgPet: pet.imgPet[0],
-            namePet: pet.namePet,
-            nameBreed: pet.petBreed.nameBreed,
-            nameSpecies: pet.petBreed.nameSpecies,
-            age: pet.age,
-            gender: pet.gender,
-            price: pet.price,
+            productID: accessory._id,
+            images: accessory.images[0],
+            nameProduct: accessory.nameProduct,
+            nameCate: accessory.category.nameCate,
+            price: accessory.price,
           },
           {
             headers: {
@@ -124,11 +121,11 @@ const AccessoryComponent = ({ data }) => {
 
         if (
           res.data.message ===
-          "The pet has been successfully removed from your favorite list"
+          "The product has been successfully removed from your favorite list"
         ) {
-          dispatch(removeFavorite(pet._id));
+          dispatch(removeProductFavorite(accessory._id));
         } else {
-          dispatch(addFavorite(pet));
+          dispatch(addProductFavorite(accessory));
         }
         Swal.fire({
           title: "SUCCESSFULLY",
@@ -407,13 +404,15 @@ const AccessoryComponent = ({ data }) => {
                       handleLikeClick(accessory);
                     }}
                   >
-                    {/* <FontAwesomeIcon
+                    <FontAwesomeIcon
                       icon={
-                        isFavorite(accessory, favorites) ? solidHeart : regularHeart
+                        isFavorite(accessory, favorites)
+                          ? solidHeart
+                          : regularHeart
                       }
                       size="lg"
                       color={isFavorite(accessory, favorites) ? "red" : "black"}
-                    /> */}
+                    />
                   </Box>
                 </Card>
               </Grid>

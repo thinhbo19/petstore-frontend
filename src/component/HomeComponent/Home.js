@@ -58,18 +58,6 @@ export default function Home({ dogs, cats }) {
   return (
     <div className="home__container">
       {/* Cart với hiệu ứng hover */}
-      <NextLink href="/cart" passHref>
-        <IconButton
-          sx={{
-            transition: "transform 0.3s ease",
-            "&:hover": {
-              transform: "scale(1.05)", // Phóng to 1.05 lần khi hover
-            },
-          }}
-        >
-          <ShoppingCartIcon sx={{ fontSize: 30 }} />
-        </IconButton>
-      </NextLink>
 
       {/* Slider banner */}
       <BannerSlider />
@@ -87,7 +75,7 @@ export default function Home({ dogs, cats }) {
           textAlign: "center",
         }}
       >
-        <Typography variant="h5" gutterBottom>
+        <Typography sx={{ fontWeight: "bold" }} variant="h5" gutterBottom>
           About Pet House
         </Typography>
         <Typography variant="body1" paragraph>

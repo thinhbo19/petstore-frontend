@@ -17,7 +17,6 @@ import MenuItems from "./MenuItems";
 import MobileMenu from "./MobileMenu";
 import UserMenu from "./UserMenu";
 import LeftMenu from "./LeftMenu";
-import { useRouter } from "next/navigation";
 import LogoWeb from "../../../public/logo.svg";
 import Image from "next/image";
 import { useSelector } from "react-redux";
@@ -29,9 +28,9 @@ import NotificationMenu from "./Popover/NotificationMenu";
 import HomeMenu from "./Popover/HomeMenu";
 import PetsMenu from "./Popover/PetsMenu";
 import { selectFavorites } from "@/src/services/Redux/FavoriteSlice";
+import { selectProductFavorites } from "@/src/services/Redux/FavoriteProductSlice";
 
 const Header = ({ allDog, allCat }) => {
-  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   const [leftMenuAnchorEl, setLeftMenuAnchorEl] = useState(null);
@@ -40,7 +39,9 @@ const Header = ({ allDog, allCat }) => {
   const [anchorElHome, setAnchorElHome] = useState(null);
   const [anchorElPets, setAnchorElPets] = useState(null);
 
-  const favoritesData = useSelector(selectFavorites);
+  const favoritesPetsData = useSelector(selectFavorites);
+  const favoritesProductData = useSelector(selectProductFavorites);
+  const favoritesData = [...favoritesPetsData, ...favoritesProductData];
 
   const [anchorElCart, setAnchorElCart] = useState(null);
   const [anchorElFavorite, setAnchorElFavorite] = useState(null);
@@ -91,9 +92,6 @@ const Header = ({ allDog, allCat }) => {
   const favoriteMenuId = "primary-favorite-menu";
   const notificationMenuId = "primary-notification-menu";
 
-  const [showHeader, setShowHeader] = useState(true);
-  const [lastScrollTop, setLastScrollTop] = useState(0);
-
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isLeftMenuOpen = Boolean(leftMenuAnchorEl);
@@ -135,21 +133,6 @@ const Header = ({ allDog, allCat }) => {
     setLeftMenuAnchorEl(null);
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollTop = window.pageYOffset;
-      if (currentScrollTop > lastScrollTop) {
-        setShowHeader(false);
-      } else {
-        setShowHeader(true);
-      }
-      setLastScrollTop(currentScrollTop <= 0 ? 0 : currentScrollTop);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollTop]);
-
   return (
     <Box sx={{ flexGrow: 1, zIndex: "1000" }}>
       <AppBar
@@ -161,8 +144,7 @@ const Header = ({ allDog, allCat }) => {
           flexGrow: 1,
           position: "fixed",
           top: 0,
-          transition: "top 0.3s",
-          top: showHeader ? "0" : "-100px",
+          top: "0",
           zIndex: "100000",
         }}
       >
@@ -181,7 +163,7 @@ const Header = ({ allDog, allCat }) => {
               src={LogoWeb}
               alt="Logo"
               priority
-              style={{ display: { xs: "none", sm: "block" } }}
+              className="responsive-logo"
             />
             <MenuItems
               handleMenuHomeOpen={handleMenuHomeOpen}

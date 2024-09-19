@@ -11,3 +11,29 @@
   text-decoration: none;
   color: black;
 }
+
+.responsive-logo {
+  width: 80px;
+  height: 80px;
+  display: block;
+}
+
+/* Responsive theo từng kích thước màn hình */
+@media (max-width: 600px) {
+  .responsive-logo {
+    width: 60%; /* Tùy chỉnh chiều rộng trên màn hình nhỏ */
+  }
+}
+
+@media (max-width: 350px) {
+  .responsive-logo {
+    width: 60%;
+    margin-right: 25px; /* Tùy chỉnh chiều rộng trên màn hình nhỏ */
+  }
+}
+
+@media (min-width: 600px) {
+  .responsive-logo {
+    width: 160px; /* Tùy chỉnh chiều rộng cho màn hình lớn hơn */
+  }
+}

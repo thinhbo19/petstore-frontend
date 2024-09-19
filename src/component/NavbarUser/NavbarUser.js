@@ -9,7 +9,6 @@ import {
   IconButton,
   Drawer,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HistoryIcon from "@mui/icons-material/History";
@@ -18,6 +17,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LockIcon from "@mui/icons-material/Lock";
 import Link from "next/link";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { usePathname } from "next/navigation";
 
 const NavbarUser = () => {
@@ -110,13 +110,23 @@ const NavbarUser = () => {
   return (
     <Box>
       <IconButton
-        sx={{ display: { md: "none" } }} // Ẩn khi màn hình lớn hơn medium
+        sx={{
+          display: { md: "none" },
+          width: "35px",
+          height: "35px",
+          backgroundColor: "#ededed",
+        }}
         onClick={toggleDrawer}
       >
-        <MenuIcon sx={{ fontSize: "2rem" }} />
+        <ArrowForwardIosIcon sx={{ fontSize: "1.2rem" }} />
       </IconButton>
 
-      <Drawer anchor="left" open={isOpen} onClose={toggleDrawer}>
+      <Drawer
+        sx={{ zIndex: "10000000" }}
+        anchor="left"
+        open={isOpen}
+        onClose={toggleDrawer}
+      >
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer}>
           {iconList}
         </Box>

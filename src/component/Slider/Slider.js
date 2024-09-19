@@ -45,9 +45,9 @@ const BannerSlider = () => {
         position: "relative",
         width: "100%",
         maxWidth: "1400px",
-        margin: "0 auto",
+        margin: "60px auto",
         overflow: "hidden",
-        height: { xs: "300px", sm: "400px", md: "500px", lg: "600px" }, // Responsive height
+        height: { xs: "200px", sm: "400px", md: "500px", lg: "600px" },
       }}
     >
       <Box

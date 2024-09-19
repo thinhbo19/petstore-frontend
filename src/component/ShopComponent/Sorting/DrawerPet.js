@@ -74,7 +74,12 @@ const DrawerPet = ({
   };
 
   return (
-    <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer(false)}>
+    <Drawer
+      sx={{ zIndex: "10000000" }}
+      anchor="left"
+      open={isDrawerOpen}
+      onClose={toggleDrawer(false)}
+    >
       <Box sx={{ width: 270, padding: 2 }} role="presentation">
         <TextField
           fullWidth

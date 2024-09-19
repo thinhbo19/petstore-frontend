@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import Link from "next/link";
 import { Box } from "@mui/material";
+import { generateSlug } from "@/src/services/slugifyConfig";
 
 const FavoriteMenu = ({
   favoritesData,
@@ -65,44 +66,65 @@ const FavoriteMenu = ({
       ) : (
         sortedFavorites.map((favorite, index) => (
           <MenuItem key={index} sx={{ alignItems: "center", gap: 1.5 }}>
-            <Image
-              src={favorite.imgPet}
-              width={50}
-              height={50}
-              alt={favorite.namePet}
-            />
-            <Box
-              sx={{
-                width: "100%",
+            <Link
+              href={
+                favorite.petID
+                  ? `/shop/${generateSlug(favorite.nameSpecies)}/${generateSlug(
+                      favorite.nameBreed
+                    )}/${generateSlug(favorite.namePet)}`
+                  : `/accessory/${generateSlug(
+                      favorite.nameCate
+                    )}/${generateSlug(favorite.nameProduct)}`
+              }
+              style={{
                 display: "flex",
-                flexDirection: "column",
                 justifyContent: "space-between",
-                maxWidth: "350px",
-                overflow: "hidden",
+                alignItems: "center",
+                textDecoration: "none",
+                color: "black",
+                width: "100%",
               }}
             >
-              <Typography
-                variant="inherit"
-                noWrap
+              <Image
+                src={favorite.imgPet || favorite.images}
+                width={50}
+                height={50}
+                alt={favorite.namePet || favorite.images}
+              />
+              <Box
                 sx={{
-                  textOverflow: "ellipsis",
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  maxWidth: "350px",
                   overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  flexGrow: 1,
                 }}
               >
-                {favorite.namePet}
-              </Typography>
-              <Typography
-                variant="inherit"
-                sx={{
-                  textAlign: "right",
-                  fontWeight: "bold",
-                }}
-              >
-                {favorite.price}đ
-              </Typography>
-            </Box>
+                <Typography
+                  variant="inherit"
+                  noWrap
+                  sx={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    flexGrow: 1,
+                    marginLeft: "5px",
+                  }}
+                >
+                  {favorite.namePet || favorite.nameProduct}
+                </Typography>
+                <Typography
+                  variant="inherit"
+                  sx={{
+                    textAlign: "right",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {favorite.price}đ
+                </Typography>
+              </Box>
+            </Link>
           </MenuItem>
         ))
       )}

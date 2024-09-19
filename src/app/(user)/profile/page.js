@@ -133,7 +133,7 @@ export default function ProfilePage() {
   return (
     <Box
       sx={{
-        padding: "2rem",
+        padding: "0 1rem",
         maxWidth: "600px",
         margin: "auto",
         textAlign: "center",
@@ -143,7 +143,7 @@ export default function ProfilePage() {
         <Avatar
           src={avatar}
           alt="Profile Avatar"
-          sx={{ width: 100, height: 100, margin: "auto", cursor: "pointer" }}
+          sx={{ width: 100, height: 100, margin: "0 auto", cursor: "pointer" }}
           onClick={handleAvatarClick}
         />
         <input
