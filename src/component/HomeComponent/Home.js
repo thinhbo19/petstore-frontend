@@ -1,23 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Link as MuiLink,
-  Grid,
-  Button,
-  IconButton,
-} from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Box, Typography, Link as MuiLink, Grid, Button } from "@mui/material";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
-import NextLink from "next/link";
 import BannerSlider from "../Slider/Slider";
 import Loading from "../Loading/Loading";
 import Link from "next/link";
 import { generateSlug } from "@/src/services/slugifyConfig";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCat, faDog } from "@fortawesome/free-solid-svg-icons";
 
 const features = [
   {
@@ -44,6 +39,13 @@ const features = [
 
 export default function Home({ dogs, cats }) {
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      offset: 120,
+    });
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -130,14 +132,17 @@ export default function Home({ dogs, cats }) {
       </Box>
 
       {/* Dog Breeds Section */}
-      <Box sx={{ backgroundColor: "#F5F5F5", padding: "20px" }}>
+      <Box
+        data-aos="fade-left"
+        sx={{ backgroundColor: "#F5F5F5", padding: "20px" }}
+      >
         <Typography
           sx={{ fontWeight: "bold" }}
           variant="h6"
           textAlign="center"
           gutterBottom
         >
-          DOG BREEDS
+          <FontAwesomeIcon icon={faDog} /> DOG BREEDS
         </Typography>
         <Grid container spacing={2}>
           {dogs.map((dog, index) => (
@@ -175,14 +180,68 @@ export default function Home({ dogs, cats }) {
       </Box>
 
       {/* Cat Breeds Section */}
-      <Box sx={{ backgroundColor: "#F5F5F5", padding: "20px" }}>
+      <Box
+        data-aos="fade-right"
+        sx={{ backgroundColor: "#F5F5F5", padding: "20px" }}
+      >
         <Typography
           sx={{ fontWeight: "bold" }}
           variant="h6"
           textAlign="center"
           gutterBottom
         >
-          CAT BREEDS
+          <FontAwesomeIcon icon={faCat} /> CAT BREEDS
+        </Typography>
+        <Grid container spacing={2}>
+          {cats.map((cat, index) => (
+            <Grid item xs={6} sm={6} md={2.4} key={index}>
+              <Link
+                href={`/shop/dog/${generateSlug(cat.nameBreed)}`}
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Box
+                  textAlign="center"
+                  sx={{
+                    padding: "10px",
+                    backgroundColor: "#FFF",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <img
+                    src={cat.imgBreed[0]}
+                    alt={cat.nameBreed}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      aspectRatio: "1/1",
+                      borderRadius: "10px",
+                    }}
+                  />
+                  <Typography variant="body1" mt={1}>
+                    {cat.nameBreed}
+                  </Typography>
+                </Box>
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* Cat Breeds Section */}
+      <Box
+        data-aos="fade-left"
+        sx={{
+          backgroundColor: "#F5F5F5",
+          padding: "20px",
+        }}
+      >
+        <Typography
+          sx={{ fontWeight: "bold" }}
+          variant="h6"
+          textAlign="center"
+          gutterBottom
+        >
+          <FontAwesomeIcon icon={faCat} /> CAT BREEDS
         </Typography>
         <Grid container spacing={2}>
           {cats.map((cat, index) => (

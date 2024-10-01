@@ -13,6 +13,7 @@ const options = [
   "Pets",
   "Voucher",
   "Product",
+  "Contact Us",
 ];
 const ITEM_HEIGHT = 48;
 

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Box,
   Container,
@@ -6,6 +7,8 @@ import {
   Typography,
   Link as MuiLink,
   IconButton,
+  TextField,
+  Button,
 } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
@@ -13,6 +16,25 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const Footer = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Logic xử lý form ở đây
+    console.log("Submitted data:", formData);
+  };
+
   return (
     <Box
       sx={{
@@ -23,6 +45,120 @@ const Footer = () => {
       }}
     >
       <Container maxWidth="lg">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" }, // Đặt thành cột trên màn hình nhỏ và hàng trên màn hình lớn
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: "15px",
+          }}
+        >
+          {/* Newsletter Section */}
+          <Box>
+            <Typography
+              variant="h4" // Đặt kích thước chữ lớn hơn
+              gutterBottom
+              textAlign="left"
+              fontWeight="bold" // Đậm
+            >
+              Newsletter
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ marginBottom: "1rem", textAlign: "left" }}
+            >
+              Signup our newsletter to get update information, news, insight or
+              promotions.
+            </Typography>
+          </Box>
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%", // Đảm bảo form chiếm toàn bộ chiều rộng
+              marginTop: { xs: "1rem", sm: "0" }, // Thêm khoảng cách phía trên trên màn hình nhỏ
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" }, // Đặt thành cột trên màn hình nhỏ và hàng trên màn hình lớn
+                alignItems: "center",
+                justifyContent: "space-between",
+                width: "100%", // Đảm bảo chiếm toàn bộ chiều rộng
+                gap: "1rem",
+              }}
+            >
+              <TextField
+                label="Name"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                fullWidth
+                required
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#FCD039", // Màu viền bình thường
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#FCD039", // Màu viền khi hover
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#FCD039", // Không hiển thị viền khi focus
+                    },
+                  },
+                }}
+              />
+              <TextField
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                fullWidth
+                required
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": {
+                      borderColor: "#FCD039", // Màu viền bình thường
+                    },
+                    "&:hover fieldset": {
+                      borderColor: "#FCD039", // Màu viền khi hover
+                    },
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#FCD039", // Không hiển thị viền khi focus
+                    },
+                  },
+                }}
+              />
+            </Box>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#FCD039",
+                color: "black",
+                maxWidth: "400px",
+                width: { xs: "100%", sm: "100%" }, // Chiều rộng 100% trên màn hình nhỏ và auto cho màn hình lớn
+                padding: { xs: "10px 0", sm: "12px 20px" }, // Padding cho các kích thước khác nhau
+                fontSize: { xs: "0.875rem", sm: "1rem" }, // Kích thước chữ cho các kích thước khác nhau
+                "&:hover": {
+                  backgroundColor: "#e6c52d", // Màu nền khi hover
+                },
+              }}
+            >
+              Sign Up
+            </Button>
+          </Box>
+        </Box>
+
         <Grid container spacing={4} justifyContent="center">
           {/* About Us Section */}
           <Grid item xs={12} sm={6} md={3}>

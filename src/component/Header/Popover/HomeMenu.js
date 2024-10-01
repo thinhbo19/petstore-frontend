@@ -51,24 +51,47 @@ const HomeMenu = ({
         },
       }}
     >
-      <MenuItem onClick={() => handleChangePage(router, "HOME")}>Home</MenuItem>
-      <MenuItem onClick={() => handleChangePage(router, "About Us")}>
+      <MenuItem
+        sx={{ fontWeight: "bold" }}
+        onClick={() => handleChangePage(router, "HOME")}
+      >
+        Home
+      </MenuItem>
+      <MenuItem
+        sx={{ fontWeight: "bold" }}
+        onClick={() => handleChangePage(router, "About Us")}
+      >
         About Us
       </MenuItem>
-      <MenuItem onClick={() => handleChangePage(router, "Spa&Hotel Services")}>
+      <MenuItem
+        sx={{ fontWeight: "bold" }}
+        onClick={() => handleChangePage(router, "Spa&Hotel Services")}
+      >
         Spa&Hotel Services
       </MenuItem>
-      <MenuItem onClick={() => handleChangePage(router, "Warranty Policy")}>
+      <MenuItem
+        sx={{ fontWeight: "bold" }}
+        onClick={() => handleChangePage(router, "Warranty Policy")}
+      >
         Warranty Policy
       </MenuItem>
       <MenuItem
+        sx={{ fontWeight: "bold" }}
         onClick={() => handleChangePage(router, "0% Installment Policy")}
       >
         0% Installment Policy
       </MenuItem>
-      <MenuItem onClick={() => handleChangePage(router, "News")}>News</MenuItem>
-      <MenuItem onClick={() => handleChangePage(router, "Contact")}>
-        Contact
+      <MenuItem
+        sx={{ fontWeight: "bold" }}
+        onClick={() => handleChangePage(router, "News")}
+      >
+        News
+      </MenuItem>
+      <MenuItem
+        sx={{ fontWeight: "bold" }}
+        onClick={() => handleChangePage(router, "Contact")}
+      >
+        Contact Us
       </MenuItem>
     </Menu>
   );
