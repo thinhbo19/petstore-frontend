@@ -1,6 +1,5 @@
 "use client";
 
-import formatPetName from "@/src/services/formatPetName";
 import { Box, Typography, Collapse, Button, IconButton } from "@mui/material";
 import PetInfo from "./PetInfo";
 import Loading from "../Loading/Loading";
@@ -11,14 +10,17 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SimilarProducts from "./SimilarProducts";
 import { useSelector } from "react-redux";
-import { selectAccessToken } from "@/src/services/Redux/useSlice";
+import { selectAccessToken, selectUid } from "@/src/services/Redux/useSlice";
+import "react-toastify/dist/ReactToastify.css";
 
 const PetDetailComponent = ({ petName, petData, similarProducts }) => {
   const description = petData?.description;
+  const reviews = petData?.rating;
   const accessToken = useSelector(selectAccessToken);
   const [loading, setLoading] = useState(true);
   const [openDescription, setOpenDescription] = useState(false);
   const [openReviews, setOpenReviews] = useState(false);
+  const userId = useSelector(selectUid);
 
   useEffect(() => {
     setTimeout(() => {
@@ -93,7 +95,7 @@ const PetDetailComponent = ({ petName, petData, similarProducts }) => {
         Reviews
       </Button>
       <Collapse in={openReviews}>
-        <PetReviews />
+        <PetReviews reviews={reviews} />
       </Collapse>
 
       {/* Similar Products */}

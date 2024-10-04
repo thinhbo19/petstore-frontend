@@ -34,7 +34,15 @@ const SimilarProducts = ({ similarProducts }) => {
   };
 
   return (
-    <Paper elevation={0} sx={{ padding: 3, marginTop: "20px" }}>
+    <Paper
+      elevation={0}
+      sx={{
+        padding: 3,
+        marginTop: "20px",
+        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // Custom box shadow
+        borderRadius: "8px", // Optional: add a subtle border-radius for smoother edges
+      }}
+    >
       <Typography
         sx={{
           fontWeight: "bold",
@@ -66,6 +74,8 @@ const SimilarProducts = ({ similarProducts }) => {
                   padding: 2,
                   textAlign: "center",
                   height: "100%",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.15)", // Shadow for inner Paper
+                  borderRadius: "8px",
                 }}
               >
                 <Image
@@ -78,7 +88,16 @@ const SimilarProducts = ({ similarProducts }) => {
                     display: "block",
                   }}
                 />
-                <Typography variant="subtitle1" gutterBottom>
+                <Typography
+                  sx={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "150px", // Adjust the width as needed
+                  }}
+                  variant="subtitle1"
+                  gutterBottom
+                >
                   {product.namePet}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">

@@ -103,6 +103,7 @@ const Header = ({ allDog, allCat }) => {
       if (accessToken) {
         const res = await getCurrentUser(accessToken);
         setAvatar(res.Avatar);
+        console.log(favoritesData);
       }
     };
     fetchData();

@@ -19,7 +19,6 @@ export default async function PetDetailPage({ params }) {
 
   const breedData = await getPetByBreed(petData.pet.petBreed.nameBreed);
 
-  console.log(petData.pet.petBreed.nameBreed);
   return (
     <PetDetailComponent
       petName={petName}

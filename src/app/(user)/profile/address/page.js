@@ -158,7 +158,7 @@ export default function AddressPage() {
                 padding: "1rem",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
+                alignItems: "left",
                 boxShadow: 3,
                 position: "relative",
               }}

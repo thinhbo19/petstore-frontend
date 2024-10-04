@@ -31,3 +31,6 @@ html::-ms-scrollbar-thumb {
   background-color: #888;
   border-radius: 6px;
 }
+.custom-toast-container {
+  z-index: 100000 !important;
+}

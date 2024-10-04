@@ -9,12 +9,10 @@ import {
   Typography,
   Grid,
   Pagination,
-  IconButton,
   Button,
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import {
   addFavorite,
@@ -134,11 +132,13 @@ export default function FavoritesPage() {
         <>
           <Grid container spacing={3}>
             {currentItems.map((favorite, index) => (
-              <Grid item xs={6} key={index}>
+              <Grid item xs={12} sm={6} md={6} key={index}>
+                {" "}
+                {/* Adjusted for larger screens */}
                 <Card
                   sx={{
                     display: "flex",
-                    flexDirection: "row",
+                    flexDirection: { xs: "column", md: "row" },
                     width: "100%",
                     "&:hover": {
                       backgroundColor: "#f0f0f0",
@@ -147,7 +147,11 @@ export default function FavoritesPage() {
                 >
                   <CardMedia
                     component="img"
-                    sx={{ width: 150, height: 150, objectFit: "cover" }}
+                    sx={{
+                      width: { xs: "100%", md: 150 },
+                      height: { xs: 180, md: 150 },
+                      objectFit: "cover",
+                    }}
                     image={favorite.imgPet}
                     alt={favorite.namePet}
                   />
@@ -171,35 +175,44 @@ export default function FavoritesPage() {
                     >
                       {favorite.price} đ
                     </Typography>
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      startIcon={<DeleteIcon />}
-                      onClick={() => handleRemoveFavorite(favorite)}
-                      sx={{ marginTop: "0.5rem", zIndex: "100" }}
-                    >
-                      Remove
-                    </Button>{" "}
-                    <Link
-                      href={`/shop/${generateSlug(
-                        favorite.nameBreed
-                      )}/${generateSlug(favorite.nameSpecies)}/${generateSlug(
-                        favorite.namePet
-                      )}`}
-                      style={{
-                        textDecoration: "none",
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: { xs: "column", sm: "row" },
+                        gap: 1,
+                        marginTop: "0.5rem",
                       }}
-                      passHref
                     >
                       <Button
                         variant="outlined"
-                        color="primary"
-                        startIcon={<MoreIcon />}
-                        sx={{ marginTop: "0.5rem", zIndex: "100" }}
+                        color="error"
+                        startIcon={<DeleteIcon />}
+                        onClick={() => handleRemoveFavorite(favorite)}
+                        sx={{ flexGrow: 1, maxWidth: "150px" }}
                       >
-                        Detail
+                        Remove
                       </Button>
-                    </Link>
+                      <Link
+                        href={`/shop/${generateSlug(
+                          favorite.nameBreed
+                        )}/${generateSlug(favorite.nameSpecies)}/${generateSlug(
+                          favorite.namePet
+                        )}`}
+                        style={{
+                          textDecoration: "none",
+                        }}
+                        passHref
+                      >
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          startIcon={<MoreIcon />}
+                          sx={{ flexGrow: 1 }}
+                        >
+                          Detail
+                        </Button>
+                      </Link>
+                    </Box>
                   </CardContent>
                 </Card>
               </Grid>

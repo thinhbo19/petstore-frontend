@@ -7,7 +7,7 @@ const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.common.white,
-  border: `1px solid ${theme.palette.common.black}`,
+  border: `1px solid #cdcdcd`,
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.9),
   },

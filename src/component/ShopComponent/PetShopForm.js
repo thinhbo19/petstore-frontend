@@ -34,6 +34,8 @@ import {
   addFavorite,
   removeFavorite,
 } from "@/src/services/Redux/FavoriteSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.petID === product._id);
@@ -132,21 +134,13 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
           "The pet has been successfully removed from your favorite list"
         ) {
           dispatch(removeFavorite(pet._id));
+          toast.success(res.data.message);
         } else {
           dispatch(addFavorite(pet));
+          toast.success(res.data.message);
         }
-        Swal.fire({
-          title: "SUCCESSFULLY",
-          text: res.data.message,
-          icon: "success",
-        });
       } catch (error) {
-        console.log(error);
-        Swal.fire({
-          title: "ERROR",
-          text: "Something went wrong",
-          icon: "error",
-        });
+        toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
       }
     }
   };
@@ -232,6 +226,18 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
         alignItems: "center",
       }}
     >
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="custom-toast-container"
+      />
       <Box
         ref={containerRef}
         sx={{ maxWidth: "1400px", width: "100%", marginBottom: 4 }}
