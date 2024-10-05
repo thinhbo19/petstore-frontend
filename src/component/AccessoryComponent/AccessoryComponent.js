@@ -1,57 +1,54 @@
 "use client";
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
+  Container,
   Box,
-  Typography,
   Grid,
+  Typography,
   Card,
   CardContent,
   CardMedia,
-  Pagination,
+  Divider,
+  IconButton,
   Button,
-  Alert,
-  Menu,
-  MenuItem,
+  Pagination,
 } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useRouter } from "next/navigation";
-import { generateSlug } from "@/src/services/slugifyConfig";
-import "../../styles/shop.css";
-import Loading from "../Loading/Loading";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import Link from "next/link";
 import DrawerAccessory from "./Sorting/DrawerAccessory";
-import { sortingPets } from "@/src/services/apiPet";
-import { useDispatch, useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
+import { generateSlug } from "@/src/services/slugifyConfig";
+import Loading from "../Loading/Loading";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
-import Swal from "sweetalert2";
-import axios from "axios";
-import { apiUrlUser } from "@/src/services/config";
+import { useDispatch, useSelector } from "react-redux";
 import { getFavorites } from "@/src/services/apiUser";
+import Swal from "sweetalert2";
+import { apiUrlUser } from "@/src/services/config";
+import axios from "axios";
 import {
   addProductFavorite,
   removeProductFavorite,
 } from "@/src/services/Redux/FavoriteProductSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.productID === product._id);
 }
 
-const AccessoryComponent = ({ data }) => {
-  const router = useRouter();
-  const accessToken = useSelector(selectAccessToken);
-  const dispatch = useDispatch();
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const containerRef = useRef(null);
-  const itemsPerPage = 18;
+const AccessoryComponent = ({ categoryData, groupedProducts }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [priceRange, setPriceRange] = useState([0, 20000000]);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [optionMenu, setOptionMenu] = useState("Sort Options");
+  const pathName = usePathname();
+  const productsPerPage = 24;
+  const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState([]);
+  const accessToken = useSelector(selectAccessToken);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (accessToken) {
@@ -73,21 +70,7 @@ const AccessoryComponent = ({ data }) => {
     }, 500);
   }, []);
 
-  useEffect(() => {
-    if (page) {
-      containerRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [page]);
-
-  const handleChangePageDog = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const changePage = (accessory) => {
-    router.push(`/accessory/${generateSlug(accessory)}`);
-  };
-
-  const handleLikeClick = async (accessory) => {
+  const handleFavorite = async (accessory) => {
     if (!accessToken) {
       Swal.fire({
         title: "LOGIN",
@@ -124,71 +107,30 @@ const AccessoryComponent = ({ data }) => {
           "The product has been successfully removed from your favorite list"
         ) {
           dispatch(removeProductFavorite(accessory._id));
+          toast.success(res.data.message);
         } else {
           dispatch(addProductFavorite(accessory));
+          toast.success(res.data.message);
         }
-        Swal.fire({
-          title: "SUCCESSFULLY",
-          text: res.data.message,
-          icon: "success",
-        });
       } catch (error) {
-        console.log(error);
-        Swal.fire({
-          title: "ERROR",
-          text: "Something went wrong",
-          icon: "error",
-        });
+        toast.error("Error");
       }
     }
   };
 
+  // Bộ lọc theo giá
+  const handlePriceChange = (event, newValue) => {
+    setPriceRange(newValue);
+  };
+
   const filterByPrice = (accessories) => {
     return accessories.filter(
-      (accessories) =>
-        accessories.price >= priceRange[0] && accessories.price <= priceRange[1]
+      (accessory) =>
+        accessory.price >= priceRange[0] && accessory.price <= priceRange[1]
     );
   };
 
-  const sortData = (pets, option) => {
-    switch (option) {
-      case "A to Z":
-        return pets.sort((a, b) => a.namePet.localeCompare(b.namePet));
-      case "Z to A":
-        return pets.sort((a, b) => b.namePet.localeCompare(a.namePet));
-      case "Price: High to Low":
-        return pets.sort((a, b) => b.price - a.price);
-      case "Price: Low to High":
-        return pets.sort((a, b) => a.price - b.price);
-      default:
-        return pets;
-    }
-  };
-
-  const handleSortOption = async (option) => {
-    setOptionMenu(option);
-    const newBreedName = formatString(breedName);
-    const sortedPets = await sortingPets(newBreedName, option);
-    setData(sortedPets); // Cập nhật dữ liệu đã sắp xếp
-    handleMenuClose();
-  };
-
-  const formatString = (input) => {
-    return input
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-      .join(" ");
-  };
-
-  const startIndexDog = (page - 1) * itemsPerPage;
-  const endIndexDog = page * itemsPerPage;
-  const filteredData = filterByPrice(data);
-  const sortedData = useMemo(
-    () => sortData(filteredData, optionMenu),
-    [filteredData, optionMenu]
-  );
-  const currentData = sortedData.slice(startIndexDog, endIndexDog);
-
+  // Toggle Drawer
   const toggleDrawer = (open) => (event) => {
     if (
       event &&
@@ -200,237 +142,219 @@ const AccessoryComponent = ({ data }) => {
     setIsDrawerOpen(open);
   };
 
-  const handlePriceChange = (event, newValue) => {
-    setPriceRange(newValue);
+  // Sắp xếp dữ liệu
+  const sortData = (accessories, option) => {
+    switch (option) {
+      case "A to Z":
+        return accessories.sort((a, b) =>
+          a.nameProduct.localeCompare(b.nameProduct)
+        );
+      case "Z to A":
+        return accessories.sort((a, b) =>
+          b.nameProduct.localeCompare(a.nameProduct)
+        );
+      case "Price: High to Low":
+        return accessories.sort((a, b) => b.price - a.price);
+      case "Price: Low to High":
+        return accessories.sort((a, b) => a.price - b.price);
+      default:
+        return accessories;
+    }
   };
 
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const formatString = (input) => {
+    return input
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleSortOption = (option) => {
+    setOptionMenu(option);
   };
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  const totalProducts = Object.values(groupedProducts).flat().length;
+  const totalPages = Math.ceil(totalProducts / productsPerPage);
+  const filteredData = filterByPrice(categoryData);
+  const sortedData = useMemo(
+    () => sortData(filteredData, optionMenu),
+    [filteredData, optionMenu]
+  );
+
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const endIndex = currentPage * productsPerPage;
+  const currentData = sortedData.slice(startIndex, endIndex);
 
   if (loading) {
     return <Loading />;
   }
 
   return (
-    <Box
-      sx={{
-        padding: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <Box
-        ref={containerRef}
-        sx={{ maxWidth: "1400px", width: "100%", marginBottom: 4 }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: {
-              xs: "column",
-              sm: "row",
-            },
-            gap: {
-              xs: "10px",
-              sm: "20px",
-            },
-            justifyContent: "space-between",
-            alignItems: "center",
-            width: "100%",
-            marginBottom: "20px",
-          }}
+    <Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="custom-toast-container"
+      />
+      {/* Nút mở Drawer để lọc theo giá */}
+      <div style={{ textAlign: "left" }} className="all__item">
+        <Button
+          variant="outlined"
+          startIcon={<SortIcon />}
+          onClick={toggleDrawer(true)}
         >
-          {/* Button "View Products By Price" */}
-          <Button
-            variant="outlined"
-            startIcon={<SortIcon />}
-            onClick={toggleDrawer(true)}
-            sx={{
-              marginBottom: {
-                xs: "10px",
-                sm: 0,
-              },
-              color: "black",
-            }}
-          >
-            View Products By Price
-          </Button>
+          View Products {pathName === "/accessory/" ? "By Price" : null}
+        </Button>
+      </div>
 
-          {/* Button with dropdown for sorting options */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                marginRight: {
-                  xs: 2,
-                  sm: 2,
-                },
-                fontSize: {
-                  xs: "0.75rem",
-                  sm: "0.875rem",
-                },
-              }}
-            >
-              Showing {currentData.length} results
-            </Typography>
-            <Button
-              sx={{ color: "black" }}
-              variant="outlined"
-              onClick={handleMenuClick}
-              endIcon={<ArrowDropDownIcon />}
-            >
-              {optionMenu}
-            </Button>
-          </Box>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
-            <MenuItem onClick={() => handleSortOption("A to Z")}>
-              A to Z
-            </MenuItem>
-            <MenuItem onClick={() => handleSortOption("Z to A")}>
-              Z to A
-            </MenuItem>
-            <MenuItem onClick={() => handleSortOption("Price: High to Low")}>
-              Price: High to Low
-            </MenuItem>
-            <MenuItem onClick={() => handleSortOption("Price: Low to High")}>
-              Price: Low to High
-            </MenuItem>
-          </Menu>
-        </Box>
+      {/* Drawer lọc sản phẩm */}
+      <DrawerAccessory
+        data={groupedProducts}
+        isDrawerOpen={isDrawerOpen}
+        toggleDrawer={toggleDrawer}
+        priceRange={priceRange}
+        handlePriceChange={handlePriceChange}
+      />
 
-        <DrawerAccessory
-          data={data}
-          isDrawerOpen={isDrawerOpen}
-          toggleDrawer={toggleDrawer}
-          priceRange={priceRange}
-          handlePriceChange={handlePriceChange}
-        />
+      {/* Hiển thị danh sách sản phẩm */}
+      <Grid container spacing={2} sx={{ marginTop: 2 }}>
+        {currentData.length === 0 ? (
+          <Typography
+            variant="h6"
+            color="textSecondary"
+            sx={{ margin: "20px auto" }}
+          >
+            No product in this price
+          </Typography>
+        ) : (
+          currentData.map((product, index) => {
+            const categoryName =
+              product.category?.nameCate || "default-category";
+            const productName = product.nameProduct
+              .replace(/\s+/g, "-")
+              .toLowerCase();
 
-        <Grid container spacing={2} justifyContent="center">
-          {currentData.length === 0 ? (
-            <Box
-              sx={{
-                height: "50vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Alert severity="info">
-                There are no products in this price range.
-              </Alert>
-            </Box>
-          ) : (
-            currentData.map((accessory) => (
-              <Grid
-                item
-                xs={6}
-                sm={4}
-                md={3}
-                lg={2}
-                key={accessory._id}
-                display="flex"
-                justifyContent="center"
-                sx={{
-                  position: "relative",
-                  transition: "transform 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.05)",
+            return (
+              <Grid item xs={6} sm={4} md={3} key={index}>
+                <Card
+                  sx={{
+                    position: "relative",
+                    transition: "transform 0.2s",
+                    "&:hover": { transform: "scale(1.05)" },
                     cursor: "pointer",
-                  },
-                }}
-                onClick={() => changePage(accessory.nameProduct)}
-              >
-                <Card sx={{ maxWidth: 300 }}>
-                  <CardMedia
-                    component="img"
-                    height="280"
-                    image={accessory.images}
-                    alt={accessory.nameProduct}
-                    loading="lazy"
-                  />
-
-                  <CardContent>
-                    <Typography
-                      gutterBottom
-                      variant="h5"
-                      component="div"
-                      align="left"
+                    width: "100%",
+                    height: 300,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Link
+                    href={`/accessory/${generateSlug(
+                      categoryName
+                    )}/${generateSlug(productName)}`}
+                    passHref
+                    style={{ textDecoration: "none" }}
+                  >
+                    <CardMedia
+                      component="img"
+                      alt={product.nameProduct}
+                      image={product.images[0]}
                       sx={{
-                        fontSize: {
-                          xs: "1rem",
-                          sm: "1rem",
-                          md: "1rem",
-                          lg: "1rem",
-                        },
+                        height: 150,
+                        objectFit: "contain",
+                        padding: 1,
                       }}
-                    >
-                      {accessory.nameProduct}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      align="center"
-                      className="price"
-                    >
-                      {accessory.price}
-                    </Typography>
-                  </CardContent>
-                  <Box
+                    />
+                    <CardContent sx={{ padding: 2 }}>
+                      <Typography
+                        variant="body2"
+                        color="text.primary"
+                        sx={{
+                          fontSize: {
+                            xs: "0.7rem",
+                            sm: "1rem",
+                            md: "1rem",
+                          },
+                        }}
+                      >
+                        {product.nameProduct}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: {
+                            xs: "0.7rem",
+                            sm: "1rem",
+                            md: "1rem",
+                          },
+                        }}
+                        variant="body1"
+                        color="red"
+                      >
+                        {product.price.toLocaleString()} VND
+                      </Typography>
+                    </CardContent>
+                  </Link>
+
+                  {/* Nút yêu thích */}
+                  <IconButton
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleFavorite(product);
+                    }}
+                    aria-label="add to favorites"
                     sx={{
                       position: "absolute",
-                      top: 20,
-                      right: 10,
-                      cursor: "pointer",
+                      top: 8,
+                      right: 8,
                       zIndex: 1,
-                      fontSize: "1.4rem",
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleLikeClick(accessory);
+                      color: isFavorite(product, favorites) ? "red" : "gray",
+                      backgroundColor: "rgba(255, 255, 255, 0.7)",
+                      "&:hover": {
+                        backgroundColor: "rgba(255, 255, 255, 0.9)",
+                      },
                     }}
                   >
-                    <FontAwesomeIcon
-                      icon={
-                        isFavorite(accessory, favorites)
-                          ? solidHeart
-                          : regularHeart
-                      }
-                      size="lg"
-                      color={isFavorite(accessory, favorites) ? "red" : "black"}
-                    />
-                  </Box>
+                    {isFavorite(product, favorites) ? (
+                      <FavoriteIcon />
+                    ) : (
+                      <FavoriteBorderIcon />
+                    )}
+                  </IconButton>
                 </Card>
               </Grid>
-            ))
-          )}
-        </Grid>
-        {currentData.length !== 0 && (
-          <Box sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}>
-            <Pagination
-              count={Math.ceil(data.length / itemsPerPage)}
-              page={page}
-              onChange={handleChangePageDog}
-              color="primary"
-            />
-          </Box>
+            );
+          })
         )}
+      </Grid>
+
+      {/* Phân trang */}
+      <Divider sx={{ marginY: 2 }} />
+      <Box
+        display="flex"
+        justifyContent="center"
+        sx={{ marginTop: 2, marginBottom: 2 }}
+      >
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          shape="rounded"
+        />
       </Box>
-    </Box>
+    </Container>
   );
 };
 

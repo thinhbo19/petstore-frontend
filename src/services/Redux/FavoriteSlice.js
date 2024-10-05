@@ -25,6 +25,7 @@ const favoriteSlice = createSlice({
           age: newFavorite.age,
           gender: newFavorite.gender,
           price: newFavorite.price,
+          createAt: new Date().toISOString(),
         });
       }
     },

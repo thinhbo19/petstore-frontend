@@ -14,17 +14,16 @@ import SortIcon from "@mui/icons-material/Sort";
 import { useRouter } from "next/navigation";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import "../../styles/shop.css";
-import Link from "next/link";
 import Loading from "../Loading/Loading";
 import DrawerBreed from "./Sorting/DrawerBreed";
 
 const BreedShopForm = ({ nameSpecies, data, catData, dogData }) => {
   const router = useRouter();
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
   const containerRef = useRef(null);
   const itemsPerPage = 30;
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {

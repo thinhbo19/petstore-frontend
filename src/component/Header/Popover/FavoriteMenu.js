@@ -14,10 +14,7 @@ const FavoriteMenu = ({
   openFavorite,
   handleMenuFavoriteClose,
 }) => {
-  const sortedFavorites = [...favoritesData] // Sao chép mảng
-    .sort((a, b) => new Date(a.createNow) - new Date(b.createNow)) // Sắp xếp dựa trên createNow
-    .slice(0, 5); // Lấy 5 phần tử đầu tiên
-
+  const sortedFavorites = [...favoritesData].slice(0, 5);
   return (
     <Menu
       sx={{ zIndex: "100000" }}

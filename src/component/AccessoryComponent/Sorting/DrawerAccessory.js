@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
   Drawer,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Divider,
+  Button,
   TextField,
   InputAdornment,
   Slider,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import Link from "next/link";
 import { generateSlug } from "@/src/services/slugifyConfig";
+import Loading from "../../Loading/Loading";
 
 const DrawerAccessory = ({
   data,
@@ -23,37 +23,45 @@ const DrawerAccessory = ({
   priceRange,
   handlePriceChange,
 }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState(data);
 
-  // Chuyển đổi chuỗi thành dạng Title Case
-  const formatString = (input) => {
-    return input
+  const formatString = (input) =>
+    input
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
       .join(" ");
+
+  const handleToggleCategory = (category) => {
+    setExpandedCategory((prevState) => ({
+      ...prevState,
+      [category]: !prevState[category],
+    }));
   };
 
-  // Xử lý tìm kiếm sản phẩm
   const handleSearch = (event) => {
-    const query = event.target.value;
-    setSearchQuery(query);
-    setFilteredData(
-      data.filter((acc) =>
-        acc.nameProduct.toLowerCase().includes(query.toLowerCase())
-      )
-    );
+    setSearchQuery(event.target.value);
   };
 
   useEffect(() => {
-    // Mở accordion khi có dữ liệu lọc
-    setExpanded(filteredData.length > 0 ? "panel1" : false);
-  }, [searchQuery, filteredData]);
+    const newFilteredData = {};
+    const newExpandedCategory = {};
 
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+    Object.keys(data).forEach((category) => {
+      const filteredProducts = data[category].filter((product) =>
+        product.nameProduct.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      if (filteredProducts.length > 0) {
+        newFilteredData[category] = filteredProducts;
+        newExpandedCategory[category] = true;
+      }
+    });
+
+    setFilteredData(newFilteredData);
+    setExpandedCategory(newExpandedCategory);
+  }, [searchQuery, data]);
 
   return (
     <Drawer
@@ -63,10 +71,9 @@ const DrawerAccessory = ({
       onClose={toggleDrawer(false)}
     >
       <Box sx={{ width: 270, padding: 2 }} role="presentation">
-        {/* Trường tìm kiếm */}
         <TextField
           fullWidth
-          placeholder="Tìm kiếm..."
+          placeholder="Tìm kiếm sản phẩm..."
           variant="outlined"
           value={searchQuery}
           onChange={handleSearch}
@@ -80,7 +87,6 @@ const DrawerAccessory = ({
           }}
         />
 
-        {/* Slider lọc theo giá */}
         <Box sx={{ width: 220, padding: 2 }}>
           <Typography gutterBottom>Giá</Typography>
           <Slider
@@ -88,59 +94,102 @@ const DrawerAccessory = ({
             onChange={handlePriceChange}
             valueLabelDisplay="auto"
             min={0}
-            max={20000000} // Thay đổi giá trị tối đa nếu cần
+            max={20000000}
             aria-labelledby="price-slider"
           />
           <Typography>
-            {`Price from ${priceRange[0].toLocaleString()} to ${priceRange[1].toLocaleString()}`}
+            {`Giá từ ${priceRange[0].toLocaleString()} đến ${priceRange[1].toLocaleString()} VND`}
           </Typography>
         </Box>
 
-        {/* Accordion cho danh sách phụ kiện */}
-        {filteredData.length > 0 && (
-          <Accordion
-            expanded={expanded === "panel1"}
-            onChange={handleChange("panel1")}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography
-                component={Link}
-                href="/shop/accessory"
+        <Divider sx={{ marginY: 2 }} />
+
+        <Box
+          sx={{
+            maxHeight: "400px",
+            overflowY: "auto",
+            scrollbarWidth: "thin",
+            "&::-webkit-scrollbar": {
+              width: "10px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1",
+              borderRadius: "5px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#888",
+              borderRadius: "5px",
+              border: "2px solid #f1f1f1",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555",
+            },
+          }}
+        >
+          {Object.keys(filteredData).map((category, index) => (
+            <Box key={index}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() => handleToggleCategory(category)}
+                endIcon={
+                  expandedCategory[category] ? (
+                    <ExpandLessIcon />
+                  ) : (
+                    <ExpandMoreIcon />
+                  )
+                }
                 sx={{
-                  fontWeight: "bold",
-                  textDecoration: "none",
-                  color: "black",
+                  textTransform: "none",
+                  backgroundColor: "black",
+                  color: "white",
+                  marginBottom: 1,
                 }}
               >
-                ACCESSORIES
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {filteredData.map((acc) => (
-                <Typography
-                  component={Link}
-                  href={`/shop/accessory/${generateSlug(acc.nameProduct)}`}
-                  key={acc._id}
-                  sx={{
-                    textDecoration: "none",
-                    color: "black",
-                    fontWeight: "bold",
-                    display: "block",
-                    marginY: 0.5,
-                  }}
-                >
-                  {formatString(acc.nameProduct)}
-                </Typography>
-              ))}
-            </AccordionDetails>
-          </Accordion>
-        )}
+                {formatString(category)}
+              </Button>
 
-        <Divider sx={{ marginY: 2 }} />
+              {expandedCategory[category] && (
+                <Box sx={{ paddingLeft: 2 }}>
+                  {filteredData[category].map((product, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        textDecoration: "none",
+                        color: "black",
+                        fontWeight: "bold",
+                        display: "block",
+                        marginY: 0.5,
+                        padding: 1,
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                        borderRadius: "5px",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.2)",
+                          transform: "translateY(-3px)",
+                        },
+                      }}
+                    >
+                      <Typography
+                        component={Link}
+                        href={`/accessory/${generateSlug(
+                          product.category.nameCate
+                        )}/${generateSlug(product.nameProduct)}`}
+                        sx={{ textDecoration: "none", color: "black" }}
+                      >
+                        {formatString(product.nameProduct)}
+                      </Typography>
+                      <Typography sx={{ color: "red", fontWeight: "bold" }}>
+                        {product.price.toLocaleString()} VND
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+              <Divider sx={{ marginY: 1 }} />
+            </Box>
+          ))}
+        </Box>
       </Box>
     </Drawer>
   );

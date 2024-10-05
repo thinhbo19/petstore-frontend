@@ -22,6 +22,7 @@ const favoriteProductSlice = createSlice({
           nameProduct: newFavorite.nameProduct,
           nameCate: newFavorite.category.nameCate,
           price: newFavorite.price,
+          createAt: new Date().toISOString(),
         });
       }
     },

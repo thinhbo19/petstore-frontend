@@ -41,7 +41,9 @@ const Header = ({ allDog, allCat }) => {
 
   const favoritesPetsData = useSelector(selectFavorites);
   const favoritesProductData = useSelector(selectProductFavorites);
-  const favoritesData = [...favoritesPetsData, ...favoritesProductData];
+  const favoritesData = favoritesPetsData
+    .concat(favoritesProductData)
+    .sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
 
   const [anchorElCart, setAnchorElCart] = useState(null);
   const [anchorElFavorite, setAnchorElFavorite] = useState(null);
@@ -103,7 +105,6 @@ const Header = ({ allDog, allCat }) => {
       if (accessToken) {
         const res = await getCurrentUser(accessToken);
         setAvatar(res.Avatar);
-        console.log(favoritesData);
       }
     };
     fetchData();

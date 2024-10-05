@@ -59,7 +59,7 @@ const DrawerPet = ({
     const hasFilteredCatData = filteredCatData.length > 0;
 
     if (hasFilteredDogData && hasFilteredCatData) {
-      setExpanded("panel1"); // Hoặc bạn có thể chọn mở cả hai nếu cần
+      setExpanded("panel1");
     } else if (hasFilteredDogData) {
       setExpanded("panel1");
     } else if (hasFilteredCatData) {
@@ -104,7 +104,7 @@ const DrawerPet = ({
             onChange={handlePriceChange}
             valueLabelDisplay="auto"
             min={0}
-            max={20000000} // Thay đổi giá trị tối đa nếu cần
+            max={20000000}
             aria-labelledby="price-slider"
           />
           <Typography>
@@ -160,7 +160,6 @@ const DrawerPet = ({
 
         <Divider sx={{ marginY: 2 }} />
 
-        {/* Accordion cho Cat */}
         {filteredCatData.length > 0 && (
           <Accordion
             expanded={expanded === "panel2"}

@@ -24,6 +24,7 @@ import { apiUrlUser } from "@/src/services/config";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreIcon from "@mui/icons-material/More";
+import { selectProductFavorites } from "@/src/services/Redux/FavoriteProductSlice";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.petID === product._id);
@@ -32,7 +33,9 @@ function isFavorite(product, favorites) {
 export default function FavoritesPage() {
   const accessToken = useSelector(selectAccessToken);
   const dispatch = useDispatch();
-  const favoritesData = useSelector(selectFavorites);
+  const favoritesPetsData = useSelector(selectFavorites);
+  const favoritesProductData = useSelector(selectProductFavorites);
+  const favoritesData = [...favoritesPetsData, ...favoritesProductData];
   const [favorites, setFavorites] = useState([]);
 
   // State to manage current page
@@ -43,10 +46,9 @@ export default function FavoritesPage() {
   const totalPages = Math.ceil(favoritesData.length / itemsPerPage);
 
   // Get items for current page
-  const currentItems = favoritesData.slice(
-    (page - 1) * itemsPerPage,
-    page * itemsPerPage
-  );
+  const currentItems = favoritesData
+    .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+    .reverse();
 
   // Handle page change
   const handlePageChange = (event, newPage) => {
@@ -152,8 +154,8 @@ export default function FavoritesPage() {
                       height: { xs: 180, md: 150 },
                       objectFit: "cover",
                     }}
-                    image={favorite.imgPet}
-                    alt={favorite.namePet}
+                    src={favorite.imgPet || favorite.images}
+                    alt={favorite.namePet || favorite.images}
                   />
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Typography
@@ -163,10 +165,11 @@ export default function FavoritesPage() {
                         color: "text.primary",
                       }}
                     >
-                      {favorite.namePet}
+                      {favorite.namePet || favorite.nameProduct}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" noWrap>
-                      {favorite.nameBreed} - {favorite.nameSpecies}
+                      {favorite.nameBreed - favorite.nameSpecies ||
+                        favorite.category}
                     </Typography>
                     <Typography
                       variant="body1"
@@ -193,14 +196,17 @@ export default function FavoritesPage() {
                         Remove
                       </Button>
                       <Link
-                        href={`/shop/${generateSlug(
-                          favorite.nameBreed
-                        )}/${generateSlug(favorite.nameSpecies)}/${generateSlug(
-                          favorite.namePet
-                        )}`}
-                        style={{
-                          textDecoration: "none",
-                        }}
+                        href={
+                          favorite.petID
+                            ? `/shop/${generateSlug(
+                                favorite.nameSpecies
+                              )}/${generateSlug(
+                                favorite.nameBreed
+                              )}/${generateSlug(favorite.namePet)}`
+                            : `/accessory/${generateSlug(
+                                favorite.nameCate
+                              )}/${generateSlug(favorite.nameProduct)}`
+                        }
                         passHref
                       >
                         <Button
