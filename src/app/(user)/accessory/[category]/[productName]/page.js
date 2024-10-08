@@ -1,4 +1,10 @@
-import { getAllProduct } from "@/src/services/apiProduct";
+import ProductDetailComponent from "@/src/component/ProductDetailComponent/ProductDetailComponent";
+import {
+  getAllProduct,
+  getCurrentProdByName,
+  getProductByCate,
+} from "@/src/services/apiProduct";
+import formatPetName from "@/src/services/formatPetName";
 
 export async function generateStaticParams() {
   const Data = await getAllProduct();
@@ -7,7 +13,16 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function ProductDetailPage({ params }) {
+export default async function ProductDetailPage({ params }) {
   const { productName } = params;
-  return;
+  const prodData = await getCurrentProdByName(formatPetName(productName));
+  const similarProducts = await getProductByCate(prodData.category.nameCate);
+
+  return (
+    <ProductDetailComponent
+      productName={productName}
+      prodData={prodData}
+      similarProducts={similarProducts}
+    />
+  );
 }

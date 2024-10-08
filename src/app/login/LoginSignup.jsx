@@ -63,15 +63,13 @@ const LoginSignup = () => {
         const res = await getFavorites(response.data.accessToken);
         dispatch(setFavorites(res.favorites));
 
-        setTimeout(() => {
-          if (response.data.userData.role === "User") {
-            router.push("/");
-          } else if (response.data.userData.role === "Admin") {
-            router.push("/dashboard");
-          } else {
-            router.push("/CustomerMessages");
-          }
-        }, 600);
+        if (response.data.userData.role === "User") {
+          router.push("/");
+        } else if (response.data.userData.role === "Admin") {
+          router.push("/dashboard");
+        } else {
+          router.push("/CustomerMessages");
+        }
         Swal.fire({
           title: "Success!",
           text: "Login successfully!",

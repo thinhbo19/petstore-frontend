@@ -126,3 +126,21 @@ export const changeProduct = async (accessToken, productId, formData) => {
     throw error;
   }
 };
+
+export const getCurrentProdByName = async (name) => {
+  try {
+    const res = await axios.get(`${apiUrlProduct}/currentProduct/${name}`);
+    return res.data.prod;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getProductByCate = async (nameCate) => {
+  try {
+    const res = await axios.get(`${apiUrlProduct}/category/${nameCate}`);
+    return res.data.products;
+  } catch (error) {
+    throw error;
+  }
+};
