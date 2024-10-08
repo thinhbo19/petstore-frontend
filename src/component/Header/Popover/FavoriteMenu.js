@@ -13,6 +13,7 @@ const FavoriteMenu = ({
   favoriteMenuId,
   openFavorite,
   handleMenuFavoriteClose,
+  setAnchorElFavorite,
 }) => {
   const sortedFavorites = [...favoritesData].slice(0, 5);
   return (
@@ -130,6 +131,7 @@ const FavoriteMenu = ({
         <Link
           style={{ fontSize: "0.8rem", color: "black" }}
           href="/profile/favorite"
+          onClick={() => setAnchorElFavorite(null)}
         >
           More
         </Link>

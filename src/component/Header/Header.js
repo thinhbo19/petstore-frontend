@@ -263,6 +263,7 @@ const Header = ({ allDog, allCat }) => {
         favoriteMenuId={favoriteMenuId}
         openFavorite={openFavorite}
         handleMenuFavoriteClose={handleMenuFavoriteClose}
+        setAnchorElFavorite={setAnchorElFavorite}
       />
       <NotificationMenu
         anchorElNotification={anchorElNotification}
