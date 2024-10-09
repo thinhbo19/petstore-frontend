@@ -13,7 +13,7 @@ import Image from "next/image";
 import { Editor } from "@tinymce/tinymce-react";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
-import { getCurrentNews, updateNews } from "@/src/services/apiNews";
+import { getCurrentNews } from "@/src/services/apiNews";
 
 const EditData = ({ newsId }) => {
   const accessToken = useSelector(selectAccessToken);
