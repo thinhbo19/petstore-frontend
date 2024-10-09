@@ -189,7 +189,6 @@ const ProdReviews = ({ prodData, accessToken }) => {
           <Typography variant="h5" color="red" gutterBottom>
             {prodData.price.toLocaleString()} đ
           </Typography>
-
           <Grid container spacing={2}>
             <Grid item xs={12} md={10}>
               <Typography
