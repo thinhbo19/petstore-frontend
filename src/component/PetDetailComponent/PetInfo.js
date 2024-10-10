@@ -211,9 +211,9 @@ const PetInfo = ({ petData, accessToken }) => {
             sx={{
               fontWeight: "bold",
               fontSize: {
-                xs: "1.8rem",
-                sm: "1.8rem",
-                md: "1.8rem",
+                xs: "1.2rem",
+                sm: "1.4rem",
+                md: "1.6rem",
                 lg: "2rem",
               },
               textAlign: {
@@ -229,10 +229,34 @@ const PetInfo = ({ petData, accessToken }) => {
             {petData.namePet}
           </Typography>
           <Divider></Divider>
-          <Typography variant="h5" color="text.secondary" gutterBottom>
+          <Typography
+            sx={{
+              fontSize: {
+                xs: "1.2rem",
+                sm: "1.3rem",
+                md: "1.4rem",
+                lg: "1.5rem",
+              },
+            }}
+            variant="h5"
+            color="text.secondary"
+            gutterBottom
+          >
             {petData.petBreed.nameBreed}
           </Typography>
-          <Typography variant="h5" color="red" gutterBottom>
+          <Typography
+            sx={{
+              fontSize: {
+                xs: "1.2rem",
+                sm: "1.3rem",
+                md: "1.4rem",
+                lg: "1.5rem",
+              },
+            }}
+            variant="h5"
+            color="red"
+            gutterBottom
+          >
             {petData.price.toLocaleString()} đ
           </Typography>
 
@@ -308,12 +332,23 @@ const PetInfo = ({ petData, accessToken }) => {
                 sx={{
                   fontWeight: "bold",
                   fontSize: {
-                    xs: "1rem",
+                    xs: "0.9rem",
                     sm: "1rem",
                     md: "1rem",
                     lg: "1rem",
                   },
-                  marginRight: 2,
+                  padding: {
+                    xs: "4px 10px",
+                    sm: "6px 10px",
+                    md: "6px 10px",
+                    lg: "8px 12px",
+                  },
+                  marginRight: {
+                    xs: 1,
+                    sm: 1.6,
+                    md: 1.8,
+                    lg: 2,
+                  },
                   backgroundColor: "#F7482E",
                   "&:hover": {
                     backgroundColor: "#D63A2E",
@@ -329,10 +364,16 @@ const PetInfo = ({ petData, accessToken }) => {
                 sx={{
                   fontWeight: "bold",
                   fontSize: {
-                    xs: "1rem",
-                    sm: "1rem",
-                    md: "1rem",
-                    lg: "1rem",
+                    xs: "0.9rem", // Smaller font size for extra-small screens
+                    sm: "1rem", // Default size for small screens
+                    md: "1rem", // Slightly larger for medium screens
+                    lg: "1rem", // Larger size for large screens
+                  },
+                  padding: {
+                    xs: "4px 10px", // Smaller padding for extra-small screens
+                    sm: "6px 10px", // Standard padding for small screens
+                    md: "6px 10px", // More padding for medium screens
+                    lg: "8px 12px", // Largest padding for large screens
                   },
                   marginRight: 2,
                   backgroundColor: "#F7482E",

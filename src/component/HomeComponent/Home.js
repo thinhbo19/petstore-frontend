@@ -59,8 +59,6 @@ export default function Home({ dogs, cats }) {
 
   return (
     <div className="home__container">
-      {/* Cart với hiệu ứng hover */}
-
       {/* Slider banner */}
       <BannerSlider />
 
@@ -69,15 +67,19 @@ export default function Home({ dogs, cats }) {
         sx={{
           backgroundColor: "#DAD6D6",
           borderRadius: "10px",
-          padding: "20px",
+          padding: { xs: "10px", md: "20px" }, // Responsive padding
           marginTop: "30px",
-          width: "70%",
+          width: { xs: "90%", sm: "80%", md: "70%" }, // Responsive width
           maxWidth: "600px",
           margin: "30px auto",
           textAlign: "center",
         }}
       >
-        <Typography sx={{ fontWeight: "bold" }} variant="h5" gutterBottom>
+        <Typography
+          sx={{ fontWeight: "bold", fontSize: { xs: "20px", md: "24px" } }} // Responsive font size
+          variant="h5"
+          gutterBottom
+        >
           About Pet House
         </Typography>
         <Typography variant="body1" paragraph>
@@ -103,7 +105,13 @@ export default function Home({ dogs, cats }) {
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Box textAlign="center">
                 {feature.icon}
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: { xs: "16px", md: "18px" },
+                  }} // Responsive font size
+                >
                   {feature.title}
                 </Typography>
                 <Typography variant="body2" sx={{ color: "#555" }}>
@@ -122,8 +130,8 @@ export default function Home({ dogs, cats }) {
               backgroundColor: "#E63232",
               color: "#fff",
               borderRadius: "20px",
-              padding: "10px 20px",
-              fontSize: "18px",
+              padding: { xs: "8px 16px", md: "10px 20px" }, // Responsive padding
+              fontSize: { xs: "16px", md: "18px" }, // Responsive font size
             }}
           >
             HOTLINE: 0xxx.xxx.xxx
@@ -133,11 +141,14 @@ export default function Home({ dogs, cats }) {
 
       {/* Dog Breeds Section */}
       <Box
-        data-aos="fade-left"
-        sx={{ backgroundColor: "#F5F5F5", padding: "20px" }}
+        data-aos="fade-up"
+        sx={{ backgroundColor: "#F5F5F5", padding: { xs: "10px", md: "20px" } }} // Responsive padding
       >
         <Typography
-          sx={{ fontWeight: "bold" }}
+          sx={{
+            fontWeight: "bold",
+            fontSize: { xs: "18px", md: "20px" }, // Responsive font size
+          }}
           variant="h6"
           textAlign="center"
           gutterBottom
@@ -146,7 +157,7 @@ export default function Home({ dogs, cats }) {
         </Typography>
         <Grid container spacing={2}>
           {dogs.map((dog, index) => (
-            <Grid item xs={6} sm={6} md={2.4} key={index}>
+            <Grid item xs={6} sm={4} md={2.4} key={index}>
               <Link
                 href={`/shop/dog/${generateSlug(dog.nameBreed)}`}
                 style={{ textDecoration: "none", color: "black" }}
@@ -181,11 +192,14 @@ export default function Home({ dogs, cats }) {
 
       {/* Cat Breeds Section */}
       <Box
-        data-aos="fade-right"
-        sx={{ backgroundColor: "#F5F5F5", padding: "20px" }}
+        data-aos="fade-up"
+        sx={{ backgroundColor: "#F5F5F5", padding: { xs: "10px", md: "20px" } }} // Responsive padding
       >
         <Typography
-          sx={{ fontWeight: "bold" }}
+          sx={{
+            fontWeight: "bold",
+            fontSize: { xs: "18px", md: "20px" }, // Responsive font size
+          }}
           variant="h6"
           textAlign="center"
           gutterBottom
@@ -194,60 +208,9 @@ export default function Home({ dogs, cats }) {
         </Typography>
         <Grid container spacing={2}>
           {cats.map((cat, index) => (
-            <Grid item xs={6} sm={6} md={2.4} key={index}>
+            <Grid item xs={6} sm={4} md={2.4} key={index}>
               <Link
-                href={`/shop/dog/${generateSlug(cat.nameBreed)}`}
-                style={{ textDecoration: "none", color: "black" }}
-              >
-                <Box
-                  textAlign="center"
-                  sx={{
-                    padding: "10px",
-                    backgroundColor: "#FFF",
-                    borderRadius: "10px",
-                  }}
-                >
-                  <img
-                    src={cat.imgBreed[0]}
-                    alt={cat.nameBreed}
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      aspectRatio: "1/1",
-                      borderRadius: "10px",
-                    }}
-                  />
-                  <Typography variant="body1" mt={1}>
-                    {cat.nameBreed}
-                  </Typography>
-                </Box>
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      {/* Cat Breeds Section */}
-      <Box
-        data-aos="fade-left"
-        sx={{
-          backgroundColor: "#F5F5F5",
-          padding: "20px",
-        }}
-      >
-        <Typography
-          sx={{ fontWeight: "bold" }}
-          variant="h6"
-          textAlign="center"
-          gutterBottom
-        >
-          <FontAwesomeIcon icon={faCat} /> CAT BREEDS
-        </Typography>
-        <Grid container spacing={2}>
-          {cats.map((cat, index) => (
-            <Grid item xs={6} sm={6} md={2.4} key={index}>
-              <Link
-                href={`/shop/dog/${generateSlug(cat.nameBreed)}`}
+                href={`/shop/cat/${generateSlug(cat.nameBreed)}`}
                 style={{ textDecoration: "none", color: "black" }}
               >
                 <Box

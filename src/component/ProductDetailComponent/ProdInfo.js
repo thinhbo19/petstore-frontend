@@ -47,23 +47,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
     }
   }, [accessToken]);
 
-  const handleLikeClick = async () => {
-    if (!accessToken) {
-      Swal.fire({
-        title: "LOGIN",
-        text: "You are not logged in yet!!!",
-        icon: "warning",
-      });
-    } else {
-      setLoading(true);
-      const isCurrentlyFavorite = isFavorite(prodData, favorites);
-      const updatedFavorites = isCurrentlyFavorite
-        ? favorites.filter((f) => f.productID !== prodData._id)
-        : [...favorites, { productID: prodData._id, ...prodData }];
-
-      setFavorites(updatedFavorites);
-    }
-  };
+  const handleLikeClick = async () => {};
 
   const handleImageClick = (image) => {
     setMainImage(image);
@@ -165,9 +149,9 @@ const ProdReviews = ({ prodData, accessToken }) => {
             sx={{
               fontWeight: "bold",
               fontSize: {
-                xs: "1.8rem",
-                sm: "1.8rem",
-                md: "1.8rem",
+                xs: "1.5rem",
+                sm: "1.5rem",
+                md: "1.5rem",
                 lg: "2rem",
               },
               textAlign: {
