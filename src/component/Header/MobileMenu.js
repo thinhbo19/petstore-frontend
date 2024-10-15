@@ -17,6 +17,8 @@ const MobileMenu = ({
   isMobileMenuOpen,
   handleMobileMenuClose,
   handleProfileMenuOpen,
+  favoritesData,
+  cartData,
 }) => {
   const router = useRouter();
 
@@ -49,17 +51,27 @@ const MobileMenu = ({
         </IconButton>
         <p>Profile</p>
       </MenuItem>
-      <MenuItem onClick={() => handleChangePage(router, "cart")}>
+      <MenuItem
+        onClick={() => {
+          handleChangePage(router, "cart");
+          handleMobileMenuClose();
+        }}
+      >
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={cartData?.length} color="error">
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
         <p>Cart</p>
       </MenuItem>
-      <MenuItem onClick={() => handleChangePage(router, "favorite")}>
+      <MenuItem
+        onClick={() => {
+          handleChangePage(router, "favorite");
+          handleMobileMenuClose();
+        }}
+      >
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={favoritesData?.length} color="error">
             <FavoriteIcon />
           </Badge>
         </IconButton>

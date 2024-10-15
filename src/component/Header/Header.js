@@ -33,6 +33,7 @@ import { Search, SearchIconWrapper, StyledInputBase } from "./SearchBar";
 import SearchResults from "./Popover/SearchResults";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import { useRouter } from "next/navigation";
+import { selectCart } from "@/src/services/Redux/CartSlice";
 
 const Header = ({ allDog, allCat, allPets, allProds }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -47,6 +48,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
   const favoritesData = favoritesPetsData
     .concat(favoritesProductData)
     .sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+  const cartData = useSelector(selectCart);
 
   const [anchorElCart, setAnchorElCart] = useState(null);
   const [anchorElFavorite, setAnchorElFavorite] = useState(null);
@@ -85,7 +87,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
       if (
         searchInputRef.current &&
         !searchInputRef.current.contains(event.target) &&
-        !event.target.closest(".search-result-item") // Modify this to match your result item class
+        !event.target.closest(".search-result-item")
       ) {
         setSearchTerm("");
         setFilteredResults([]);
@@ -279,7 +281,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
               size="large"
               color="inherit"
             >
-              <Badge badgeContent={4} color="error">
+              <Badge badgeContent={cartData?.length} color="error">
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
@@ -344,11 +346,14 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
         isMobileMenuOpen={isMobileMenuOpen}
         handleMobileMenuClose={handleMobileMenuClose}
         handleProfileMenuOpen={handleProfileMenuOpen}
+        favoritesData={favoritesData}
+        cartData={favoritesData}
       />
       <UserMenu
         anchorEl={anchorEl}
         isMenuOpen={isMenuOpen}
         handleMenuClose={handleMenuClose}
+        handleMobileMenuClose={handleMobileMenuClose}
       />
       <LeftMenu
         leftMenuAnchorEl={leftMenuAnchorEl}
@@ -361,6 +366,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
         cartMenuId={cartMenuId}
         openCart={openCart}
         handleMenuCartClose={handleMenuCartClose}
+        cartData={cartData}
       />
       <FavoriteMenu
         favoritesData={favoritesData}

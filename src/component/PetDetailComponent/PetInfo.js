@@ -32,6 +32,10 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { addCart } from "@/src/services/Redux/CartSlice";
+import { generateSlug } from "@/src/services/slugifyConfig";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.petID === product._id);
@@ -42,6 +46,7 @@ const PetInfo = ({ petData, accessToken }) => {
   const [favorites, setFavorites] = useState([]);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (accessToken) {
@@ -110,8 +115,65 @@ const PetInfo = ({ petData, accessToken }) => {
     }
   };
 
+  const handleCart = async () => {
+    if (!accessToken) {
+      Swal.fire({
+        title: "LOGIN",
+        text: "You are not logged in yet!!!",
+        icon: "warning",
+      });
+    } else {
+      setLoading(true);
+      try {
+        const res = await axios.put(
+          `${apiUrlUser}/cart`,
+          {
+            id: petData._id,
+            quantity: quantity,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const item = res.data.cart;
+        dispatch(
+          addCart({
+            id: item.id,
+            info: item.info,
+            quantity: item.quantity,
+            newPrice: item.newPrice,
+            images: item.images,
+            slug: `/shop/${generateSlug(
+              petData.petBreed.nameSpecies
+            )}/${generateSlug(petData.petBreed.nameBreed)}/${generateSlug(
+              petData.namePet
+            )}`,
+          })
+        );
+        toast.success(res.data.message);
+        setQuantity(1);
+      } catch (error) {
+        toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const handleImageClick = (image) => {
     setMainImage(image);
+  };
+
+  const handleIncrease = () => {
+    setQuantity((prevQuantity) =>
+      prevQuantity < petData.quantity ? prevQuantity + 1 : prevQuantity
+    );
+  };
+
+  const handleDecrease = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
   return (
@@ -177,7 +239,7 @@ const PetInfo = ({ petData, accessToken }) => {
                 >
                   <Image
                     src={image}
-                    alt={`Thumbnail ${index}`}
+                    alt={petData.name}
                     width={100}
                     height={100}
                     style={{ borderRadius: "8px", cursor: "pointer" }}
@@ -317,11 +379,80 @@ const PetInfo = ({ petData, accessToken }) => {
 
           {/*button buy now*/}
 
+          {/* Increase/Decrease and Add to Cart buttons */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              flexDirection: { xs: "column", md: "row" },
+              justifyContent: { xs: "center", md: "left" },
+              flexDirection: { xs: "row", md: "row" },
+              gap: 2,
+              marginBottom: 2,
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor: "#eeeeee",
+                color: "black",
+                display: "flex",
+                alignItems: "center",
+                borderRadius: "4px",
+              }}
+            >
+              <IconButton
+                onClick={handleDecrease}
+                sx={{
+                  color: "black",
+                  "&:hover": { backgroundColor: "#f7f7f7" },
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                }}
+              >
+                <RemoveIcon />
+              </IconButton>
+              <Box
+                sx={{
+                  fontWeight: "bold",
+                  margin: "0 12px",
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                }}
+              >
+                {quantity}
+              </Box>
+              <IconButton
+                onClick={handleIncrease}
+                sx={{
+                  color: "black",
+                  "&:hover": { backgroundColor: "#f7f7f7" },
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+            </Box>
+
+            <Button
+              variant="contained"
+              sx={{
+                fontWeight: "bold",
+                backgroundColor: "#F7482E",
+                "&:hover": {
+                  backgroundColor: "#D63A2E",
+                },
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+              }}
+              onClick={() => handleCart()}
+            >
+              Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
+            </Button>
+          </Box>
+
+          {/* Buy Now and Favorite buttons */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "center", md: "left" },
+              flexDirection: { xs: "row", md: "row" },
               gap: 2,
               marginBottom: 2,
             }}
@@ -331,70 +462,27 @@ const PetInfo = ({ petData, accessToken }) => {
                 variant="contained"
                 sx={{
                   fontWeight: "bold",
-                  fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
-                    md: "1rem",
-                    lg: "1rem",
-                  },
-                  padding: {
-                    xs: "4px 10px",
-                    sm: "6px 10px",
-                    md: "6px 10px",
-                    lg: "8px 12px",
-                  },
-                  marginRight: {
-                    xs: 1,
-                    sm: 1.6,
-                    md: 1.8,
-                    lg: 2,
-                  },
-                  backgroundColor: "#F7482E",
+                  backgroundColor: "#0C89F7",
                   "&:hover": {
-                    backgroundColor: "#D63A2E",
+                    backgroundColor: "#0C89F2",
                   },
+                  padding: { xs: "6px", sm: "8px", md: "10px" }, // Responsive padding
+                  fontSize: { xs: "0.8rem", sm: "1rem" }, // Responsive font size
                 }}
               >
                 Buy Now
               </Button>
             </Box>
-            <Box>
-              <Button
-                variant="contained"
-                sx={{
-                  fontWeight: "bold",
-                  fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
-                    md: "1rem",
-                    lg: "1rem",
-                  },
-                  padding: {
-                    xs: "4px 10px",
-                    sm: "6px 10px",
-                    md: "6px 10px",
-                    lg: "8px 12px",
-                  },
-                  marginRight: 2,
-                  backgroundColor: "#F7482E",
-                  "&:hover": {
-                    backgroundColor: "#D63A2E",
-                  },
-                }}
-              >
-                Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
-              </Button>
-              <IconButton>
-                <FontAwesomeIcon
-                  icon={
-                    isFavorite(petData, favorites) ? solidHeart : regularHeart
-                  }
-                  size="lg"
-                  color={isFavorite(petData, favorites) ? "red" : "black"}
-                  onClick={() => handleLikeClick()}
-                />
-              </IconButton>
-            </Box>
+
+            <IconButton onClick={() => handleLikeClick()}>
+              <FontAwesomeIcon
+                icon={
+                  isFavorite(petData, favorites) ? solidHeart : regularHeart
+                }
+                size="lg"
+                color={isFavorite(petData, favorites) ? "red" : "black"}
+              />
+            </IconButton>
           </Box>
         </Grid>
       </Grid>

@@ -1,29 +1,61 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Paper, Button, Grid } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import testImg from "../../../public/avartar.jpg";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CartItem from "./CartItem";
 import CartEmpty from "./CartEmpty";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
 import TakeLogin from "../No-Login/TakeLogin";
+import axios from "axios";
+import { apiUrlUser } from "@/src/services/config";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getCurrentUser } from "@/src/services/apiUser";
+import { removeCart } from "@/src/services/Redux/CartSlice";
 
 const CartPage = () => {
   const accessToken = useSelector(selectAccessToken);
-
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      description: "This is a sample product description.",
-      price: 100000,
-      quantity: 1,
-      image: testImg,
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+  const [quantityUpdateTimeout, setQuantityUpdateTimeout] = useState(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetchData();
+  }, [accessToken]);
+
+  const fetchData = async () => {
+    try {
+      const res = await getCurrentUser(accessToken);
+      setCartItems(res.cart);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateQuantity = async (id, newQuantity) => {
+    try {
+      await axios.put(
+        `${apiUrlUser}/cart`,
+        {
+          id,
+          quantity: newQuantity,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      toast.success("Quantity updated successfully!");
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to update quantity");
+    }
+  };
 
   const handleSelect = (id) => {
     setSelectedItems((prevSelected) =>
@@ -37,44 +69,106 @@ const CartPage = () => {
     if (selectedItems.length === cartItems.length) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(cartItems.map((item) => item.id)); // Chọn tất cả
+      setSelectedItems(cartItems.map((item) => item.id));
     }
   };
 
-  const handleRemoveItem = (id) => {
-    setCartItems(cartItems.filter((item) => item.id !== id));
-    setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
+  const handleRemoveItem = async (id) => {
+    try {
+      const res = await axios.delete(`${apiUrlUser}/allOneCart`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          id: id,
+        },
+      });
+      setCartItems(cartItems.filter((item) => item.id !== id));
+      setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
+      dispatch(removeCart(id));
+      toast.success(res.data.message);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleRemoveSelectedItems = () => {
-    setCartItems(cartItems.filter((item) => !selectedItems.includes(item.id)));
-    setSelectedItems([]);
+  const handleRemoveSelectedItems = async () => {
+    try {
+      const res = await axios.delete(`${apiUrlUser}/allCart`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      setCartItems(
+        cartItems.filter((item) => !selectedItems.includes(item.id))
+      );
+      setSelectedItems([]);
+      toast.success(res.data.message);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleIncrease = (id) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
+    const updatedItems = cartItems.map((item) => {
+      if (item.id === id && item.quantity < item.info.quantity) {
+        return { ...item, quantity: item.quantity + 1 };
+      }
+      return item;
+    });
+    setCartItems(updatedItems);
+
+    if (quantityUpdateTimeout) {
+      clearTimeout(quantityUpdateTimeout);
+    }
+
+    const newTimeout = setTimeout(() => {
+      const item = updatedItems.find((item) => item.id === id);
+      updateQuantity(id, item.quantity);
+    }, 500);
+
+    setQuantityUpdateTimeout(newTimeout);
   };
 
   const handleDecrease = (id) => {
-    setCartItems(
-      cartItems.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
+    const updatedItems = cartItems.map((item) => {
+      if (item.id === id && item.quantity > 1) {
+        return { ...item, quantity: item.quantity - 1 };
+      }
+      return item;
+    });
+    setCartItems(updatedItems);
+
+    if (quantityUpdateTimeout) {
+      clearTimeout(quantityUpdateTimeout);
+    }
+
+    const newTimeout = setTimeout(() => {
+      const item = updatedItems.find((item) => item.id === id);
+      updateQuantity(id, item.quantity);
+    }, 500);
+
+    setQuantityUpdateTimeout(newTimeout);
   };
 
   const subtotal = cartItems
     .filter((item) => selectedItems.includes(item.id))
-    .reduce((acc, item) => acc + item.price * item.quantity, 0);
+    .reduce((acc, item) => acc + item.newPrice, 0);
 
   return (
     <Box sx={{ maxWidth: 1200, mx: "auto", p: 2, marginTop: "5rem" }}>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="custom-toast-container"
+      />
       <Box
         sx={{
           display: "flex",

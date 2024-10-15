@@ -37,7 +37,7 @@ export const handleChangePage = (router, item) => {
       router.push("/notification");
       break;
     case "favorite":
-      router.push("/favorite");
+      router.push("/profile/favorite");
       break;
     case "cart":
       router.push("/cart");

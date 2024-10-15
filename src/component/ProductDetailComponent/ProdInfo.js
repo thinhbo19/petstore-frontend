@@ -22,6 +22,15 @@ import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { addCart } from "@/src/services/Redux/CartSlice";
+import {
+  addProductFavorite,
+  removeProductFavorite,
+} from "@/src/services/Redux/FavoriteProductSlice";
+import { removeFavorite } from "@/src/services/Redux/FavoriteSlice";
+import { generateSlug } from "@/src/services/slugifyConfig";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.productID === product._id);
@@ -29,16 +38,17 @@ function isFavorite(product, favorites) {
 
 const ProdReviews = ({ prodData, accessToken }) => {
   const [mainImage, setMainImage] = useState(prodData.images[0]);
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavoritesProd] = useState([]);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (accessToken) {
       const fetchData = async () => {
         try {
           const res = await getFavorites(accessToken);
-          setFavorites(res?.favorites);
+          setFavoritesProd(res?.favorites);
         } catch (error) {
           console.log(error);
         }
@@ -47,10 +57,112 @@ const ProdReviews = ({ prodData, accessToken }) => {
     }
   }, [accessToken]);
 
-  const handleLikeClick = async () => {};
+  const handleLikeClick = async () => {
+    if (!accessToken) {
+      Swal.fire({
+        title: "LOGIN",
+        text: "You are not logged in yet!!!",
+        icon: "warning",
+      });
+    } else {
+      const isCurrentlyFavorite = isFavorite(prodData, favorites);
+      const updatedFavorites = isCurrentlyFavorite
+        ? favorites.filter((f) => f.productID !== prodData._id)
+        : [...favorites, { productID: prodData._id, ...prodData }];
+
+      setFavoritesProd(updatedFavorites);
+
+      try {
+        const res = await axios.put(
+          `${apiUrlUser}/favoriteProduct`,
+          {
+            productID: prodData._id,
+            images: prodData.images[0],
+            nameProduct: prodData.nameProduct,
+            nameCate: prodData.category.nameCate,
+            price: prodData.price,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        if (
+          res.data.message ===
+          "The product has been successfully removed from your favorite list"
+        ) {
+          dispatch(removeFavorite(prodData._id));
+          dispatch(removeProductFavorite(prodData._id));
+          toast.success(res.data.message);
+        } else {
+          dispatch(addProductFavorite(prodData));
+          toast.success(res.data.message);
+        }
+      } catch (error) {
+        toast.error("Error");
+      }
+    }
+  };
 
   const handleImageClick = (image) => {
     setMainImage(image);
+  };
+
+  const handleIncrease = () => {
+    setQuantity((prevQuantity) =>
+      prevQuantity < prodData.quantity ? prevQuantity + 1 : prevQuantity
+    );
+  };
+
+  const handleCart = async () => {
+    if (!accessToken) {
+      Swal.fire({
+        title: "LOGIN",
+        text: "You are not logged in yet!!!",
+        icon: "warning",
+      });
+    } else {
+      setLoading(true);
+      try {
+        const res = await axios.put(
+          `${apiUrlUser}/cart`,
+          {
+            id: prodData._id,
+            quantity: quantity,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const item = res.data.cart;
+
+        dispatch(
+          addCart({
+            id: item.id,
+            info: item.info,
+            quantity: item.quantity,
+            newPrice: item.newPrice,
+            images: item.images,
+            slug: `/shop/${generateSlug(
+              prodData.category.nameCate
+            )}/${generateSlug(prodData.nameProduct)}`,
+          })
+        );
+        toast.success(res.data.message);
+        setQuantity(1);
+      } catch (error) {
+        toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleDecrease = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
   return (
@@ -116,7 +228,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
                 >
                   <Image
                     src={image}
-                    alt={`Thumbnail ${index}`}
+                    alt={prodData.nameProduct}
                     width={100}
                     height={100}
                     style={{ borderRadius: "8px", cursor: "pointer" }}
@@ -231,15 +343,82 @@ const ProdReviews = ({ prodData, accessToken }) => {
 
           <Divider></Divider>
 
-          {/*button buy now*/}
+          {/* Increase/Decrease and Add to Cart buttons */}
           <Box
             sx={{
               display: "flex",
               alignItems: "center",
-              flexDirection: { xs: "column", md: "row" },
+              justifyContent: { xs: "center", md: "left" },
+              flexDirection: { xs: "row", md: "row" },
               gap: 2,
               marginBottom: 2,
-              marginTop: 2,
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor: "#eeeeee",
+                color: "black",
+                display: "flex",
+                alignItems: "center",
+                borderRadius: "4px",
+              }}
+            >
+              <IconButton
+                onClick={handleDecrease}
+                sx={{
+                  color: "black",
+                  "&:hover": { backgroundColor: "#f7f7f7" },
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                }}
+              >
+                <RemoveIcon />
+              </IconButton>
+              <Box
+                sx={{
+                  fontWeight: "bold",
+                  margin: "0 12px",
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                }}
+              >
+                {quantity}
+              </Box>
+              <IconButton
+                onClick={handleIncrease}
+                sx={{
+                  color: "black",
+                  "&:hover": { backgroundColor: "#f7f7f7" },
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+            </Box>
+
+            <Button
+              variant="contained"
+              sx={{
+                fontWeight: "bold",
+                backgroundColor: "#F7482E",
+                "&:hover": {
+                  backgroundColor: "#D63A2E",
+                },
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+              }}
+              onClick={() => handleCart()}
+            >
+              Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
+            </Button>
+          </Box>
+
+          {/* Buy Now and Favorite buttons */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "center", md: "left" },
+              flexDirection: { xs: "row", md: "row" },
+              gap: 2,
+              marginBottom: 2,
             }}
           >
             <Box>
@@ -247,75 +426,27 @@ const ProdReviews = ({ prodData, accessToken }) => {
                 variant="contained"
                 sx={{
                   fontWeight: "bold",
-                  fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
-                    md: "1rem",
-                    lg: "1rem",
-                  },
-                  padding: {
-                    xs: "4px 10px",
-                    sm: "6px 10px",
-                    md: "6px 10px",
-                    lg: "8px 12px",
-                  },
-                  marginRight: {
-                    xs: 1,
-                    sm: 1.6,
-                    md: 1.8,
-                    lg: 2,
-                  },
-                  backgroundColor: "#F7482E",
+                  backgroundColor: "#0C89F7",
                   "&:hover": {
-                    backgroundColor: "#D63A2E",
+                    backgroundColor: "#0C89F2",
                   },
+                  padding: { xs: "6px", sm: "8px", md: "10px" }, // Responsive padding
+                  fontSize: { xs: "0.8rem", sm: "1rem" }, // Responsive font size
                 }}
               >
                 Buy Now
               </Button>
             </Box>
-            <Box>
-              <Button
-                variant="contained"
-                sx={{
-                  fontWeight: "bold",
-                  fontSize: {
-                    xs: "0.9rem",
-                    sm: "1rem",
-                    md: "1rem",
-                    lg: "1rem",
-                  },
-                  padding: {
-                    xs: "4px 10px",
-                    sm: "6px 10px",
-                    md: "6px 10px",
-                    lg: "8px 12px",
-                  },
-                  marginRight: {
-                    xs: 1,
-                    sm: 1.6,
-                    md: 1.8,
-                    lg: 2,
-                  },
-                  backgroundColor: "#F7482E",
-                  "&:hover": {
-                    backgroundColor: "#D63A2E",
-                  },
-                }}
-              >
-                Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
-              </Button>
-              <IconButton>
-                <FontAwesomeIcon
-                  icon={
-                    isFavorite(prodData, favorites) ? solidHeart : regularHeart
-                  }
-                  size="lg"
-                  color={isFavorite(prodData, favorites) ? "red" : "black"}
-                  onClick={() => handleLikeClick()}
-                />
-              </IconButton>
-            </Box>
+
+            <IconButton onClick={() => handleLikeClick()}>
+              <FontAwesomeIcon
+                icon={
+                  isFavorite(prodData, favorites) ? solidHeart : regularHeart
+                }
+                size="lg"
+                color={isFavorite(prodData, favorites) ? "red" : "black"}
+              />
+            </IconButton>
           </Box>
         </Grid>
       </Grid>

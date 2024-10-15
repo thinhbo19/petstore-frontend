@@ -16,6 +16,7 @@ const FavoriteMenu = ({
   setAnchorElFavorite,
 }) => {
   const sortedFavorites = [...favoritesData].slice(0, 5);
+
   return (
     <Menu
       sx={{ zIndex: "100000" }}
@@ -116,6 +117,7 @@ const FavoriteMenu = ({
                   variant="inherit"
                   sx={{
                     textAlign: "right",
+                    color: "red",
                     fontWeight: "bold",
                   }}
                 >

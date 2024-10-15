@@ -6,12 +6,15 @@ import Image from "next/image";
 import TextImage from "../../../../public/Breed/Dog/anh-meo-Bengal-5.jpg";
 import Link from "next/link";
 import { Box } from "@mui/material";
+import { generateSlug } from "@/src/services/slugifyConfig";
+import { handleChangePage } from "@/src/hooks/useChangePage";
 
 const CartMenu = ({
   anchorElCart,
   cartMenuId,
   openCart,
   handleMenuCartClose,
+  cartData,
 }) => {
   return (
     <Menu
@@ -52,43 +55,75 @@ const CartMenu = ({
         },
       }}
     >
-      <MenuItem sx={{ alignItems: "center", gap: 1.5 }}>
-        <Image src={TextImage} width={100} height={100} alt="" />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            maxWidth: "300px",
-            overflow: "hidden",
-          }}
-        >
-          <Typography
-            variant="inherit"
-            noWrap
-            sx={{
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              flexGrow: 1,
-            }}
-          >
-            A very long text that overflows
-          </Typography>
-          <Typography
-            variant="inherit"
-            sx={{
-              textAlign: "right",
-              fontWeight: "bold",
-            }}
-          >
-            1.900.000đ
-          </Typography>
-        </Box>
-      </MenuItem>
+      {cartData.length === 0 ? (
+        <MenuItem sx={{ textAlign: "center" }}>
+          <Typography variant="body2">There are no products yet</Typography>
+        </MenuItem>
+      ) : (
+        cartData.map((cart, index) => (
+          <MenuItem key={index} sx={{ alignItems: "center", gap: 1.5 }}>
+            <Link
+              href={cart.slug}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                textDecoration: "none",
+                color: "black",
+                width: "100%",
+              }}
+            >
+              <Image
+                src={cart.images}
+                width={50}
+                height={50}
+                alt={cart.info.name}
+              />
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  maxWidth: "350px",
+                  overflow: "hidden",
+                }}
+              >
+                <Typography
+                  variant="inherit"
+                  noWrap
+                  sx={{
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    flexGrow: 1,
+                    marginLeft: "5px",
+                  }}
+                >
+                  {cart.info.name}
+                </Typography>
+                <Typography
+                  variant="inherit"
+                  sx={{
+                    textAlign: "right",
+                    fontWeight: "bold",
+                    color: "red",
+                  }}
+                >
+                  {cart.info.price}đ
+                </Typography>
+              </Box>
+            </Link>
+          </MenuItem>
+        ))
+      )}
 
       <MenuItem sx={{ textAlign: "right", justifyContent: "flex-end" }}>
-        <Link style={{ fontSize: "0.8rem", color: "black" }} href="/cart">
+        <Link
+          onClick={handleMenuCartClose}
+          style={{ fontSize: "0.8rem", color: "black" }}
+          href="/cart"
+        >
           More
         </Link>
       </MenuItem>

@@ -19,6 +19,7 @@ import Login from "@/src/component/Form/LoginForm/Login";
 import SignUp from "@/src/component/Form/SignUpForm/Signup";
 import { getFavorites } from "@/src/services/apiUser";
 import { setFavorites } from "@/src/services/Redux/FavoriteSlice";
+import { setCart } from "@/src/services/Redux/CartSlice";
 
 const LoginSignup = () => {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ const LoginSignup = () => {
         dispatch(setAccessToken(response.data.accessToken));
         const res = await getFavorites(response.data.accessToken);
         dispatch(setFavorites(res.favorites));
+        dispatch(setCart(response.data.userData.cart));
 
         if (response.data.userData.role === "User") {
           router.push("/");

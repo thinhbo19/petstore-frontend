@@ -33,6 +33,7 @@ import {
 } from "@/src/services/Redux/FavoriteProductSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { removeFavorite } from "@/src/services/Redux/FavoriteSlice";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.productID === product._id);
@@ -107,6 +108,7 @@ const AccessoryComponent = ({ categoryData, groupedProducts }) => {
           "The product has been successfully removed from your favorite list"
         ) {
           dispatch(removeProductFavorite(accessory._id));
+          dispatch(removeFavorite(accessory._id));
           toast.success(res.data.message);
         } else {
           dispatch(addProductFavorite(accessory));

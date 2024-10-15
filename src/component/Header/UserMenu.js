@@ -15,7 +15,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { handleChangePage } from "@/src/hooks/useChangePage";
 
-const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
+const UserMenu = ({
+  anchorEl,
+  isMenuOpen,
+  handleMenuClose,
+  handleMobileMenuClose,
+}) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const login = useSelector(selectIsLoggedIn);
@@ -73,7 +78,8 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
             key="profile"
             onClick={() => {
               handleChangePage(router, "profile");
-              handleMenuClose;
+              handleMenuClose();
+              handleMobileMenuClose();
             }}
           >
             <AccountCircleIcon /> Profile
@@ -83,7 +89,8 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
               key="dashboard"
               onClick={() => {
                 handleChangePage(router, "dashboard");
-                handleMenuClose;
+                handleMenuClose();
+                handleMobileMenuClose();
               }}
             >
               <DashboardIcon />
@@ -94,7 +101,8 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
             key="order-history"
             onClick={() => {
               handleChangePage(router, "order-history");
-              handleMenuClose;
+              handleMenuClose();
+              handleMobileMenuClose();
             }}
           >
             <LibraryBooksIcon /> Order History
@@ -103,7 +111,8 @@ const UserMenu = ({ anchorEl, isMenuOpen, handleMenuClose }) => {
             key="logout"
             onClick={() => {
               handleLogout(dispatch, router, setLogout);
-              handleMenuClose;
+              handleMenuClose();
+              handleMobileMenuClose();
             }}
           >
             <LogoutIcon /> Log Out

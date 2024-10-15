@@ -40,8 +40,8 @@ const CartItem = ({
           }}
         >
           <Image
-            src={item.image}
-            alt={item.name}
+            src={item.images}
+            alt={item.info.name}
             layout="responsive"
             width={100}
             height={100}
@@ -52,16 +52,22 @@ const CartItem = ({
       <Grid item xs={5} sm={6}>
         <Typography
           variant="body2"
-          sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" } }}
+          sx={{
+            fontSize: { xs: "0.75rem", sm: "0.875rem", md: "1rem" },
+            fontWeight: "bold",
+          }}
         >
-          {item.name}
+          {item.info.name}
         </Typography>
         <Typography
           variant="caption"
-          color="text.secondary"
-          sx={{ fontSize: { xs: "0.65rem", sm: "0.75rem" } }}
+          color="red"
+          sx={{
+            fontSize: { xs: "0.65rem", sm: "0.75rem" },
+            fontWeight: "bold",
+          }}
         >
-          {item.description}
+          Price: {item.info.price} VNĐ
         </Typography>
       </Grid>
       <Grid item xs={2} sm={3} sx={{ textAlign: "right" }}>
@@ -94,7 +100,7 @@ const CartItem = ({
           fontWeight: "bold",
         }}
       >
-        {item.price} VNĐ
+        {item.newPrice} VNĐ
       </Typography>
       <Box
         display="flex"
@@ -119,7 +125,7 @@ const CartItem = ({
           {item.quantity}
         </Typography>
         <IconButton
-          onClick={() => handleIncrease(item.id)}
+          onClick={() => handleIncrease(item.id, item)}
           size="small"
           sx={{ color: "#fff" }}
         >
