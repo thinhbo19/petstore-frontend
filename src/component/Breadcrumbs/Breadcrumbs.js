@@ -9,6 +9,8 @@ const BreadcrumbsComponent = () => {
 
   if (pathName.startsWith("/news/")) {
     return null; // Không render Breadcrumbs
+  } else if (pathName.startsWith("/cart")) {
+    return null;
   }
 
   const breadcrumbsLinks = pathName

@@ -10,22 +10,22 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
   return (
     <Box
       sx={{
-        display: { xs: "none", sm: "none", md: "flex", lg: "flex" }, // Hide on extra small screens, show on small and up
+        display: { xs: "none", sm: "none", md: "flex", lg: "flex" },
         alignItems: "center",
         flexGrow: 2,
         gap: 2,
         zIndex: "100000",
-        flexDirection: { xs: "column", sm: "row" }, // Column layout on small screens, row on larger screens
-        padding: { xs: 2, sm: 0 }, // Padding adjustments
-        textAlign: { xs: "center", sm: "left" }, // Center text on small screens, left-align on larger
+        flexDirection: { xs: "column", sm: "row" },
+        padding: { xs: 2, sm: 0 },
+        textAlign: { xs: "center", sm: "left" },
       }}
     >
       <MenuItem
         onClick={handleMenuHomeOpen}
         sx={{
           fontWeight: "bold",
-          fontSize: { xs: "14px", sm: "16px", md: "18px" },
-        }} // Responsive font size
+          fontSize: { xs: "14px", sm: "16px", md: "16px" },
+        }}
       >
         HOME
       </MenuItem>
@@ -33,8 +33,8 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
         onClick={handleMenuPetsOpen}
         sx={{
           fontWeight: "bold",
-          fontSize: { xs: "14px", sm: "16px", md: "18px" },
-        }} // Responsive font size
+          fontSize: { xs: "14px", sm: "16px", md: "16px" },
+        }}
       >
         PETS
       </MenuItem>
@@ -42,8 +42,8 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
         onClick={() => handleChangePage(router, "Voucher")}
         sx={{
           fontWeight: "bold",
-          fontSize: { xs: "14px", sm: "16px", md: "18px" },
-        }} // Responsive font size
+          fontSize: { xs: "14px", sm: "16px", md: "16px" },
+        }}
       >
         VOUCHER
       </MenuItem>
@@ -51,8 +51,8 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
         onClick={() => handleChangePage(router, "More")}
         sx={{
           fontWeight: "bold",
-          fontSize: { xs: "14px", sm: "16px", md: "18px" },
-        }} // Responsive font size
+          fontSize: { xs: "14px", sm: "16px", md: "16px" },
+        }}
       >
         MORE
       </MenuItem>

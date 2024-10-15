@@ -364,16 +364,16 @@ const PetInfo = ({ petData, accessToken }) => {
                 sx={{
                   fontWeight: "bold",
                   fontSize: {
-                    xs: "0.9rem", // Smaller font size for extra-small screens
-                    sm: "1rem", // Default size for small screens
-                    md: "1rem", // Slightly larger for medium screens
-                    lg: "1rem", // Larger size for large screens
+                    xs: "0.9rem",
+                    sm: "1rem",
+                    md: "1rem",
+                    lg: "1rem",
                   },
                   padding: {
-                    xs: "4px 10px", // Smaller padding for extra-small screens
-                    sm: "6px 10px", // Standard padding for small screens
-                    md: "6px 10px", // More padding for medium screens
-                    lg: "8px 12px", // Largest padding for large screens
+                    xs: "4px 10px",
+                    sm: "6px 10px",
+                    md: "6px 10px",
+                    lg: "8px 12px",
                   },
                   marginRight: 2,
                   backgroundColor: "#F7482E",

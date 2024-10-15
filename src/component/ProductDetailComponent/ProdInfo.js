@@ -167,10 +167,34 @@ const ProdReviews = ({ prodData, accessToken }) => {
             {prodData.nameProduct}
           </Typography>
           <Divider></Divider>
-          <Typography variant="h5" color="text.secondary" gutterBottom>
+          <Typography
+            sx={{
+              fontSize: {
+                xs: "1.2rem",
+                sm: "1.3rem",
+                md: "1.4rem",
+                lg: "1.5rem",
+              },
+            }}
+            variant="h5"
+            color="text.secondary"
+            gutterBottom
+          >
             Category: {prodData.category.nameCate}
           </Typography>
-          <Typography variant="h5" color="red" gutterBottom>
+          <Typography
+            sx={{
+              fontSize: {
+                xs: "1.2rem",
+                sm: "1.3rem",
+                md: "1.4rem",
+                lg: "1.5rem",
+              },
+            }}
+            variant="h5"
+            color="red"
+            gutterBottom
+          >
             {prodData.price.toLocaleString()} đ
           </Typography>
           <Grid container spacing={2}>
@@ -204,6 +228,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
           >
             Status: {prodData.sold ? "Sold" : "Available"}
           </Typography>
+
           <Divider></Divider>
 
           {/*button buy now*/}
@@ -214,6 +239,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
               flexDirection: { xs: "column", md: "row" },
               gap: 2,
               marginBottom: 2,
+              marginTop: 2,
             }}
           >
             <Box>
@@ -222,12 +248,23 @@ const ProdReviews = ({ prodData, accessToken }) => {
                 sx={{
                   fontWeight: "bold",
                   fontSize: {
-                    xs: "1rem",
+                    xs: "0.9rem",
                     sm: "1rem",
                     md: "1rem",
                     lg: "1rem",
                   },
-                  marginRight: 2,
+                  padding: {
+                    xs: "4px 10px",
+                    sm: "6px 10px",
+                    md: "6px 10px",
+                    lg: "8px 12px",
+                  },
+                  marginRight: {
+                    xs: 1,
+                    sm: 1.6,
+                    md: 1.8,
+                    lg: 2,
+                  },
                   backgroundColor: "#F7482E",
                   "&:hover": {
                     backgroundColor: "#D63A2E",
@@ -243,12 +280,23 @@ const ProdReviews = ({ prodData, accessToken }) => {
                 sx={{
                   fontWeight: "bold",
                   fontSize: {
-                    xs: "1rem",
+                    xs: "0.9rem",
                     sm: "1rem",
                     md: "1rem",
                     lg: "1rem",
                   },
-                  marginRight: 2,
+                  padding: {
+                    xs: "4px 10px",
+                    sm: "6px 10px",
+                    md: "6px 10px",
+                    lg: "8px 12px",
+                  },
+                  marginRight: {
+                    xs: 1,
+                    sm: 1.6,
+                    md: 1.8,
+                    lg: 2,
+                  },
                   backgroundColor: "#F7482E",
                   "&:hover": {
                     backgroundColor: "#D63A2E",
