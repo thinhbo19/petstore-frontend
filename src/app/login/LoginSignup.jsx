@@ -65,7 +65,7 @@ const LoginSignup = () => {
         dispatch(setFavorites(res.favorites));
         dispatch(setCart(response.data.userData.cart));
 
-        if (response?.data?.userData?.role === "User") {
+        if (response.data.userData.role === "User") {
           router.push("/");
         } else if (response.data.userData.role === "Admin") {
           router.push("/dashboard");

@@ -22,9 +22,13 @@ const CartPage = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [quantityUpdateTimeout, setQuantityUpdateTimeout] = useState(null);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchData();
+    setTimeout(() => {
+      fetchData();
+      setLoading(false);
+    }, 2000);
   }, [accessToken]);
 
   const fetchData = async () => {
@@ -185,7 +189,9 @@ const CartPage = () => {
 
       <TakeLogin accesstoken={accessToken} />
 
-      {cartItems.length === 0 ? (
+      {loading ? (
+        <Typography variant="h6">Loading...</Typography>
+      ) : cartItems.length === 0 ? (
         <CartEmpty />
       ) : (
         <>
@@ -253,20 +259,6 @@ const CartPage = () => {
               <Grid item xs={6} sx={{ textAlign: "right" }}>
                 <Typography variant="body1">{subtotal} VNĐ</Typography>
               </Grid>
-              {/* <Grid item xs={6}>
-                <Typography variant="body1">Shipping:</Typography>
-              </Grid>
-              <Grid item xs={6} sx={{ textAlign: "right" }}>
-                <Typography variant="body1">50,000 VNĐ</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body1">Tax (10%):</Typography>
-              </Grid>
-              <Grid item xs={6} sx={{ textAlign: "right" }}>
-                <Typography variant="body1">
-                  {(subtotal * 0.1).toFixed(0)} VNĐ
-                </Typography>
-              </Grid> */}
               <Grid item xs={6}>
                 <Typography variant="h6">Total:</Typography>
               </Grid>
