@@ -1,5 +1,4 @@
 import ReduxProvider from "../component/providers/Redux";
-import { UserProvider } from "../services/Context/UserContext";
 import "./layout.css";
 
 export async function generateMetadata({ params, searchParams }) {
@@ -39,9 +38,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="vi">
       <body>
-        <ReduxProvider>
-          <UserProvider>{children}</UserProvider>
-        </ReduxProvider>
+        <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>
   );
