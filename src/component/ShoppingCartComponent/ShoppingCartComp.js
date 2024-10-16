@@ -21,7 +21,7 @@ import { apiUrlUser } from "@/src/services/config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCurrentUser } from "@/src/services/apiUser";
-import { removeCart } from "@/src/services/Redux/CartSlice";
+import { removeCart, setCart } from "@/src/services/Redux/CartSlice";
 
 const CartPage = () => {
   const accessToken = useSelector(selectAccessToken);
@@ -114,6 +114,7 @@ const CartPage = () => {
         cartItems.filter((item) => !selectedItems.includes(item.id))
       );
       setSelectedItems([]);
+      dispatch(setCart([]));
       toast.success(res.data.message);
     } catch (error) {
       console.error(error);
