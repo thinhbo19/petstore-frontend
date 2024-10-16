@@ -3,11 +3,8 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
-import TextImage from "../../../../public/Breed/Dog/anh-meo-Bengal-5.jpg";
 import Link from "next/link";
 import { Box } from "@mui/material";
-import { generateSlug } from "@/src/services/slugifyConfig";
-import { handleChangePage } from "@/src/hooks/useChangePage";
 
 const CartMenu = ({
   anchorElCart,
@@ -63,7 +60,7 @@ const CartMenu = ({
         cartData.map((cart, index) => (
           <MenuItem key={index} sx={{ alignItems: "center", gap: 1.5 }}>
             <Link
-              href={cart.slug}
+              href={cart.info.slug || ""}
               style={{
                 display: "flex",
                 justifyContent: "space-between",

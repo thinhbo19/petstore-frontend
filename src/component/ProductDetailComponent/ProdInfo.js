@@ -146,9 +146,6 @@ const ProdReviews = ({ prodData, accessToken }) => {
             quantity: item.quantity,
             newPrice: item.newPrice,
             images: item.images,
-            slug: `/shop/${generateSlug(
-              prodData.category.nameCate
-            )}/${generateSlug(prodData.nameProduct)}`,
           })
         );
         toast.success(res.data.message);

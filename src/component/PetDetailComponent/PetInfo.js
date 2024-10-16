@@ -145,11 +145,6 @@ const PetInfo = ({ petData, accessToken }) => {
             quantity: item.quantity,
             newPrice: item.newPrice,
             images: item.images,
-            slug: `/shop/${generateSlug(
-              petData.petBreed.nameSpecies
-            )}/${generateSlug(petData.petBreed.nameBreed)}/${generateSlug(
-              petData.namePet
-            )}`,
           })
         );
         toast.success(res.data.message);

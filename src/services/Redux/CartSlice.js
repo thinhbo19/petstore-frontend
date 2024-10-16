@@ -11,7 +11,7 @@ const cartSlice = createSlice({
       state.cart = action.payload;
     },
     addCart: (state, action) => {
-      const { id, info, quantity, newPrice, images, slug } = action.payload;
+      const { id, info, quantity, newPrice, images } = action.payload;
 
       const existingItem = state.cart.find((item) => item.id === id);
 
@@ -26,7 +26,6 @@ const cartSlice = createSlice({
           newPrice,
           createAt: new Date().toISOString(),
           images,
-          slug,
         });
       }
     },
