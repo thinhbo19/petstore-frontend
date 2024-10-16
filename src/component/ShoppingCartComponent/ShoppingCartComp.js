@@ -32,16 +32,16 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      fetchData();
-      setLoading(false);
-    }, 2000);
+    fetchData();
   }, [accessToken]);
 
   const fetchData = async () => {
     try {
       const res = await getCurrentUser(accessToken);
-      setCartItems(res.cart);
+      setTimeout(() => {
+        setCartItems(res?.cart);
+        setLoading(false);
+      }, 1500);
     } catch (error) {
       console.error(error);
     }
