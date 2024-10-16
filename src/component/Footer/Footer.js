@@ -57,13 +57,23 @@ const Footer = () => {
           {/* Newsletter Section */}
           <Box>
             <Typography
-              variant="h4" // Đặt kích thước chữ lớn hơn
+              variant="h4"
               gutterBottom
               textAlign="left"
-              fontWeight="bold" // Đậm
+              fontWeight="bold"
+              sx={{
+                fontSize: {
+                  xs: "1.5rem",
+                  sm: "1.6rem",
+                  md: "1.8rem",
+                  lg: "2rem",
+                  xl: "2.2rem",
+                },
+              }}
             >
               Newsletter
             </Typography>
+
             <Typography
               variant="body1"
               sx={{ marginBottom: "1rem", textAlign: "left" }}
@@ -147,11 +157,12 @@ const Footer = () => {
                 color: "black",
                 maxWidth: "400px",
                 width: { xs: "100%", sm: "100%" }, // Chiều rộng 100% trên màn hình nhỏ và auto cho màn hình lớn
-                padding: { xs: "10px 0", sm: "12px 20px" }, // Padding cho các kích thước khác nhau
+                padding: { xs: "10px 0", sm: "12px 15px" }, // Padding cho các kích thước khác nhau
                 fontSize: { xs: "0.875rem", sm: "1rem" }, // Kích thước chữ cho các kích thước khác nhau
                 "&:hover": {
                   backgroundColor: "#e6c52d", // Màu nền khi hover
                 },
+                fontWeight: "bold",
               }}
             >
               Sign Up

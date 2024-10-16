@@ -53,12 +53,6 @@ const HomeMenu = ({
     >
       <MenuItem
         sx={{ fontWeight: "bold" }}
-        onClick={() => handleChangePage(router, "HOME")}
-      >
-        Home
-      </MenuItem>
-      <MenuItem
-        sx={{ fontWeight: "bold" }}
         onClick={() => handleChangePage(router, "About Us")}
       >
         About Us

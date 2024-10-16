@@ -75,7 +75,7 @@ const MobileMenu = ({
             <FavoriteIcon />
           </Badge>
         </IconButton>
-        <p>Favorite Lists</p>
+        <p>Favorite</p>
       </MenuItem>
       <MenuItem onClick={() => handleChangePage(router, "notification")}>
         <IconButton

@@ -251,7 +251,9 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
             style={{
               width: { xs: "50px", sm: "80px" },
               height: { xs: "50px", sm: "80px" },
+              cursor: "pointer",
             }}
+            onClick={() => handleChangePage("/")}
           />
           <MenuItems
             handleMenuHomeOpen={handleMenuHomeOpen}
@@ -347,7 +349,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
         handleMobileMenuClose={handleMobileMenuClose}
         handleProfileMenuOpen={handleProfileMenuOpen}
         favoritesData={favoritesData}
-        cartData={favoritesData}
+        cartData={cartData}
       />
       <UserMenu
         anchorEl={anchorEl}

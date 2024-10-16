@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { handleChangePage } from "@/src/hooks/useChangePage";
 
 const options = [
-  "Home",
   "About Us",
   "Spa&Hotel Services",
   "Warranty Policy",
