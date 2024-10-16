@@ -190,7 +190,19 @@ const CartPage = () => {
       <TakeLogin accesstoken={accessToken} />
 
       {loading ? (
-        <Typography variant="h6">Loading...</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "200px",
+          }}
+        >
+          <CircularProgress />
+          <Typography variant="h6" sx={{ ml: 2 }}>
+            Loading...
+          </Typography>
+        </Box>
       ) : cartItems.length === 0 ? (
         <CartEmpty />
       ) : (
