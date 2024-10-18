@@ -12,7 +12,7 @@ import { generateSlug } from "@/src/services/slugifyConfig";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCat, faDog } from "@fortawesome/free-solid-svg-icons";
+import { faCat, faDog, faShop } from "@fortawesome/free-solid-svg-icons";
 
 const features = [
   {
@@ -37,7 +37,7 @@ const features = [
   },
 ];
 
-export default function Home({ dogs, cats }) {
+export default function Home({ dogs, cats, prods }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,16 +67,16 @@ export default function Home({ dogs, cats }) {
         sx={{
           backgroundColor: "#DAD6D6",
           borderRadius: "10px",
-          padding: { xs: "10px", md: "20px" }, // Responsive padding
+          padding: { xs: "10px", md: "20px" },
           marginTop: "30px",
-          width: { xs: "90%", sm: "80%", md: "70%" }, // Responsive width
+          width: { xs: "90%", sm: "80%", md: "70%" },
           maxWidth: "600px",
           margin: "30px auto",
           textAlign: "center",
         }}
       >
         <Typography
-          sx={{ fontWeight: "bold", fontSize: { xs: "20px", md: "24px" } }} // Responsive font size
+          sx={{ fontWeight: "bold", fontSize: { xs: "20px", md: "24px" } }}
           variant="h5"
           gutterBottom
         >
@@ -110,7 +110,7 @@ export default function Home({ dogs, cats }) {
                   sx={{
                     fontWeight: "bold",
                     fontSize: { xs: "16px", md: "18px" },
-                  }} // Responsive font size
+                  }}
                 >
                   {feature.title}
                 </Typography>
@@ -130,8 +130,8 @@ export default function Home({ dogs, cats }) {
               backgroundColor: "#E63232",
               color: "#fff",
               borderRadius: "20px",
-              padding: { xs: "8px 16px", md: "10px 20px" }, // Responsive padding
-              fontSize: { xs: "16px", md: "18px" }, // Responsive font size
+              padding: { xs: "8px 16px", md: "10px 20px" },
+              fontSize: { xs: "16px", md: "18px" },
             }}
           >
             HOTLINE: 0xxx.xxx.xxx
@@ -142,12 +142,12 @@ export default function Home({ dogs, cats }) {
       {/* Dog Breeds Section */}
       <Box
         data-aos="fade-up"
-        sx={{ backgroundColor: "#F5F5F5", padding: { xs: "10px", md: "20px" } }} // Responsive padding
+        sx={{ backgroundColor: "#F5F5F5", padding: { xs: "10px", md: "20px" } }}
       >
         <Typography
           sx={{
             fontWeight: "bold",
-            fontSize: { xs: "18px", md: "20px" }, // Responsive font size
+            fontSize: { xs: "18px", md: "20px" },
           }}
           variant="h6"
           textAlign="center"
@@ -193,12 +193,12 @@ export default function Home({ dogs, cats }) {
       {/* Cat Breeds Section */}
       <Box
         data-aos="fade-up"
-        sx={{ backgroundColor: "#F5F5F5", padding: { xs: "10px", md: "20px" } }} // Responsive padding
+        sx={{ backgroundColor: "#F5F5F5", padding: { xs: "10px", md: "20px" } }}
       >
         <Typography
           sx={{
             fontWeight: "bold",
-            fontSize: { xs: "18px", md: "20px" }, // Responsive font size
+            fontSize: { xs: "18px", md: "20px" },
           }}
           variant="h6"
           textAlign="center"
@@ -233,6 +233,59 @@ export default function Home({ dogs, cats }) {
                   />
                   <Typography variant="body1" mt={1}>
                     {cat.nameBreed}
+                  </Typography>
+                </Box>
+              </Link>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* Cat Breeds Section */}
+      <Box
+        data-aos="fade-up"
+        sx={{ backgroundColor: "#F5F5F5", padding: { xs: "10px", md: "20px" } }}
+      >
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            fontSize: { xs: "18px", md: "20px" },
+          }}
+          variant="h6"
+          textAlign="center"
+          gutterBottom
+        >
+          <FontAwesomeIcon icon={faShop} /> ACCESSORIES
+        </Typography>
+        <Grid container spacing={2}>
+          {prods.map((prod, index) => (
+            <Grid item xs={6} sm={4} md={2.4} key={index}>
+              <Link
+                href={`/accessory/${generateSlug(
+                  prod.category.nameCate
+                )}/${generateSlug(prod.nameProduct)}`}
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                <Box
+                  textAlign="center"
+                  sx={{
+                    padding: "10px",
+                    backgroundColor: "#FFF",
+                    borderRadius: "10px",
+                  }}
+                >
+                  <img
+                    src={prod.images[0]}
+                    alt={prod.nameProduct}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      aspectRatio: "1/1",
+                      borderRadius: "10px",
+                    }}
+                  />
+                  <Typography variant="body1" mt={1}>
+                    {prod.nameProduct}
                   </Typography>
                 </Box>
               </Link>

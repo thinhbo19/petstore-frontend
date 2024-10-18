@@ -31,7 +31,7 @@ export const handleChangePage = (router, item) => {
       router.push("/accessory");
       break;
     case "Product":
-      router.push("/shop");
+      router.push("/accessory");
       break;
     case "notification":
       router.push("/notification");

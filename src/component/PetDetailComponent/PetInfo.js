@@ -166,7 +166,6 @@ const PetInfo = ({ petData, accessToken }) => {
       prevQuantity < petData.quantity ? prevQuantity + 1 : prevQuantity
     );
   };
-
   const handleDecrease = () => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
@@ -461,8 +460,8 @@ const PetInfo = ({ petData, accessToken }) => {
                   "&:hover": {
                     backgroundColor: "#0C89F2",
                   },
-                  padding: { xs: "6px", sm: "8px", md: "10px" }, // Responsive padding
-                  fontSize: { xs: "0.8rem", sm: "1rem" }, // Responsive font size
+                  padding: { xs: "6px", sm: "8px", md: "10px" },
+                  fontSize: { xs: "0.8rem", sm: "1rem" },
                 }}
               >
                 Buy Now

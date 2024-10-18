@@ -8,12 +8,14 @@ import {
   CardContent,
   CardMedia,
   Pagination,
+  Divider,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import "../../styles/shop.css";
 import Link from "next/link";
 import Loading from "../Loading/Loading";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const ShopForm = ({ data }) => {
   const router = useRouter();
@@ -88,18 +90,57 @@ const ShopForm = ({ data }) => {
         sx={{ maxWidth: "1400px", width: "100%", marginBottom: 4 }}
       >
         <div className="all__item">
-          <Link href="/shop/dog" className="link__all__item">
-            ALL DOGS
-          </Link>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography
+              gutterBottom
+              sx={{
+                margin: "0",
+                padding: "0",
+                fontWeight: "bold",
+                fontSize: "1.4rem",
+              }}
+            >
+              ALL DOGS
+            </Typography>
+            <Link
+              href="/shop/dog"
+              style={{
+                textDecoration: "none",
+                color: "#007bff",
+              }}
+            >
+              <Typography
+                sx={{
+                  display: "flex",
+                  justifyItems: "center",
+                  alignItems: "center",
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                  color: "black",
+                  marginTop: { xs: "8px", sm: "0" },
+                }}
+              >
+                More
+                <KeyboardArrowRightIcon />
+              </Typography>
+            </Link>
+          </Box>
+          <Divider sx={{ marginBottom: "20px", marginTop: "5px" }} />
         </div>
         <Grid container spacing={2} justifyContent="center">
           {currentDogs.map((breed) => (
             <Grid
               item
-              xs={6} // 2 items per row on phone screens
-              sm={4} // 3 items per row on tablet screens
+              xs={6}
+              sm={4}
               md={3}
-              lg={2} // 5 items per row on large screens
+              lg={2}
               key={breed._id}
               display="flex"
               justifyContent="center"
@@ -169,18 +210,57 @@ const ShopForm = ({ data }) => {
         sx={{ maxWidth: "1400px", width: "100%", marginBottom: 4 }}
       >
         <div className="all__item">
-          <Link href="/shop/cat" className="link__all__item">
-            ALL CATS
-          </Link>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography
+              gutterBottom
+              sx={{
+                margin: "0",
+                padding: "0",
+                fontWeight: "bold",
+                fontSize: "1.4rem",
+              }}
+            >
+              ALL CATS
+            </Typography>
+            <Link
+              href="/shop/cat"
+              style={{
+                textDecoration: "none",
+                color: "#007bff",
+              }}
+            >
+              <Typography
+                sx={{
+                  display: "flex",
+                  justifyItems: "center",
+                  alignItems: "center",
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                  color: "black",
+                  marginTop: { xs: "8px", sm: "0" },
+                }}
+              >
+                More
+                <KeyboardArrowRightIcon />
+              </Typography>
+            </Link>
+          </Box>
+          <Divider sx={{ marginBottom: "20px", marginTop: "5px" }} />
         </div>
         <Grid container spacing={2} justifyContent="center">
           {currentCats.map((breed) => (
             <Grid
               item
-              xs={6} // 2 items per row on phone screens
-              sm={4} // 3 items per row on tablet screens
+              xs={6}
+              sm={4}
               md={3}
-              lg={2} // 5 items per row on large screens
+              lg={2}
               key={breed._id}
               display="flex"
               justifyContent="center"

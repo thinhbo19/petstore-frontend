@@ -10,8 +10,8 @@ const options = [
   "Warranty Policy",
   "News",
   "Pets",
-  "Voucher",
   "Product",
+  "Voucher",
   "Contact Us",
 ];
 const ITEM_HEIGHT = 48;

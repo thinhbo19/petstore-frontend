@@ -230,7 +230,7 @@ const CartPage = () => {
                 startIcon={<DeleteIcon />}
                 onClick={handleRemoveSelectedItems}
               >
-                Xóa tất cả
+                Delete All
               </Button>
             )}
             <Button
@@ -244,8 +244,8 @@ const CartPage = () => {
               }}
             >
               {selectedItems.length === cartItems.length
-                ? "Bỏ chọn tất cả"
-                : "Chọn tất cả"}
+                ? "Cancel All"
+                : "Selected All"}
             </Button>
           </Box>
 

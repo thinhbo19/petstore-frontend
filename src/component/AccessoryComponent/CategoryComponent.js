@@ -15,7 +15,6 @@ import {
 import SortIcon from "@mui/icons-material/Sort";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import { usePathname } from "next/navigation";
@@ -33,13 +32,13 @@ import {
 } from "@/src/services/Redux/FavoriteProductSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.productID === product._id);
 }
 
 const CategoryComponent = ({ groupedProducts }) => {
-  const router = useRouter();
   let visibleProducts = {};
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const pathName = usePathname();
@@ -116,10 +115,6 @@ const CategoryComponent = ({ groupedProducts }) => {
     }
   };
 
-  const handleViewMore = (category) => {
-    router.push(`/accessory/${generateSlug(category)}`);
-  };
-
   const getVisibleProducts = (category) => {
     return visibleProducts[category] || 15;
   };
@@ -174,19 +169,45 @@ const CategoryComponent = ({ groupedProducts }) => {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
+            sx={{ marginBottom: "10px" }}
           >
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
+            <Typography
+              gutterBottom
+              sx={{
+                margin: "0",
+                padding: "0",
+                fontWeight: "bold",
+                fontSize: "1.4rem",
+              }}
+            >
               {category}
             </Typography>
-            <Button
-              variant="outlined"
-              onClick={() => handleViewMore(category)}
-              sx={{ textTransform: "none" }}
+            <Link
+              href={`/accessory/${generateSlug(category)}`}
+              style={{
+                textDecoration: "none",
+                color: "#007bff",
+              }}
             >
-              Xem thêm
-            </Button>
+              <Typography
+                sx={{
+                  display: "flex",
+                  justifyItems: "center",
+                  alignItems: "center",
+                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                  color: "black",
+                  marginTop: { xs: "8px", sm: "0" },
+                }}
+              >
+                More
+                <KeyboardArrowRightIcon />
+              </Typography>
+            </Link>
           </Box>
-          <Divider sx={{ marginBottom: "20px" }} />
+          <Divider sx={{ marginBottom: "10px", marginTop: "5px" }} />
 
           <Grid container spacing={4}>
             {groupedProducts[category]
