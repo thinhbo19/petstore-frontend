@@ -24,6 +24,7 @@ import { generateSlug } from "@/src/services/slugifyConfig";
 import { useDispatch } from "react-redux";
 import { setLogout } from "@/src/services/Redux/useSlice";
 import ArticleIcon from "@mui/icons-material/Article";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 
 const drawerWidth = 240;
 
@@ -32,7 +33,6 @@ export default function AdminLayout({ children }) {
 
   const handleLogout = () => {
     dispatch(setLogout());
-    // Redirect to login page after logout
     window.location.href = "/login";
   };
 
@@ -47,8 +47,23 @@ export default function AdminLayout({ children }) {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: "border-box",
+            overflowY: "auto",
+            "&::-webkit-scrollbar": {
+              width: "8px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#888",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#555",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1",
+            },
           },
         }}
+        className="design_scrollbar"
       >
         <Toolbar />
         <Divider />
@@ -91,7 +106,7 @@ export default function AdminLayout({ children }) {
         </List>
         <Divider />
         <List>
-          {["News", "Schedule"].map((text) => (
+          {["News", "Service", "Booking"].map((text) => (
             <ListItem
               button
               key={text}
@@ -99,7 +114,13 @@ export default function AdminLayout({ children }) {
               href={`/dashboard/${generateSlug(text)}`}
             >
               <ListItemIcon>
-                {text === "News" ? <ArticleIcon /> : <CalendarMonthIcon />}
+                {text === "News" ? (
+                  <ArticleIcon />
+                ) : text === "Service" ? (
+                  <MedicalServicesIcon />
+                ) : (
+                  <CalendarMonthIcon />
+                )}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
