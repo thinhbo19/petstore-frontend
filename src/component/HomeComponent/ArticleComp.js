@@ -10,7 +10,6 @@ const ArticleComp = ({ articleData }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Kiểm tra xem articleData có dữ liệu không
   if (!articleData) {
     return (
       <Box sx={{ padding: "20px", textAlign: "center" }}>
@@ -21,7 +20,6 @@ const ArticleComp = ({ articleData }) => {
 
   return (
     <Box sx={{ padding: "20px" }}>
-      {/* Hình ảnh nền và tiêu đề */}
       <Box
         sx={{
           width: "100%",
@@ -54,7 +52,6 @@ const ArticleComp = ({ articleData }) => {
         </Typography>
       </Box>
 
-      {/* Mô tả ngắn và nội dung bài viết */}
       <Box sx={{ textAlign: "center", marginBottom: "20px" }}>
         <Typography
           variant="body1"
@@ -78,7 +75,6 @@ const ArticleComp = ({ articleData }) => {
             alignContent: "center",
           }}
         >
-          {/* Đọc nội dung HTML */}
           <Typography
             variant="body1"
             paragraph

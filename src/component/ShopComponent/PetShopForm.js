@@ -170,7 +170,7 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
     setOptionMenu(option);
     const newBreedName = formatString(breedName);
     const sortedPets = await sortingPets(newBreedName, option);
-    setData(sortedPets); // Cập nhật dữ liệu đã sắp xếp
+    setData(sortedPets);
     handleMenuClose();
   };
 

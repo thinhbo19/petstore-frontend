@@ -373,7 +373,6 @@ const PetInfo = ({ petData, accessToken }) => {
 
           {/*button buy now*/}
 
-          {/* Increase/Decrease and Add to Cart buttons */}
           <Box
             sx={{
               display: "flex",
@@ -400,6 +399,7 @@ const PetInfo = ({ petData, accessToken }) => {
                   "&:hover": { backgroundColor: "#f7f7f7" },
                   fontSize: { xs: "1rem", sm: "1.2rem" },
                 }}
+                disabled={petData.sold}
               >
                 <RemoveIcon />
               </IconButton>
@@ -410,7 +410,7 @@ const PetInfo = ({ petData, accessToken }) => {
                   fontSize: { xs: "1rem", sm: "1.2rem" },
                 }}
               >
-                {quantity}
+                {petData.sold ? 0 : quantity}
               </Box>
               <IconButton
                 onClick={handleIncrease}
@@ -419,6 +419,7 @@ const PetInfo = ({ petData, accessToken }) => {
                   "&:hover": { backgroundColor: "#f7f7f7" },
                   fontSize: { xs: "1rem", sm: "1.2rem" },
                 }}
+                disabled={petData.sold}
               >
                 <AddIcon />
               </IconButton>
@@ -435,6 +436,7 @@ const PetInfo = ({ petData, accessToken }) => {
                 fontSize: { xs: "0.9rem", sm: "1rem" },
               }}
               onClick={() => handleCart()}
+              disabled={petData.sold}
             >
               Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
             </Button>
@@ -463,6 +465,7 @@ const PetInfo = ({ petData, accessToken }) => {
                   padding: { xs: "6px", sm: "8px", md: "10px" },
                   fontSize: { xs: "0.8rem", sm: "1rem" },
                 }}
+                disabled={petData.sold}
               >
                 Buy Now
               </Button>

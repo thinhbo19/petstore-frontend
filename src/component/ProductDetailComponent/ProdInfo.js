@@ -367,6 +367,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
                   "&:hover": { backgroundColor: "#f7f7f7" },
                   fontSize: { xs: "1rem", sm: "1.2rem" },
                 }}
+                disabled={prodData.sold}
               >
                 <RemoveIcon />
               </IconButton>
@@ -377,7 +378,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
                   fontSize: { xs: "1rem", sm: "1.2rem" },
                 }}
               >
-                {quantity}
+                {prodData.sold ? 0 : quantity}
               </Box>
               <IconButton
                 onClick={handleIncrease}
@@ -386,6 +387,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
                   "&:hover": { backgroundColor: "#f7f7f7" },
                   fontSize: { xs: "1rem", sm: "1.2rem" },
                 }}
+                disabled={prodData.sold}
               >
                 <AddIcon />
               </IconButton>
@@ -402,6 +404,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
                 fontSize: { xs: "0.9rem", sm: "1rem" },
               }}
               onClick={() => handleCart()}
+              disabled={prodData.sold}
             >
               Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
             </Button>
@@ -430,6 +433,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
                   padding: { xs: "6px", sm: "8px", md: "10px" }, // Responsive padding
                   fontSize: { xs: "0.8rem", sm: "1rem" }, // Responsive font size
                 }}
+                disabled={prodData.sold}
               >
                 Buy Now
               </Button>

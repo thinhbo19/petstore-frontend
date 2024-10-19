@@ -9,12 +9,10 @@ export default function ProfileLayout({ children }) {
       }}
     >
       <Grid container spacing={2}>
-        {/* Bên phải - NavbarUser chiếm 20% */}
         <Grid item xs={12} md={2}>
           <NavbarUser />
         </Grid>
 
-        {/* Bên trái - Phần nội dung chiếm 80% */}
         <Grid
           item
           xs={12}

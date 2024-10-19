@@ -92,10 +92,10 @@ const NavbarUser = () => {
               sx={{
                 textTransform: "uppercase",
                 fontSize: {
-                  xs: "1rem", // Kích thước văn bản trên điện thoại
-                  sm: "1rem", // Kích thước văn bản trên màn hình nhỏ
-                  md: "0.8rem", // Kích thước văn bản trên màn hình vừa
-                  lg: "1rem", // Kích thước văn bản trên màn hình lớn
+                  xs: "1rem",
+                  sm: "1rem",
+                  md: "0.8rem",
+                  lg: "1rem",
                 },
               }}
             >
