@@ -1,3 +1,4 @@
+import DeleteCartTemp from "../component/DeleteCartTemp/DeleteCartTemp";
 import ReduxProvider from "../component/providers/Redux";
 import "./layout.css";
 
@@ -38,7 +39,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="vi">
       <body>
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          {children}
+          <DeleteCartTemp />
+        </ReduxProvider>
       </body>
     </html>
   );

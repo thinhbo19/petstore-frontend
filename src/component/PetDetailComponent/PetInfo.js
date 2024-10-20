@@ -36,6 +36,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { addCart } from "@/src/services/Redux/CartSlice";
 import { generateSlug } from "@/src/services/slugifyConfig";
+import { addCartTemp } from "@/src/services/Redux/CartTempSlice";
+import { useRouter } from "next/navigation";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.petID === product._id);
@@ -47,6 +49,7 @@ const PetInfo = ({ petData, accessToken }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const router = useRouter();
 
   useEffect(() => {
     if (accessToken) {
@@ -114,7 +117,6 @@ const PetInfo = ({ petData, accessToken }) => {
       }
     }
   };
-
   const handleCart = async () => {
     if (!accessToken) {
       Swal.fire({
@@ -156,11 +158,40 @@ const PetInfo = ({ petData, accessToken }) => {
       }
     }
   };
-
+  const handleBuyNow = async () => {
+    if (!accessToken) {
+      Swal.fire({
+        title: "LOGIN",
+        text: "You are not logged in yet!!!",
+        icon: "warning",
+      });
+    } else {
+      setLoading(true);
+      dispatch(
+        addCartTemp({
+          id: petData._id,
+          info: {
+            name: petData.namePet,
+            quantity: petData.quantity,
+            price: petData.price,
+            slug: `/shop/${generateSlug(
+              petData.petBreed.nameSpecies
+            )}/${generateSlug(petData.petBreed.nameBreed)}/${generateSlug(
+              petData.namePet
+            )}`,
+          },
+          quantity: quantity,
+          newPrice: petData.price * quantity,
+          images: petData.imgPet[0],
+        })
+      );
+      router.push("/payment");
+      setLoading(false);
+    }
+  };
   const handleImageClick = (image) => {
     setMainImage(image);
   };
-
   const handleIncrease = () => {
     setQuantity((prevQuantity) =>
       prevQuantity < petData.quantity ? prevQuantity + 1 : prevQuantity
@@ -466,6 +497,7 @@ const PetInfo = ({ petData, accessToken }) => {
                   fontSize: { xs: "0.8rem", sm: "1rem" },
                 }}
                 disabled={petData.sold}
+                onClick={() => handleBuyNow()}
               >
                 Buy Now
               </Button>

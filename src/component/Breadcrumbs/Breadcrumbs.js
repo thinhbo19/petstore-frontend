@@ -8,8 +8,10 @@ const BreadcrumbsComponent = () => {
   const pathName = usePathname();
 
   if (pathName.startsWith("/news/")) {
-    return null; // Không render Breadcrumbs
+    return null;
   } else if (pathName.startsWith("/cart")) {
+    return null;
+  } else if (pathName.startsWith("/payment")) {
     return null;
   }
 
