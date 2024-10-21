@@ -45,6 +45,6 @@ const cartTempSlice = createSlice({
 export const { setCartTemp, addCartTemp, removeCartTemp } =
   cartTempSlice.actions;
 
-export const selectCart = (state) => state.cartTemp.cartTemp;
+export const selectCartTemp = (state) => state.cartTemp.cartTemp;
 
 export default cartTempSlice.reducer;

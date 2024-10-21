@@ -1,15 +1,12 @@
 import React, { useEffect } from "react";
 import { Box, Typography, Paper } from "@mui/material";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { selectCart } from "@/src/services/Redux/CartTempSlice";
 import Image from "next/image";
 
-const ProductList = () => {
-  const products = useSelector(selectCart);
+const ProductList = ({ products, setTotalAmount }) => {
   const totalPrice = products.reduce(
-    (total, product) => total + product.newPrice * product.quantity,
+    (total, product) => total + product.newPrice,
     0
   );
   const router = useRouter();
@@ -27,6 +24,7 @@ const ProductList = () => {
         router.push("/shop");
       });
     }
+    setTotalAmount(totalPrice);
   }, [products, router]);
 
   return (
@@ -58,7 +56,7 @@ const ProductList = () => {
                   Quantity: {product.quantity}
                 </Typography>
                 <Typography variant="body2">
-                  Price: {product.info.price} VND
+                  Price: {product.info.price.toLocaleString()} VND
                 </Typography>
               </Box>
             </Box>

@@ -5,7 +5,6 @@ const NoteSection = ({ note, setNote }) => {
   const handleNoteChange = (event) => {
     setNote(event.target.value);
   };
-  console.log(note);
   return (
     <Paper elevation={3} sx={{ padding: 3, marginBottom: 3 }}>
       <Typography variant="h5" gutterBottom>

@@ -31,6 +31,7 @@ import {
 } from "@/src/services/Redux/FavoriteProductSlice";
 import { removeFavorite } from "@/src/services/Redux/FavoriteSlice";
 import { generateSlug } from "@/src/services/slugifyConfig";
+import { addCartTemp } from "@/src/services/Redux/CartTempSlice";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.productID === product._id);

@@ -12,3 +12,4 @@ export const apiUrlBooking = `${backendUrl}/api/booking`;
 export const apiUrlNews = `${backendUrl}/api/news`;
 export const apiUrlChat = `${backendUrl}/api/chat`;
 export const apiUrlMess = `${backendUrl}/api/mess`;
+export const apiUrOrder = `${backendUrl}/api/order`;

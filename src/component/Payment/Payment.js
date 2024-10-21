@@ -7,16 +7,28 @@ import AddressSection from "./AddressSection";
 import VoucherSection from "./VoucherSection";
 import PaymentMethodSection from "./PaymentMethodSection";
 import { getCurrentUser } from "@/src/services/apiUser";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
+import axios from "axios";
+import { apiUrlUser, apiUrOrder } from "@/src/services/config";
+import { selectCartTemp } from "@/src/services/Redux/CartTempSlice";
+import { selectCart } from "@/src/services/Redux/CartSlice";
+import Swal from "sweetalert2";
+import { removeCart } from "@/src/services/Redux/CartSlice";
+import { useRouter } from "next/navigation";
 
 const Payment = () => {
+  const cartUser = useSelector(selectCart);
+  const cartData = useSelector(selectCartTemp);
   const [user, setUser] = useState(null);
   const [note, setNote] = useState("");
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState("");
+  const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(true);
   const accessToken = useSelector(selectAccessToken);
+  const router = useRouter();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -34,6 +46,63 @@ const Payment = () => {
     fetchAddresses();
   }, []);
 
+  const handleThanhToanPayPal = async () => {
+    try {
+      const res = await axios.post(
+        `${apiUrOrder}/order`,
+        {
+          products: cartData.map((prod) => ({
+            id: prod.id,
+            img: prod.images,
+            name: prod.info.name,
+            count: prod.quantity,
+          })),
+          note: note,
+          address: selectedAddress,
+          coupon: "",
+          paymentMethod: "PayPal",
+          orderBy: user?._id,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (res.data.success) {
+        if (cartUser > 0) {
+          for (const product of cartData) {
+            await axios.delete(`${apiUrlUser}/allOneCart`, {
+              data: {
+                id: product.id,
+                userID: user?._id,
+              },
+            });
+            dispatch(removeCart(product.id));
+          }
+        }
+
+        Swal.fire({
+          title: "Successfully!",
+          text: "You have successfully placed your order.!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        }).then(() => {
+          router.push(`/order-detail/${res.data.data._id}`);
+        });
+      } else {
+        Swal.fire({
+          title: "ĐẶT HÀNG THẤT BẠI",
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -45,7 +114,7 @@ const Payment = () => {
     >
       <Grid container spacing={4} sx={{ width: "95%" }}>
         <Grid item xs={12} md={6}>
-          <ProductList />
+          <ProductList products={cartData} setTotalAmount={setTotalAmount} />
         </Grid>
         <Grid item xs={12} md={6}>
           <NoteSection note={note} setNote={setNote} />
@@ -60,7 +129,10 @@ const Payment = () => {
             />
           )}
           <VoucherSection />
-          <PaymentMethodSection />
+          <PaymentMethodSection
+            totalAmount={totalAmount}
+            handleThanhToanPayPal={handleThanhToanPayPal}
+          />
         </Grid>
       </Grid>
     </Box>
