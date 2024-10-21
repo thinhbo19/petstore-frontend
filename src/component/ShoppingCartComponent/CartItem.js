@@ -24,7 +24,7 @@ const CartItem = ({
       <Grid item xs={2} sm={1}>
         <Checkbox
           checked={isSelected}
-          onChange={() => handleSelect(item.id)}
+          onChange={() => handleSelect(item.id, item)}
           sx={{
             "& .MuiSvgIcon-root": {
               fontSize: { xs: "1rem", sm: "1.5rem" },

@@ -162,6 +162,36 @@ const ProdReviews = ({ prodData, accessToken }) => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
+  const handleBuyNow = async () => {
+    if (!accessToken) {
+      Swal.fire({
+        title: "LOGIN",
+        text: "You are not logged in yet!!!",
+        icon: "warning",
+      });
+    } else {
+      setLoading(true);
+      dispatch(
+        addCartTemp({
+          id: prodData._id,
+          info: {
+            name: prodData.nameProduct,
+            quantity: prodData.quantity,
+            price: prodData.price,
+            slug: `/accessory/${generateSlug(
+              prodData.category.nameCate
+            )}/${generateSlug(prodData.nameProduct)}`,
+          },
+          quantity: quantity,
+          newPrice: prodData.price * quantity,
+          images: prodData.images[0],
+        })
+      );
+      router.push("/payment");
+      setLoading(false);
+    }
+  };
+
   return (
     <Paper
       elevation={8}
@@ -434,6 +464,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
                   fontSize: { xs: "0.8rem", sm: "1rem" }, // Responsive font size
                 }}
                 disabled={prodData.sold}
+                onClick={() => handleBuyNow()}
               >
                 Buy Now
               </Button>

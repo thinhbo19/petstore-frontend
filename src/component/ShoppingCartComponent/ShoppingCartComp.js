@@ -9,7 +9,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import testImg from "../../../public/avartar.jpg";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CartItem from "./CartItem";
 import CartEmpty from "./CartEmpty";
@@ -22,6 +21,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCurrentUser } from "@/src/services/apiUser";
 import { removeCart, setCart } from "@/src/services/Redux/CartSlice";
+import {
+  addCartTemp,
+  removeCartTemp,
+} from "@/src/services/Redux/CartTempSlice";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const CartPage = () => {
   const accessToken = useSelector(selectAccessToken);
@@ -30,6 +35,7 @@ const CartPage = () => {
   const [quantityUpdateTimeout, setQuantityUpdateTimeout] = useState(null);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     fetchData();
@@ -67,20 +73,43 @@ const CartPage = () => {
       toast.error("Failed to update quantity");
     }
   };
-
-  const handleSelect = (id) => {
-    setSelectedItems((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((itemId) => itemId !== id)
-        : [...prevSelected, id]
-    );
+  const handleSelect = (id, item) => {
+    if (selectedItems.includes(id)) {
+      setSelectedItems((prevSelected) =>
+        prevSelected.filter((itemId) => itemId !== id)
+      );
+      dispatch(removeCartTemp(id));
+    } else {
+      setSelectedItems((prevSelected) => [...prevSelected, id]);
+      dispatch(
+        addCartTemp({
+          id: item.id,
+          info: item.info,
+          quantity: item.quantity,
+          newPrice: item.newPrice,
+          images: item.images,
+        })
+      );
+    }
   };
 
   const handleSelectAll = () => {
     if (selectedItems.length === cartItems.length) {
       setSelectedItems([]);
+      cartItems.forEach((item) => dispatch(removeCartTemp(item.id)));
     } else {
       setSelectedItems(cartItems.map((item) => item.id));
+      cartItems.forEach((item) =>
+        dispatch(
+          addCartTemp({
+            id: item.id,
+            info: item.info,
+            quantity: item.quantity,
+            newPrice: item.newPrice,
+            images: item.images,
+          })
+        )
+      );
     }
   };
 
@@ -161,6 +190,20 @@ const CartPage = () => {
     }, 500);
 
     setQuantityUpdateTimeout(newTimeout);
+  };
+
+  const handlePayment = () => {
+    if (selectedItems.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select at least one product before proceeding to payment.",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else {
+      router.push("/payment");
+    }
   };
 
   const subtotal = cartItems
@@ -303,6 +346,7 @@ const CartPage = () => {
                   background: "#F84C2F",
                   width: { xs: "100%", sm: "20%" },
                 }}
+                onClick={() => handlePayment()}
               >
                 Payment
               </Button>
