@@ -20,14 +20,12 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { formatDate } from "@/src/hooks/useFormatTime";
 
-// Helper function to calculate average rating
 const calculateAverageRating = (reviews) => {
   if (!reviews?.length) return 0;
   const totalRating = reviews.reduce((sum, review) => sum + review.star, 0);
   return totalRating / reviews.length;
 };
 
-// Custom scrollbar styles
 const customScrollbarStyle = {
   maxHeight: "600px",
   overflowY: "auto",
@@ -46,7 +44,6 @@ const customScrollbarStyle = {
   },
 };
 
-// User Review Item Component
 const ReviewItem = ({ review }) => (
   <ListItem alignItems="flex-start">
     <Grow in>
@@ -80,7 +77,7 @@ const ReviewItem = ({ review }) => (
                 sx={{
                   maxHeight: "600px",
                   overflowY: "auto",
-                  ...customScrollbarStyle, // Apply custom scrollbar style
+                  ...customScrollbarStyle,
                 }}
               >
                 <Typography variant="body2" color="text.secondary">
@@ -94,11 +91,10 @@ const ReviewItem = ({ review }) => (
               >
                 {formatDate(review.dateComment)}
               </Typography>
-              {/* Display feedback images if available */}
               {review.feedback_img && review.feedback_img.length > 0 && (
                 <Grid container spacing={2} sx={{ mt: 2 }}>
                   {review.feedback_img.map((imgUrl, idx) => (
-                    <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={idx}>
+                    <Grid item xs={4} sm={4} md={4} lg={3} xl={2} key={idx}>
                       <CardMedia
                         component="img"
                         image={imgUrl}
@@ -121,20 +117,16 @@ const ReviewItem = ({ review }) => (
   </ListItem>
 );
 
-// Main Component for Reviews
 const PetReviews = ({ reviews }) => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const isMediumScreen = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
-  // State for selected star filter
-  const [selectedStar, setSelectedStar] = useState(null); // null means no filter
+  const [selectedStar, setSelectedStar] = useState(null);
 
-  // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 10;
 
-  // Memoized values for performance
   const filteredReviews = useMemo(() => {
     return selectedStar
       ? reviews.filter((review) => review.star === selectedStar)
@@ -161,19 +153,17 @@ const PetReviews = ({ reviews }) => {
     [reviews]
   );
 
-  // Handle pagination change
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
 
-  // Button Styles
   const getButtonStyle = (star) => ({
     fontWeight: selectedStar === star ? "bold" : "normal",
     backgroundColor: selectedStar === star ? "#F84A2F" : "transparent",
     color: selectedStar === star ? "#fff" : theme.palette.text.primary,
-    minWidth: isSmallScreen ? "40px" : "auto", // Shrink buttons on small screens
-    padding: isSmallScreen ? "4px 8px" : "8px 16px", // Adjust padding for smaller screens
-    fontSize: isSmallScreen ? "0.75rem" : "1rem", // Smaller font size on smaller screens
+    minWidth: isSmallScreen ? "40px" : "auto",
+    padding: isSmallScreen ? "4px 8px" : "8px 16px",
+    fontSize: isSmallScreen ? "0.75rem" : "1rem",
     "&:hover": {
       backgroundColor:
         selectedStar === star ? "#F84A2F" : theme.palette.action.hover,
@@ -188,7 +178,6 @@ const PetReviews = ({ reviews }) => {
         padding: isSmallScreen ? 1 : 2,
       }}
     >
-      {/* Header: Total reviews and average rating */}
       <Box display="flex" flexDirection="column" alignItems="center" mb={4}>
         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
           User Reviews
@@ -205,14 +194,12 @@ const PetReviews = ({ reviews }) => {
           {totalReviews} reviews)
         </Typography>
       </Box>
-
-      {/* Star Filter Buttons */}
       <Box display="flex" justifyContent="center" mb={3}>
         <ButtonGroup
           variant="outlined"
           color="primary"
           sx={{
-            flexDirection: "row", // Always keep it in a row
+            flexDirection: "row",
           }}
         >
           <Button
@@ -233,8 +220,6 @@ const PetReviews = ({ reviews }) => {
         </ButtonGroup>
       </Box>
 
-      {/* Display reviews list */}
-
       {totalReviews === 0 ? (
         <Typography variant="h6" align="center">
           No reviews available
@@ -252,7 +237,6 @@ const PetReviews = ({ reviews }) => {
             ))}
           </List>
 
-          {/* Pagination controls */}
           <Box display="flex" justifyContent="center" mt={3}>
             <Pagination
               count={totalPages}
