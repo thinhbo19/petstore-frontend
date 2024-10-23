@@ -10,11 +10,13 @@ import {
 import Pay from "../Pay/Pay";
 import Image from "next/image";
 import VNPayImg from "../../../public/VNpay.png";
+import MoMoImg from "../../../public/MoMo_Logo.png";
 
 const PaymentMethodSection = ({
   totalAmount,
   handleThanhToanPayPal,
   handlePayOCD,
+  handleVNPay,
 }) => {
   const [cashOnDelivery, setCashOnDelivery] = useState(false);
   const [onlinePayment, setOnlinePayment] = useState(false);
@@ -71,7 +73,16 @@ const PaymentMethodSection = ({
         </Button>
       )}
 
-      <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 2,
+          mt: 2,
+          justifyContent: { xs: "center", md: "left" },
+          alignItems: { xs: "center", md: "flex-start" },
+        }}
+      >
         <Pay
           isElectronicEnabled={onlinePayment}
           paymentSuccess={handleThanhToanPayPal}
@@ -79,10 +90,33 @@ const PaymentMethodSection = ({
           currency={"USD"}
         />
         {onlinePayment && (
-          <Button variant="contained" color="secondary" fullWidth>
-            Pay with VNPay{" "}
-            <Image src={VNPayImg} width={100} height={40} alt="name" />
-          </Button>
+          <>
+            <Box
+              sx={{
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                },
+              }}
+              onClick={() => handleVNPay()}
+            >
+              <Image src={VNPayImg} width={150} height={50} alt="VNPay" />
+            </Box>
+
+            <Box
+              sx={{
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                },
+              }}
+              onClick={() => console.log("MoMo clicked")}
+            >
+              <Image src={MoMoImg} width={120} height={70} alt="MoMo" />
+            </Box>
+          </>
         )}
       </Box>
     </Paper>

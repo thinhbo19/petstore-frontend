@@ -10,7 +10,7 @@ import { getCurrentUser } from "@/src/services/apiUser";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
 import axios from "axios";
-import { apiUrlUser, apiUrOrder } from "@/src/services/config";
+import { apiUrlUser, apiUrlOrder } from "@/src/services/config";
 import { selectCartTemp } from "@/src/services/Redux/CartTempSlice";
 import { selectCart } from "@/src/services/Redux/CartSlice";
 import Swal from "sweetalert2";
@@ -50,7 +50,7 @@ const Payment = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        `${apiUrOrder}/order`,
+        `${apiUrlOrder}/order`,
         {
           products: cartData.map((prod) => ({
             id: prod.id,
@@ -110,7 +110,7 @@ const Payment = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        `${apiUrOrder}/order`,
+        `${apiUrlOrder}/order`,
         {
           products: cartData.map((prod) => ({
             id: prod.id,
@@ -166,6 +166,39 @@ const Payment = () => {
     }
   };
 
+  const handleVNPay = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${apiUrlOrder}/createUrl`,
+        {
+          products: cartData.map((prod) => ({
+            id: prod.id,
+            img: prod.images,
+            name: prod.info.name,
+            count: prod.quantity,
+          })),
+          note: note,
+          address: selectedAddress,
+          coupon: "",
+          paymentMethod: "VNPay",
+          orderBy: user?._id,
+          bankCode: "NCB",
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      router.push(res.data.paymentUrl);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -196,6 +229,7 @@ const Payment = () => {
             totalAmount={totalAmount}
             handlePayPal={handlePayPal}
             handlePayOCD={handlePayOCD}
+            handleVNPay={handleVNPay}
           />
         </Grid>
       </Grid>

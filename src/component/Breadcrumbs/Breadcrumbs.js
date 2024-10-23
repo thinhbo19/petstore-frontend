@@ -13,6 +13,8 @@ const BreadcrumbsComponent = () => {
     return null;
   } else if (pathName.startsWith("/payment")) {
     return null;
+  } else if (pathName.startsWith("/order-detail")) {
+    return null;
   }
 
   const breadcrumbsLinks = pathName
