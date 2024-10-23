@@ -11,7 +11,11 @@ import Pay from "../Pay/Pay";
 import Image from "next/image";
 import VNPayImg from "../../../public/VNpay.png";
 
-const PaymentMethodSection = ({ totalAmount, handleThanhToanPayPal }) => {
+const PaymentMethodSection = ({
+  totalAmount,
+  handleThanhToanPayPal,
+  handlePayOCD,
+}) => {
   const [cashOnDelivery, setCashOnDelivery] = useState(false);
   const [onlinePayment, setOnlinePayment] = useState(false);
 
@@ -56,7 +60,13 @@ const PaymentMethodSection = ({ totalAmount, handleThanhToanPayPal }) => {
       />
 
       {cashOnDelivery && (
-        <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+        <Button
+          onClick={() => handlePayOCD()}
+          variant="contained"
+          color="primary"
+          fullWidth
+          sx={{ mt: 2 }}
+        >
           Payment upon receipt
         </Button>
       )}

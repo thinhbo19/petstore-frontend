@@ -46,7 +46,8 @@ const Payment = () => {
     fetchAddresses();
   }, []);
 
-  const handleThanhToanPayPal = async () => {
+  const handlePayPal = async () => {
+    setLoading(true);
     try {
       const res = await axios.post(
         `${apiUrOrder}/order`,
@@ -70,8 +71,8 @@ const Payment = () => {
         }
       );
       if (res.data.success) {
-        if (cartUser > 0) {
-          for (const product of cartData) {
+        for (const product of cartData) {
+          if (cartUser.length !== 0) {
             await axios.delete(`${apiUrlUser}/allOneCart`, {
               data: {
                 id: product.id,
@@ -100,6 +101,68 @@ const Payment = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePayOCD = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${apiUrOrder}/order`,
+        {
+          products: cartData.map((prod) => ({
+            id: prod.id,
+            img: prod.images,
+            name: prod.info.name,
+            count: prod.quantity,
+          })),
+          note: note,
+          address: selectedAddress,
+          coupon: "",
+          paymentMethod: "PaymentDelivery",
+          orderBy: user?._id,
+        },
+        {
+          headers: {
+            token: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      if (res.data.success) {
+        for (const product of cartData) {
+          if (cartUser.length !== 0) {
+            await axios.delete(`${apiUrlUser}/allOneCart`, {
+              data: {
+                id: product.id,
+                userID: user?._id,
+              },
+            });
+            dispatch(removeCart(product.id));
+          }
+        }
+
+        Swal.fire({
+          title: "Successfully!",
+          text: "You have successfully placed your order.!",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        }).then(() => {
+          router.push(`/order-detail/${res.data.data._id}`);
+        });
+      } else {
+        Swal.fire({
+          title: "ĐẶT HÀNG THẤT BẠI",
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -131,7 +194,8 @@ const Payment = () => {
           <VoucherSection />
           <PaymentMethodSection
             totalAmount={totalAmount}
-            handleThanhToanPayPal={handleThanhToanPayPal}
+            handlePayPal={handlePayPal}
+            handlePayOCD={handlePayOCD}
           />
         </Grid>
       </Grid>

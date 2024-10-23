@@ -42,7 +42,7 @@ const ProductList = ({ products, setTotalAmount }) => {
             Product List
           </Typography>
           {products.map((product) => (
-            <Box key={product._id} sx={{ display: "flex", marginBottom: 2 }}>
+            <Box key={product.id} sx={{ display: "flex", marginBottom: 2 }}>
               <Image
                 src={product.images}
                 alt={product.info.name}
