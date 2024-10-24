@@ -52,15 +52,14 @@ export default function OrderHistoryPage() {
 
   const handlePageChange = (event, value) => {
     setPage(value);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <Box
       sx={{
-        padding: { xs: "1rem", md: "2rem" },
-        maxWidth: "100%",
-        margin: "auto",
-        textAlign: "center",
+        padding: { xs: "0", md: "2rem" },
+        marginLeft: "15px",
       }}
     >
       {/* ButtonGroup for filters */}
