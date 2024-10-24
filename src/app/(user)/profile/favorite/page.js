@@ -38,24 +38,19 @@ export default function FavoritesPage() {
   const favoritesData = [...favoritesPetsData, ...favoritesProductData];
   const [favorites, setFavorites] = useState([]);
 
-  // State to manage current page
   const [page, setPage] = useState(1);
-  const itemsPerPage = 4; // Number of items per page
+  const itemsPerPage = 4;
 
-  // Calculate total pages
   const totalPages = Math.ceil(favoritesData.length / itemsPerPage);
 
-  // Get items for current page
   const currentItems = favoritesData
     .slice((page - 1) * itemsPerPage, page * itemsPerPage)
     .reverse();
 
-  // Handle page change
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
 
-  // Handle remove favorite
   const handleRemoveFavorite = async (petData) => {
     if (!accessToken) {
       Swal.fire({
