@@ -18,10 +18,16 @@ import {
   Divider,
   ListItemAvatar,
   Avatar,
+  Button,
 } from "@mui/material";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../styles/toast.css";
+import axios from "axios";
+import { apiUrlOrder } from "@/src/services/config";
 
 const OrderDetail = ({ orderId }) => {
   const accessToken = useSelector(selectAccessToken);
@@ -62,6 +68,44 @@ const OrderDetail = ({ orderId }) => {
       fetchData();
     }
   }, [accessToken]);
+
+  const handleChangeStatus = async (status) => {
+    setLoading(true);
+    try {
+      await axios.patch(
+        `${apiUrlOrder}/update/${orderDetail?._id}`,
+        {
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      fetchData();
+      toast.success(`${status} successfully`);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getChipColor = (status) => {
+    switch (status) {
+      case "Processing":
+        return "blue";
+      case "Cancelled":
+        return "red";
+      case "Shipping":
+        return "#FB5631";
+      case "Successfully":
+        return "green";
+      default:
+        return "default";
+    }
+  };
 
   if (accessToken === null) {
     Swal.fire({
@@ -124,13 +168,32 @@ const OrderDetail = ({ orderId }) => {
         marginBottom: "5rem",
       }}
     >
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="custom-toast-container"
+      />
       <Typography variant="h4" gutterBottom>
         Order Details
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
           <Paper elevation={3} sx={{ p: 2, height: "100%" }}>
-            <Typography sx={{ fontWeight: "bold" }} variant="h6" gutterBottom>
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                textAlign: { xs: "center", md: "left" },
+              }}
+              variant="h6"
+              gutterBottom
+            >
               Product List
             </Typography>
             <List>
@@ -159,21 +222,21 @@ const OrderDetail = ({ orderId }) => {
                           >
                             Quantity: {product.count}
                           </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: "red",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {(product.count * product.price).toLocaleString(
+                              "vi-VN"
+                            )}{" "}
+                            VNĐ
+                          </Typography>
                         </React.Fragment>
                       }
                     />
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: "red",
-                        minWidth: "80px",
-                        textAlign: "center",
-                        alignSelf: "center",
-                      }}
-                    >
-                      {(product.count * product.price).toLocaleString("vi-VN")}{" "}
-                      VNĐ
-                    </Typography>
                   </ListItem>
                   {index < orderDetail.products.length - 1 && (
                     <Divider variant="inset" component="li" />
@@ -192,10 +255,9 @@ const OrderDetail = ({ orderId }) => {
                   fontWeight: "bold",
                 }}
               >
-                Total:{" "}
+                Total:
                 <Typography
-                  sx={{ fontWeight: "bold", color: "red" }}
-                  variant="subtitle1"
+                  sx={{ fontWeight: "bold", color: "red", marginLeft: "5px" }}
                 >
                   {orderDetail.totalPrice?.toLocaleString("vi-VN") || "N/A"} VND
                 </Typography>
@@ -207,40 +269,104 @@ const OrderDetail = ({ orderId }) => {
         {/* Responsive Grid cho thông tin hóa đơn */}
         <Grid item xs={12} md={6}>
           <Paper elevation={3} sx={{ p: 3, height: "100%" }}>
-            <Typography sx={{ fontWeight: "bold" }} variant="h6" gutterBottom>
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                textAlign: { xs: "center", md: "left" },
+              }}
+              variant="h6"
+              gutterBottom
+            >
               Order Information
             </Typography>
             <Grid container spacing={2}>
+              {[
+                { title: "Order ID", value: orderDetail._id },
+                { title: "Customer", value: orderDetail.OrderBy.username },
+                {
+                  title: "Contact",
+                  value: `${orderDetail.OrderBy.mobile} - ${orderDetail.OrderBy.email}`,
+                },
+                { title: "Address", value: orderDetail.address },
+                {
+                  title: "Date",
+                  value: new Date(orderDetail.createdAt).toLocaleDateString(),
+                },
+                {
+                  title: "Status",
+                  value: (
+                    <Chip
+                      label={orderDetail.status}
+                      sx={{
+                        backgroundColor: getChipColor(orderDetail.status),
+                        color: "white",
+                      }}
+                    />
+                  ),
+                },
+              ].map((info, index) => (
+                <Grid item xs={12} key={index}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        {info.title}:
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Typography
+                        variant="subtitle1"
+                        sx={{
+                          wordBreak: "break-word",
+                          overflowWrap: "break-word",
+                        }}
+                      >
+                        {info.value}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              ))}
+
               <Grid item xs={12}>
-                <Typography variant="subtitle1">
-                  Order ID: {orderDetail._id}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">
-                  Customer: {orderDetail.OrderBy.username}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">
-                  Contact: {orderDetail.OrderBy.mobile} -{" "}
-                  {orderDetail.OrderBy.email}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">
-                  Address: {orderDetail.address}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">
-                  Date: {new Date(orderDetail.createdAt).toLocaleDateString()}
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="subtitle1">
-                  Status: <Chip label={orderDetail.status} color="primary" />
-                </Typography>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {orderDetail.status === "Processing" && (
+                    <Button
+                      variant="contained"
+                      color="error"
+                      sx={{ mt: 2 }}
+                      onClick={() => handleChangeStatus("Cancelled")}
+                    >
+                      Cancel Order
+                    </Button>
+                  )}
+
+                  {orderDetail.status === "Shipping" && (
+                    <Button
+                      variant="contained"
+                      color="success"
+                      sx={{ mt: 2 }}
+                      onClick={() => handleChangeStatus("Successfully")}
+                    >
+                      Package Received
+                    </Button>
+                  )}
+
+                  {orderDetail.status === "Successfully" && (
+                    <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                      Review
+                    </Button>
+                  )}
+                </Box>
               </Grid>
             </Grid>
           </Paper>
