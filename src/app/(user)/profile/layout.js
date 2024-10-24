@@ -6,6 +6,7 @@ export default function ProfileLayout({ children }) {
     <Box
       sx={{
         width: "100%",
+        marginBottom: "2rem",
       }}
     >
       <Grid container spacing={2}>
