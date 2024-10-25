@@ -75,10 +75,33 @@ export const getAllProduct = async () => {
   }
 };
 
+export const getSimpleProd = async () => {
+  try {
+    const prods = await getAllProduct();
+    const res = prods.map((prod) => ({
+      _id: prod._id,
+      rating: prod.rating,
+    }));
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getCurrentProduct = async (prodid) => {
   try {
     const res = await axios.get(`${apiUrlProduct}/current/${prodid}`);
     return res.data.existing;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};
+
+export const getProdOrPet = async (pid) => {
+  try {
+    const res = await axios.get(`${apiUrlProduct}/prodpets/${pid}`);
+    return res.data.data;
   } catch (error) {
     console.error("Error fetching species:", error);
     throw error;

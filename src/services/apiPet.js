@@ -57,6 +57,20 @@ export const getAllPets = async () => {
     throw error;
   }
 };
+
+export const getSimplePets = async () => {
+  try {
+    const pets = await getAllPets();
+    const res = pets.map((pet) => ({
+      _id: pet._id,
+      rating: pet.rating,
+    }));
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getCurrentPets = async (pid) => {
   try {
     const res = await axios.get(`${apiUrlPets}/current/${pid}`);
@@ -65,6 +79,7 @@ export const getCurrentPets = async (pid) => {
     throw error;
   }
 };
+
 export const getCurrentPetsByName = async (name) => {
   try {
     const res = await axios.get(`${apiUrlPets}/currentPet/${name}`);
