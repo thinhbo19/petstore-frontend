@@ -157,6 +157,63 @@ const OrderAdminComp = () => {
     }
   };
 
+  const handleConfirmAll = async () => {
+    const processingOrders = dataList.filter(
+      (item) => item.status === "Processing"
+    );
+
+    if (processingOrders.length === 0) {
+      Swal.fire("Warning", "No processing orders to confirm.", "warning");
+      return;
+    }
+
+    const confirmation = await Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to confirm all processing orders!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, confirm them!",
+    });
+
+    if (confirmation.isConfirmed) {
+      setLoading(true);
+      try {
+        await Promise.all(
+          processingOrders.map((order) =>
+            axios.patch(
+              `${apiUrlOrder}/update/${order._id}`,
+              {
+                status: "Shipping",
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              }
+            )
+          )
+        );
+        Swal.fire(
+          "Success",
+          "All processing orders confirmed successfully!",
+          "success"
+        );
+        fetchData();
+      } catch (error) {
+        console.log(error);
+        Swal.fire(
+          "Error",
+          "Failed to confirm orders. Please try again.",
+          "error"
+        );
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const filteredDataList = dataList.filter((item) => {
     const matchesSearchTerm =
       item._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -210,6 +267,7 @@ const OrderAdminComp = () => {
         onDeleteAll={handleDeleteAll}
         selectedStatus={selectedStatus}
         onStatusChange={handleStatusChange}
+        handleConfirmAll={handleConfirmAll}
       />
       <TableData
         dataList={paginatedDataList}

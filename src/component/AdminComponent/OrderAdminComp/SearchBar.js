@@ -5,6 +5,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Button,
 } from "@mui/material";
 import ActionButtons from "./ActionButtons";
 
@@ -15,6 +16,7 @@ const SearchBar = ({
   onDeleteAll,
   selectedStatus,
   onStatusChange,
+  handleConfirmAll,
 }) => (
   <div style={{ marginBottom: "20px", display: "flex", alignItems: "center" }}>
     <TextField
@@ -24,6 +26,15 @@ const SearchBar = ({
       onChange={onSearchChange}
       style={{ marginRight: "10px" }}
     />
+
+    <Button
+      variant="contained"
+      color="success"
+      onClick={handleConfirmAll}
+      style={{ marginRight: "20px" }}
+    >
+      Confirm All Processing Orders
+    </Button>
 
     <FormControl
       variant="outlined"
