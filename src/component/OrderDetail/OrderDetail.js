@@ -19,6 +19,7 @@ import {
   ListItemAvatar,
   Avatar,
   Button,
+  Modal,
 } from "@mui/material";
 import Image from "next/image";
 import Swal from "sweetalert2";
@@ -27,17 +28,32 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/toast.css";
 import axios from "axios";
-import { apiUrlOrder } from "@/src/services/config";
+import { apiUrlOrder, apiUrlPets, apiUrlProduct } from "@/src/services/config";
+import { getSimplePets } from "@/src/services/apiPet";
+import { getProdOrPet, getSimpleProd } from "@/src/services/apiProduct";
+import RatingForm from "../RatingForm/RatingForm";
 
 const OrderDetail = ({ orderId }) => {
   const accessToken = useSelector(selectAccessToken);
   const [orderDetail, setOrderDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [ratings, setRatings] = useState([]);
   const cartUser = useSelector(selectCart);
   const dispatch = useDispatch();
   const router = useRouter();
+  const userID = orderDetail?.OrderBy._id;
+  const [isRatingFormOpen, setIsRatingFormOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
+  const handleOpenRatingForm = (id) => {
+    setIsRatingFormOpen(true);
+    setSelectedProductId(id);
+  };
+  const handleCloseRatingForm = () => {
+    setIsRatingFormOpen(false);
+    setSelectedProductId(null);
+  };
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -55,6 +71,12 @@ const OrderDetail = ({ orderId }) => {
           dispatch(removeCart(matchingProduct.id));
         }
       }
+
+      const resPet = await getSimplePets();
+      const resProd = await getSimpleProd();
+
+      const resRating = [...resPet, ...resProd];
+      setRatings(resRating);
     } catch (error) {
       console.error(error);
       setError("Failed to fetch order details. Please try again later.");
@@ -100,10 +122,59 @@ const OrderDetail = ({ orderId }) => {
         return "red";
       case "Shipping":
         return "#FB5631";
-      case "Successfully":
+      case "Success":
         return "green";
       default:
         return "default";
+    }
+  };
+
+  const handleRatingSubmit = async (star, comment, feedback_img) => {
+    try {
+      const formData = new FormData();
+      formData.append("star", star);
+      formData.append("comment", comment);
+      formData.append("postBy", userID);
+      feedback_img.forEach((image) => formData.append("feedback_img", image));
+
+      if (!star || !comment) {
+        toast.error(`No stars entered or comments missing`);
+        return;
+      }
+
+      const res = await getProdOrPet(selectedProductId);
+      if (res === "Pet") {
+        await axios.post(
+          `${apiUrlPets}/rating/${selectedProductId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        toast.success(`Review successfully`);
+      } else if (res === "Prod") {
+        await axios.post(
+          `${apiUrlProduct}/rating/${selectedProductId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        toast.success(`Review successfully`);
+      } else {
+        console.error(
+          "Error fetching data: Invalid response from getProdOrPet"
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Error fetching data:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
@@ -158,7 +229,6 @@ const OrderDetail = ({ orderId }) => {
       </Box>
     );
   }
-
   return (
     <Box
       sx={{
@@ -197,52 +267,96 @@ const OrderDetail = ({ orderId }) => {
               Product List
             </Typography>
             <List>
-              {orderDetail.products.map((product, index) => (
-                <React.Fragment key={product.id}>
-                  <ListItem alignItems="flex-start">
-                    <ListItemAvatar>
-                      <Avatar variant="rounded">
-                        <Image
-                          src={product.img || "/placeholder.svg"}
-                          alt={product.name}
-                          width={50}
-                          height={50}
-                          objectFit="cover"
-                        />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={product.name}
-                      secondary={
-                        <React.Fragment>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="text.primary"
+              {orderDetail.products.map((product, index) => {
+                const userHasReviewed =
+                  ratings.length > 0 &&
+                  ratings.some(
+                    (rating) =>
+                      rating._id === product.id &&
+                      rating.rating.some(
+                        (r) => r.postBy === orderDetail.OrderBy._id
+                      )
+                  );
+
+                return (
+                  <React.Fragment key={product.id}>
+                    <ListItem
+                      alignItems="flex-start"
+                      sx={{
+                        flexDirection: { xs: "column", sm: "row" },
+                      }}
+                    >
+                      <ListItemAvatar
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Avatar variant="rounded">
+                          <Image
+                            src={product.img || "/placeholder.svg"}
+                            alt={product.name}
+                            width={50}
+                            height={50}
+                            objectFit="cover"
+                          />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={product.name}
+                        secondary={
+                          <React.Fragment>
+                            <Typography
+                              component="span"
+                              variant="body2"
+                              color="text.primary"
+                            >
+                              Quantity: {product.count}
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "red",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {(product.count * product.price).toLocaleString(
+                                "vi-VN"
+                              )}{" "}
+                              VNĐ
+                            </Typography>
+                          </React.Fragment>
+                        }
+                      />
+                      <Box
+                        sx={{
+                          width: { xs: "100%", sm: "auto" },
+                          flexShrink: 0,
+                          mt: { xs: 1, sm: 0 },
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        {orderDetail.status === "Success" && (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => handleOpenRatingForm(product.id)}
                           >
-                            Quantity: {product.count}
-                          </Typography>
-                          <Typography
-                            variant="body2"
-                            sx={{
-                              color: "red",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {(product.count * product.price).toLocaleString(
-                              "vi-VN"
-                            )}{" "}
-                            VNĐ
-                          </Typography>
-                        </React.Fragment>
-                      }
-                    />
-                  </ListItem>
-                  {index < orderDetail.products.length - 1 && (
-                    <Divider variant="inset" component="li" />
-                  )}
-                </React.Fragment>
-              ))}
+                            {userHasReviewed ? "Change Rating" : "Rating"}
+                          </Button>
+                        )}
+                      </Box>
+                    </ListItem>
+
+                    {index < orderDetail.products.length - 1 && (
+                      <Divider variant="inset" component="li" />
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </List>
             <Divider sx={{ my: 2 }} />
             <Box display="flex" justifyContent="right" alignItems="flex-end">
@@ -286,6 +400,10 @@ const OrderDetail = ({ orderId }) => {
                 {
                   title: "Contact",
                   value: `${orderDetail.OrderBy.mobile} - ${orderDetail.OrderBy.email}`,
+                },
+                {
+                  title: "Note",
+                  value: `${orderDetail.Note}`,
                 },
                 { title: "Address", value: orderDetail.address },
                 {
@@ -355,15 +473,9 @@ const OrderDetail = ({ orderId }) => {
                       variant="contained"
                       color="success"
                       sx={{ mt: 2 }}
-                      onClick={() => handleChangeStatus("Successfully")}
+                      onClick={() => handleChangeStatus("Success")}
                     >
                       Package Received
-                    </Button>
-                  )}
-
-                  {orderDetail.status === "Successfully" && (
-                    <Button variant="contained" color="primary" sx={{ mt: 2 }}>
-                      Review
                     </Button>
                   )}
                 </Box>
@@ -372,6 +484,23 @@ const OrderDetail = ({ orderId }) => {
           </Paper>
         </Grid>
       </Grid>
+
+      <Modal open={isRatingFormOpen} onClose={handleCloseRatingForm}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            outline: "none",
+          }}
+        >
+          <RatingForm
+            onSubmit={handleRatingSubmit}
+            onClose={handleCloseRatingForm}
+          />
+        </Box>
+      </Modal>
     </Box>
   );
 };
