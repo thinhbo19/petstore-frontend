@@ -1,6 +1,20 @@
 import axios from "axios";
 import { apiUrlOrder } from "./config";
 
+export const getAllOrders = async (accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlOrder}/`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.data;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};
+
 export const getAllOrderUser = async (userID, accessToken) => {
   try {
     const res = await axios.get(`${apiUrlOrder}/user/${userID}`, {

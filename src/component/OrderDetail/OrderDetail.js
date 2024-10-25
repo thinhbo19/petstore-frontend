@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/toast.css";
@@ -45,6 +45,7 @@ const OrderDetail = ({ orderId }) => {
   const userID = orderDetail?.OrderBy._id;
   const [isRatingFormOpen, setIsRatingFormOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const pathName = usePathname();
 
   const handleOpenRatingForm = (id) => {
     setIsRatingFormOpen(true);
@@ -339,15 +340,16 @@ const OrderDetail = ({ orderId }) => {
                           alignItems: "center",
                         }}
                       >
-                        {orderDetail.status === "Success" && (
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => handleOpenRatingForm(product.id)}
-                          >
-                            {userHasReviewed ? "Change Rating" : "Rating"}
-                          </Button>
-                        )}
+                        {orderDetail.status === "Success" &&
+                          pathName !== `/dashboard/order/${orderId}` && (
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() => handleOpenRatingForm(product.id)}
+                            >
+                              {userHasReviewed ? "Change Rating" : "Rating"}
+                            </Button>
+                          )}
                       </Box>
                     </ListItem>
 
@@ -457,27 +459,29 @@ const OrderDetail = ({ orderId }) => {
                     alignItems: "center",
                   }}
                 >
-                  {orderDetail.status === "Processing" && (
-                    <Button
-                      variant="contained"
-                      color="error"
-                      sx={{ mt: 2 }}
-                      onClick={() => handleChangeStatus("Cancelled")}
-                    >
-                      Cancel Order
-                    </Button>
-                  )}
+                  {orderDetail.status === "Processing" &&
+                    pathName !== `/dashboard/order/${orderId}` && (
+                      <Button
+                        variant="contained"
+                        color="error"
+                        sx={{ mt: 2 }}
+                        onClick={() => handleChangeStatus("Cancelled")}
+                      >
+                        Cancel Order
+                      </Button>
+                    )}
 
-                  {orderDetail.status === "Shipping" && (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      sx={{ mt: 2 }}
-                      onClick={() => handleChangeStatus("Success")}
-                    >
-                      Package Received
-                    </Button>
-                  )}
+                  {orderDetail.status === "Shipping" &&
+                    pathName !== `/dashboard/order/${orderId}` && (
+                      <Button
+                        variant="contained"
+                        color="success"
+                        sx={{ mt: 2 }}
+                        onClick={() => handleChangeStatus("Success")}
+                      >
+                        Package Received
+                      </Button>
+                    )}
                 </Box>
               </Grid>
             </Grid>

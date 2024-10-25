@@ -1,7 +1,7 @@
 import NewsAdminComp from "@/src/component/AdminComponent/NewsComponent/NewsAdminComp";
 
-const PetsAdminPage = async () => {
+const NewsAdminPage = async () => {
   return <NewsAdminComp />;
 };
 
-export default PetsAdminPage;
+export default NewsAdminPage;
