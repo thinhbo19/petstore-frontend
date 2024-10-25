@@ -335,7 +335,7 @@ const OrderDetail = ({ orderId }) => {
                           flexShrink: 0,
                           mt: { xs: 1, sm: 0 },
                           display: "flex",
-                          justifyContent: "center",
+                          justifyContent: "flex-end",
                           alignItems: "center",
                         }}
                       >
