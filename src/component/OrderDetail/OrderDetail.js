@@ -46,7 +46,7 @@ const OrderDetail = ({ orderId }) => {
   const [isRatingFormOpen, setIsRatingFormOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const pathName = usePathname();
-  console.log(orderDetail);
+
   const handleOpenRatingForm = (id) => {
     setIsRatingFormOpen(true);
     setSelectedProductId(id);

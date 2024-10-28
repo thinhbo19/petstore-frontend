@@ -229,6 +229,19 @@ const Payment = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
@@ -249,16 +262,14 @@ const Payment = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <NoteSection note={note} setNote={setNote} />
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <AddressSection
-              user={user}
-              addresses={addresses}
-              selectedAddress={selectedAddress}
-              setSelectedAddress={setSelectedAddress}
-            />
-          )}
+
+          <AddressSection
+            user={user}
+            addresses={addresses}
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+          />
+
           <VoucherSection
             vouchers={vouchers}
             selectedVoucher={selectedVoucher}
