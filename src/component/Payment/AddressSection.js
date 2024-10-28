@@ -27,7 +27,7 @@ const AddressSection = ({
         <FormControl fullWidth>
           <InputLabel>Address</InputLabel>
           <Select
-            label="Địa Chỉ"
+            label="Address"
             value={selectedAddress}
             onChange={handleAddressChange}
           >
@@ -38,7 +38,7 @@ const AddressSection = ({
                 </MenuItem>
               ))
             ) : (
-              <MenuItem disabled>Không có địa chỉ nào</MenuItem>
+              <MenuItem disabled>You hasn't add address</MenuItem>
             )}
           </Select>
         </FormControl>

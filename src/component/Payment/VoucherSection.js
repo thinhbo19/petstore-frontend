@@ -8,17 +8,31 @@ import {
   MenuItem,
 } from "@mui/material";
 
-const VoucherSection = () => {
+const VoucherSection = ({ vouchers, selectedVoucher, setSelectedVoucher }) => {
+  const handleChange = (event) => {
+    setSelectedVoucher(event.target.value);
+  };
   return (
     <Paper elevation={3} sx={{ padding: 3, marginBottom: 3 }}>
       <Typography variant="h5" gutterBottom>
-        Chọn voucher
+        Select Voucher
       </Typography>
       <FormControl fullWidth>
         <InputLabel>Voucher</InputLabel>
-        <Select>
-          <MenuItem value={1}>Voucher 1</MenuItem>
-          <MenuItem value={2}>Voucher 2</MenuItem>
+        <Select
+          label="Vouchers"
+          value={selectedVoucher}
+          onChange={handleChange}
+        >
+          {vouchers.length > 0 ? (
+            vouchers.map((vou, index) => (
+              <MenuItem key={index} value={vou._id}>
+                {vou.nameVoucher}
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem disabled>You hasn't add voucher</MenuItem>
+          )}
         </Select>
       </FormControl>
     </Paper>

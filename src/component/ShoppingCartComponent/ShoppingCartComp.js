@@ -326,8 +326,11 @@ const CartPage = () => {
                 <Typography variant="h6">Total:</Typography>
               </Grid>
               <Grid item xs={6} sx={{ textAlign: "right" }}>
-                <Typography variant="h6">
-                  {(subtotal + subtotal * 0.1 + 50000).toFixed(0)} VNĐ
+                <Typography
+                  sx={{ color: "red", fontWeight: "bold" }}
+                  variant="h6"
+                >
+                  {subtotal} VNĐ
                 </Typography>
               </Grid>
             </Grid>

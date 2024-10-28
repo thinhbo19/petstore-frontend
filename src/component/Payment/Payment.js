@@ -6,7 +6,7 @@ import NoteSection from "./NoteSection";
 import AddressSection from "./AddressSection";
 import VoucherSection from "./VoucherSection";
 import PaymentMethodSection from "./PaymentMethodSection";
-import { getCurrentUser } from "@/src/services/apiUser";
+import { getCurrentUser, getVouchersUser } from "@/src/services/apiUser";
 import { useDispatch, useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
 import axios from "axios";
@@ -16,6 +16,7 @@ import { selectCart } from "@/src/services/Redux/CartSlice";
 import Swal from "sweetalert2";
 import { removeCart } from "@/src/services/Redux/CartSlice";
 import { useRouter } from "next/navigation";
+import { getCurrentVoucher } from "@/src/services/apiVocher";
 
 const Payment = () => {
   const cartUser = useSelector(selectCart);
@@ -23,7 +24,9 @@ const Payment = () => {
   const [user, setUser] = useState(null);
   const [note, setNote] = useState("");
   const [addresses, setAddresses] = useState([]);
+  const [vouchers, setVouchers] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState("");
+  const [selectedVoucher, setSelectedVoucher] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
   const [loading, setLoading] = useState(true);
   const accessToken = useSelector(selectAccessToken);
@@ -34,6 +37,8 @@ const Payment = () => {
     const fetchAddresses = async () => {
       try {
         const response = await getCurrentUser(accessToken);
+        const res = await getVouchersUser(accessToken);
+        setVouchers(res);
         setUser(response);
         setAddresses(response.Address);
         setLoading(false);
@@ -45,6 +50,28 @@ const Payment = () => {
 
     fetchAddresses();
   }, []);
+
+  useEffect(() => {
+    const fetchTotalPrice = async () => {
+      try {
+        let totalPrice = cartData.reduce(
+          (total, product) => total + product.newPrice,
+          0
+        );
+        if (selectedVoucher) {
+          const voucher = await getCurrentVoucher(selectedVoucher);
+          const discount = voucher.discount;
+          const lastTotal = totalPrice - (totalPrice * discount) / 100;
+          setTotalAmount(lastTotal);
+        } else {
+          setTotalAmount(totalPrice);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchTotalPrice();
+  }, [selectedVoucher]);
 
   const handlePayPal = async () => {
     setLoading(true);
@@ -61,7 +88,7 @@ const Payment = () => {
           })),
           note: note,
           address: selectedAddress,
-          coupon: "",
+          coupon: selectedVoucher,
           paymentMethod: "PayPal",
           orderBy: user?._id,
         },
@@ -106,7 +133,6 @@ const Payment = () => {
       setLoading(false);
     }
   };
-
   const handlePayOCD = async () => {
     setLoading(true);
     try {
@@ -122,7 +148,7 @@ const Payment = () => {
           })),
           note: note,
           address: selectedAddress,
-          coupon: "",
+          coupon: selectedVoucher,
           paymentMethod: "PaymentDelivery",
           orderBy: user?._id,
         },
@@ -167,7 +193,6 @@ const Payment = () => {
       setLoading(false);
     }
   };
-
   const handleVNPay = async () => {
     setLoading(true);
     try {
@@ -183,7 +208,7 @@ const Payment = () => {
           })),
           note: note,
           address: selectedAddress,
-          coupon: "",
+          coupon: selectedVoucher,
           paymentMethod: "VNPay",
           orderBy: user?._id,
           bankCode: "NCB",
@@ -213,7 +238,11 @@ const Payment = () => {
     >
       <Grid container spacing={4} sx={{ width: "95%" }}>
         <Grid item xs={12} md={6}>
-          <ProductList products={cartData} setTotalAmount={setTotalAmount} />
+          <ProductList
+            products={cartData}
+            totalPrice={totalAmount}
+            setTotalAmount={setTotalAmount}
+          />
         </Grid>
         <Grid item xs={12} md={6}>
           <NoteSection note={note} setNote={setNote} />
@@ -227,7 +256,11 @@ const Payment = () => {
               setSelectedAddress={setSelectedAddress}
             />
           )}
-          <VoucherSection />
+          <VoucherSection
+            vouchers={vouchers}
+            selectedVoucher={selectedVoucher}
+            setSelectedVoucher={setSelectedVoucher}
+          />
           <PaymentMethodSection
             totalAmount={totalAmount}
             handlePayPal={handlePayPal}

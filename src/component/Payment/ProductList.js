@@ -4,11 +4,7 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import Image from "next/image";
 
-const ProductList = ({ products, setTotalAmount }) => {
-  const totalPrice = products.reduce(
-    (total, product) => total + product.newPrice,
-    0
-  );
+const ProductList = ({ products, totalPrice }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -24,7 +20,6 @@ const ProductList = ({ products, setTotalAmount }) => {
         router.push("/shop");
       });
     }
-    setTotalAmount(totalPrice);
   }, [products, router]);
 
   return (
@@ -56,14 +51,14 @@ const ProductList = ({ products, setTotalAmount }) => {
                   Quantity: {product.quantity}
                 </Typography>
                 <Typography variant="body2">
-                  Price: {product.info.price.toLocaleString()} VND
+                  Price: {product.info.price.toLocaleString("vi")} VND
                 </Typography>
               </Box>
             </Box>
           ))}
           <Box sx={{ marginTop: 3, textAlign: "right" }}>
             <Typography variant="h6" sx={{ color: "red", fontWeight: "bold" }}>
-              Total Price: {totalPrice} VND
+              Total Price: {totalPrice.toLocaleString("vi")} VND
             </Typography>
           </Box>
         </>

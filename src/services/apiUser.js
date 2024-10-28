@@ -107,3 +107,17 @@ export const getFavorites = async (accessToken) => {
     throw error;
   }
 };
+
+export const getVouchersUser = async (accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlUser}/vouchers`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.vouchers;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};
