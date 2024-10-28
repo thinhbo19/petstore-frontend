@@ -70,7 +70,7 @@ const LoginSignup = () => {
         } else if (response.data.userData.role === "Admin") {
           router.push("/dashboard");
         } else {
-          router.push("/CustomerMessages");
+          router.push("/staff");
         }
         Swal.fire({
           title: "Success!",
