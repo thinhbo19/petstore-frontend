@@ -320,13 +320,9 @@ const CartPage = () => {
           >
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Typography variant="body1">Subtotal:</Typography>
-              </Grid>
-              <Grid item xs={6} sx={{ textAlign: "right" }}>
-                <Typography variant="body1">{subtotal} VNĐ</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="h6">Total:</Typography>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  Total Price:
+                </Typography>
               </Grid>
               <Grid item xs={6} sx={{ textAlign: "right" }}>
                 <Typography
@@ -375,13 +371,9 @@ const CartPage = () => {
           >
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <Typography variant="body1">Subtotal:</Typography>
-              </Grid>
-              <Grid item xs={6} sx={{ textAlign: "right" }}>
-                <Typography variant="body1">{subtotal} VNĐ</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="h6">Total:</Typography>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  Total Price:
+                </Typography>
               </Grid>
               <Grid item xs={6} sx={{ textAlign: "right" }}>
                 <Typography

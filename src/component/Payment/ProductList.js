@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Typography, Paper, Grid } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import Image from "next/image";
 
-const ProductList = ({ products, totalPrice }) => {
+const ProductList = ({ subTotal, products, totalPrice }) => {
   const router = useRouter();
 
   useEffect(() => {
@@ -63,45 +63,80 @@ const ProductList = ({ products, totalPrice }) => {
               display: { xs: "none", sm: "block" },
             }}
           >
-            <Typography variant="h6" sx={{ color: "red", fontWeight: "bold" }}>
-              Total Price: {totalPrice.toLocaleString("vi")} VND
-            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography variant="body1">Subtotal:</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ textAlign: "right" }}>
+                <Typography variant="body1">
+                  {subTotal.toLocaleString("vi")} VNĐ
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1">Decrease:</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ textAlign: "right" }}>
+                <Typography variant="body1">
+                  {(subTotal - totalPrice).toLocaleString("vi")} VNĐ
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="h6">Total:</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ textAlign: "right" }}>
+                <Typography
+                  sx={{ color: "red", fontWeight: "bold" }}
+                  variant="h6"
+                >
+                  {totalPrice.toLocaleString("vi")} VNĐ
+                </Typography>
+              </Grid>
+            </Grid>
           </Box>
 
           <Paper
-            elevation={3}
+            elevation={2}
             sx={{
-              p: 2,
               position: "fixed",
               bottom: 0,
               left: 0,
               zIndex: 1000,
               margin: 0,
-              p: 2,
+              p: 1,
               boxSizing: "border-box",
               width: "100%",
               display: { xs: "block", sm: "none" },
             }}
           >
-            <Box
-              sx={{
-                marginTop: 3,
-                textAlign: "right",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                Total Price:
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{ color: "red", fontWeight: "bold" }}
-              >
-                {totalPrice.toLocaleString("vi")} VND
-              </Typography>
-            </Box>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography variant="body1">Subtotal:</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ textAlign: "right" }}>
+                <Typography variant="body1">
+                  {subTotal.toLocaleString("vi")} VNĐ
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1">Decrease:</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ textAlign: "right" }}>
+                <Typography variant="body1">
+                  {(subTotal - totalPrice).toLocaleString("vi")} VNĐ
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="h6">Total:</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ textAlign: "right" }}>
+                <Typography
+                  sx={{ color: "red", fontWeight: "bold" }}
+                  variant="h6"
+                >
+                  {totalPrice.toLocaleString("vi")} VNĐ
+                </Typography>
+              </Grid>
+            </Grid>
           </Paper>
         </>
       )}

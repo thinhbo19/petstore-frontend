@@ -28,6 +28,7 @@ const Payment = () => {
   const [selectedAddress, setSelectedAddress] = useState("");
   const [selectedVoucher, setSelectedVoucher] = useState("");
   const [totalAmount, setTotalAmount] = useState(0);
+  const [subTotal, setSubTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const accessToken = useSelector(selectAccessToken);
   const router = useRouter();
@@ -58,6 +59,7 @@ const Payment = () => {
           (total, product) => total + product.newPrice,
           0
         );
+        setSubTotal(totalPrice);
         if (selectedVoucher) {
           const voucher = await getCurrentVoucher(selectedVoucher);
           const discount = voucher.discount;
@@ -239,6 +241,7 @@ const Payment = () => {
       <Grid container spacing={4} sx={{ width: "95%" }}>
         <Grid item xs={12} md={6}>
           <ProductList
+            subTotal={subTotal}
             products={cartData}
             totalPrice={totalAmount}
             setTotalAmount={setTotalAmount}
