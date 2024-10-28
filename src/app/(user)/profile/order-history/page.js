@@ -152,7 +152,7 @@ export default function OrderHistoryPage() {
                       fontSize: { xs: "0.8rem", sm: "1rem", md: "1.2rem" },
                     }}
                   >
-                    Total Price: {order.totalPrice} VND
+                    Total Price: {order.totalPrice.toLocaleString("vi")} VNĐ
                   </Typography>
                   <Typography
                     sx={{

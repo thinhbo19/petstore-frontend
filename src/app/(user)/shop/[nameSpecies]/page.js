@@ -20,6 +20,7 @@ export default async function ShopSpeciesPage({ params }) {
   } else if (nameSpecies === "cat") {
     data = await getAllCat();
   }
+
   return (
     <BreedShopForm
       nameSpecies={nameSpecies}

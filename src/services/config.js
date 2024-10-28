@@ -13,3 +13,4 @@ export const apiUrlNews = `${backendUrl}/api/news`;
 export const apiUrlChat = `${backendUrl}/api/chat`;
 export const apiUrlMess = `${backendUrl}/api/mess`;
 export const apiUrlOrder = `${backendUrl}/api/order`;
+export const apiUrlVoucher = `${backendUrl}/api/voucher`;
