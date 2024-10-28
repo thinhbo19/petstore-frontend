@@ -19,7 +19,18 @@ const CartItem = ({
   handleSelect,
   isSelected,
 }) => (
-  <Paper sx={{ p: 2, mb: 2 }} elevation={3}>
+  <Paper
+    sx={{
+      p: 2,
+      mb: 2,
+      background: "rgba(255, 255, 255, 0.55)",
+      boxShadow: " 0 8px 32px 0 rgba( 31, 38, 135, 0.37 )",
+      backdropFilter: "blur(8.5px)",
+      WebkitBackdropFilter: "blur(8.5px)",
+      border: "1px solid rgba(255, 255, 255, 0.18)",
+    }}
+    elevation={3}
+  >
     <Grid container alignItems="center">
       <Grid item xs={2} sm={1}>
         <Checkbox

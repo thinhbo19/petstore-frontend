@@ -56,11 +56,53 @@ const ProductList = ({ products, totalPrice }) => {
               </Box>
             </Box>
           ))}
-          <Box sx={{ marginTop: 3, textAlign: "right" }}>
+          <Box
+            sx={{
+              marginTop: 3,
+              textAlign: "right",
+              display: { xs: "none", sm: "block" },
+            }}
+          >
             <Typography variant="h6" sx={{ color: "red", fontWeight: "bold" }}>
               Total Price: {totalPrice.toLocaleString("vi")} VND
             </Typography>
           </Box>
+
+          <Paper
+            elevation={3}
+            sx={{
+              p: 2,
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              zIndex: 1000,
+              margin: 0,
+              p: 2,
+              boxSizing: "border-box",
+              width: "100%",
+              display: { xs: "block", sm: "none" },
+            }}
+          >
+            <Box
+              sx={{
+                marginTop: 3,
+                textAlign: "right",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                Total Price:
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ color: "red", fontWeight: "bold" }}
+              >
+                {totalPrice.toLocaleString("vi")} VND
+              </Typography>
+            </Box>
+          </Paper>
         </>
       )}
     </Paper>

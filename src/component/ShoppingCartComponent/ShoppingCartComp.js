@@ -314,7 +314,10 @@ const CartPage = () => {
             ))}
           </Box>
 
-          <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
+          <Paper
+            elevation={3}
+            sx={{ p: 3, mt: 3, display: { xs: "none", sm: "block" } }}
+          >
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <Typography variant="body1">Subtotal:</Typography>
@@ -334,6 +337,7 @@ const CartPage = () => {
                 </Typography>
               </Grid>
             </Grid>
+
             <Box
               sx={{
                 width: "100%",
@@ -350,6 +354,61 @@ const CartPage = () => {
                   width: { xs: "100%", sm: "20%" },
                 }}
                 onClick={() => handlePayment()}
+              >
+                Payment
+              </Button>
+            </Box>
+          </Paper>
+          <Paper
+            elevation={3}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              position: "fixed",
+              bottom: 0,
+              left: 0,
+              zIndex: 1000,
+              margin: 0,
+              p: 2,
+              boxSizing: "border-box",
+              width: "100%",
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography variant="body1">Subtotal:</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ textAlign: "right" }}>
+                <Typography variant="body1">{subtotal} VNĐ</Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="h6">Total:</Typography>
+              </Grid>
+              <Grid item xs={6} sx={{ textAlign: "right" }}>
+                <Typography
+                  sx={{ color: "red", fontWeight: "bold" }}
+                  variant="h6"
+                >
+                  {subtotal} VNĐ
+                </Typography>
+              </Grid>
+            </Grid>
+
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 2,
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#F84C2F",
+                  width: "100%",
+                }}
+                onClick={handlePayment}
               >
                 Payment
               </Button>
