@@ -409,7 +409,7 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
                       align="center"
                       className="price"
                     >
-                      {pet.price}
+                      {pet.price.toLocaleString("vi")}
                     </Typography>
                   </CardContent>
                   <Box

@@ -108,7 +108,9 @@ const DrawerPet = ({
             aria-labelledby="price-slider"
           />
           <Typography>
-            {`Price from ${priceRange[0].toLocaleString()} to ${priceRange[1].toLocaleString()}`}
+            {`Price from ${priceRange[0].toLocaleString(
+              "vi"
+            )} to ${priceRange[1].toLocaleString("vi")}`}
           </Typography>
         </Box>
 

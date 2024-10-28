@@ -290,7 +290,7 @@ const CategoryComponent = ({ groupedProducts }) => {
                             }, // Responsive font size for price
                           }}
                         >
-                          Price: {product.price.toLocaleString()} VND
+                          Price: {product.price.toLocaleString("vi")} VND
                         </Typography>
                       </CardContent>
                     </Card>

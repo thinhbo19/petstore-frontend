@@ -337,7 +337,7 @@ const ProdReviews = ({ prodData, accessToken }) => {
             color="red"
             gutterBottom
           >
-            {prodData.price.toLocaleString()} đ
+            {prodData.price.toLocaleString("vi")} đ
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} md={10}>

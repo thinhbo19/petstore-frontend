@@ -107,7 +107,7 @@ const CartMenu = ({
                     color: "red",
                   }}
                 >
-                  {cart.info.price}đ
+                  {cart.info.price.toLocaleString("vi")}đ
                 </Typography>
               </Box>
             </Link>

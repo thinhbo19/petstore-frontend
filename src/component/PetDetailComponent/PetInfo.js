@@ -344,7 +344,7 @@ const PetInfo = ({ petData, accessToken }) => {
             color="red"
             gutterBottom
           >
-            {petData.price.toLocaleString()} đ
+            {petData.price.toLocaleString("vi")} đ
           </Typography>
 
           {/* table info */}

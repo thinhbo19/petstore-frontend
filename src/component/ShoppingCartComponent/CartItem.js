@@ -67,7 +67,7 @@ const CartItem = ({
             fontWeight: "bold",
           }}
         >
-          Price: {item.info.price} VNĐ
+          Price: {item.info.price.toLocaleString("vi")} VNĐ
         </Typography>
       </Grid>
       <Grid item xs={2} sm={3} sx={{ textAlign: "right" }}>
@@ -100,7 +100,7 @@ const CartItem = ({
           fontWeight: "bold",
         }}
       >
-        {item.newPrice} VNĐ
+        {item.newPrice.toLocaleString("vi")} VNĐ
       </Typography>
       <Box
         display="flex"

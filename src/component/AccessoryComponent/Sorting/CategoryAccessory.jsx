@@ -133,7 +133,7 @@ const CategoryAccessory = ({ data, isDrawerOpen, toggleDrawer }) => {
                       {formatString(product.nameProduct)}
                     </Typography>
                     <Typography sx={{ color: "red", fontWeight: "bold" }}>
-                      {product.price.toLocaleString()} VND
+                      {product.price.toLocaleString("vi")} VND
                     </Typography>
                   </Box>
                 ))}

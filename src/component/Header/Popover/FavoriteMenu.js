@@ -121,7 +121,7 @@ const FavoriteMenu = ({
                     fontWeight: "bold",
                   }}
                 >
-                  {favorite.price}đ
+                  {favorite.price.toLocaleString("vi")}đ
                 </Typography>
               </Box>
             </Link>

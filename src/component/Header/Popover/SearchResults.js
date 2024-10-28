@@ -93,7 +93,7 @@ const SearchResults = ({ results, handleChangePage }) => {
                 variant="body2"
                 color="text.secondary"
               >
-                {item.price} VNĐ
+                {item.price.toLocaleString("vi")} VNĐ
               </Typography>
             </Box>
           </Button>

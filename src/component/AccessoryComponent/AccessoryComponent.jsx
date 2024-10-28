@@ -304,7 +304,7 @@ const AccessoryComponent = ({ categoryData, groupedProducts }) => {
                         variant="body1"
                         color="red"
                       >
-                        {product.price.toLocaleString()} VND
+                        {product.price.toLocaleString("vi")} VND
                       </Typography>
                     </CardContent>
                   </Link>
