@@ -21,11 +21,15 @@ const AddData = ({
 }) => {
   const [name, setName] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [typeVoucher, setTypeVoucher] = useState("");
   const [exclusive, setExclusive] = useState(0);
   const [expiry, setExpiry] = useState(0);
 
   const handleChange = (event) => {
     setName(event.target.value);
+  };
+  const handleTypeVoucherChange = (event) => {
+    setTypeVoucher(event.target.value);
   };
   const handleDiscountChange = (event) => {
     setDiscount(event.target.value);
@@ -42,7 +46,7 @@ const AddData = ({
     try {
       await axios.post(
         `${apiUrlVoucher}/`,
-        { nameVoucher: name, discount, exclusive, expiry },
+        { nameVoucher: name, typeVoucher, discount, exclusive, expiry },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -52,6 +56,7 @@ const AddData = ({
       Swal.fire("Success", "Added successfully!", "success");
       fetchData();
       setName("");
+      setTypeVoucher("");
       setDiscount(0);
       setExclusive(0);
       setExpiry(0);
@@ -78,6 +83,17 @@ const AddData = ({
           variant="outlined"
           value={name}
           onChange={handleChange}
+        />
+        <TextField
+          autoFocus
+          margin="dense"
+          name="type"
+          label="Type"
+          type="text"
+          fullWidth
+          variant="outlined"
+          value={typeVoucher}
+          onChange={handleTypeVoucherChange}
         />
         <TextField
           margin="dense"

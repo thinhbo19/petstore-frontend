@@ -23,6 +23,7 @@ const EditData = ({
 }) => {
   const [name, setName] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [typeVoucher, setTypeVoucher] = useState("");
   const [exclusive, setExclusive] = useState(0);
   const [expiry, setExpiry] = useState(0);
 
@@ -31,6 +32,7 @@ const EditData = ({
       setName(editData.nameVoucher || "");
       setDiscount(editData.discount || 0);
       setExclusive(editData.exclusive || 0);
+      setTypeVoucher(editData.typeVoucher);
       const today = new Date();
       const expiryDate = new Date(editData.expiry);
       const timeDifference = expiryDate - today;
@@ -41,6 +43,9 @@ const EditData = ({
 
   const handleChange = (event) => {
     setName(event.target.value);
+  };
+  const handleTypeVoucherChange = (event) => {
+    setTypeVoucher(event.target.value);
   };
   const handleDiscountChange = (event) => {
     setDiscount(event.target.value);
@@ -59,6 +64,7 @@ const EditData = ({
         `${apiUrlVoucher}/${idEdit}`,
         {
           nameVoucher: name,
+          typeVoucher,
           discount,
           exclusive,
           expiry,
@@ -93,6 +99,17 @@ const EditData = ({
           variant="outlined"
           value={name}
           onChange={handleChange}
+        />
+        <TextField
+          autoFocus
+          margin="dense"
+          name="type"
+          label="Type"
+          type="text"
+          fullWidth
+          variant="outlined"
+          value={typeVoucher}
+          onChange={handleTypeVoucherChange}
         />
         <TextField
           margin="dense"
