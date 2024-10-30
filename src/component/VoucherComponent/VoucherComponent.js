@@ -1,183 +1,336 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Container,
   Box,
   Grid,
-  Card,
-  CardContent,
-  CardActions,
+  Paper,
   Typography,
   Button,
-  IconButton,
+  Container,
+  ThemeProvider,
+  createTheme,
+  CircularProgress,
 } from "@mui/material";
-import RedeemIcon from "@mui/icons-material/Redeem";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
-import { styled } from "@mui/system";
+import Image from "next/image";
+import VoucherIMG from "../../../public/Slider/Brown Minimalist Pet Shop Promotion Banner.png";
+import { getAllVouchers } from "@/src/services/apiVocher";
+import { formatDate } from "@/src/hooks/useFormatTime";
+import { useSelector } from "react-redux";
+import { selectAccessToken } from "@/src/services/Redux/useSlice";
+import { getVouchersUser } from "@/src/services/apiUser";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { apiUrlUser } from "@/src/services/config";
 
-// Data for vouchers
-const vouchers = [
-  {
-    id: 1,
-    title: "10% OFF on Electronics",
-    description: "Get 10% off on all electronics items.",
-    discount: "10%",
-    expiryDate: "Valid until: Dec 31, 2024",
-    backgroundColor: "#E0E0E0", // Soft gray
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#4A6741",
+    },
+    secondary: {
+      main: "#D4A373",
+    },
+    background: {
+      default: "#F5F5F5",
+      paper: "#FFFFFF",
+    },
+    text: {
+      primary: "#333333",
+      secondary: "#666666",
+    },
   },
-  {
-    id: 2,
-    title: "Buy 1 Get 1 Free on Accessories",
-    description: "Buy one, get one free on selected accessories.",
-    discount: "BOGO",
-    expiryDate: "Valid until: Nov 15, 2024",
-    backgroundColor: "#F5F5F5", // Lighter gray
-  },
-  {
-    id: 3,
-    title: "20% OFF on Fashion",
-    description: "Save 20% on all fashion items.",
-    discount: "20%",
-    expiryDate: "Valid until: Jan 5, 2025",
-    backgroundColor: "#F0F0F0", // Subtle gray
-  },
-];
-
-// Styled component for cleaner, toned-down cards
-const StyledCard = styled(Card)(({ bg }) => ({
-  backgroundColor: bg || "#FFF",
-  color: "#333",
-  borderRadius: "12px",
-  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-  "&:hover": {
-    transform: "translateY(-4px)",
-    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.15)",
-  },
-}));
-
-// Styled Button with subtle accents
-const StyledButton = styled(Button)({
-  background: "#1976D2", // Soft blue for primary action
-  borderRadius: 50,
-  border: 0,
-  color: "white",
-  height: 40,
-  padding: "0 24px",
-  boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-  "&:hover": {
-    background: "#1565C0", // Slightly darker on hover
+  typography: {
+    fontFamily: '"Poppins", "Roboto", "Helvetica", "Arial", sans-serif',
   },
 });
 
+const voucherTypeColors = {
+  Food: "#FF6B6B",
+  Toy: "#4ECDC4",
+  Accessory: "#45B7D1",
+  Medicine: "#98D8C8",
+  Service: "#FFBE0B",
+  Other: "#6B5B95",
+};
+
 const VoucherComponent = () => {
+  const accessToken = useSelector(selectAccessToken);
+  const [vouchersByType, setVouchersByType] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const allVouchers = await getAllVouchers();
+
+      if (accessToken) {
+        const userVoucherList = await getVouchersUser(accessToken);
+        const groupedVouchers = allVouchers.reduce((acc, voucher) => {
+          const isClaimed = userVoucherList.some(
+            (uv) => uv._id === voucher._id
+          );
+
+          if (!isClaimed) {
+            if (!acc[voucher.typeVoucher]) {
+              acc[voucher.typeVoucher] = [];
+            }
+            acc[voucher.typeVoucher].push(voucher);
+          }
+
+          return acc;
+        }, {});
+        setVouchersByType(groupedVouchers);
+      } else {
+        setVouchersByType(allVouchers);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [accessToken]);
+
+  const handleClaimVoucher = async (id) => {
+    setLoading(true);
+    if (!accessToken) {
+      Swal.fire({
+        title: "Error!",
+        text: "You have not login!",
+        icon: "warning",
+        showConfirmButton: false,
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await axios.put(
+        `${apiUrlUser}/add-voucher`,
+        { voucherId: id },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      toast.success("You have successfully obtained the voucher");
+      fetchData();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <Box
-      sx={{
-        backgroundColor: "#FAFAFA", // Light gray background
-        paddingTop: "40px",
-        paddingBottom: "40px",
-        minHeight: "100vh",
-      }}
-    >
-      <Container>
-        <Box
-          mt={4}
-          mb={4}
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ flexDirection: "column" }}
-        >
-          <Typography
-            variant="h4"
-            gutterBottom
+    <ThemeProvider theme={theme}>
+      <Box
+        sx={{
+          backgroundColor: "background.default",
+          padding: "6rem 0 2rem",
+          width: "100%",
+        }}
+      >
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          style={{ zIndex: "10000000 !important" }}
+        />
+        <Container maxWidth="lg">
+          <Paper
+            elevation={6}
             sx={{
-              fontWeight: "bold",
-              textAlign: "center",
-              color: "#333", // Soft dark for headings
+              borderRadius: "16px",
+              overflow: "hidden",
+              mb: 6,
+              position: "relative",
             }}
           >
-            Your Vouchers
-          </Typography>
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            gutterBottom
-            sx={{ color: "#666", textAlign: "center" }}
-          >
-            Redeem your exclusive offers below
-          </Typography>
-        </Box>
+            <Image
+              src={VoucherIMG}
+              alt="Pet Shop Promotion Banner"
+              style={{
+                width: "100%",
+                height: "auto",
+                objectFit: "cover",
+              }}
+              priority
+            />
+          </Paper>
 
-        <Grid container spacing={3}>
-          {vouchers.map((voucher) => (
-            <Grid item xs={12} sm={6} md={4} key={voucher.id}>
-              <StyledCard bg={voucher.backgroundColor}>
-                <CardContent>
-                  <Box display="flex" alignItems="center">
-                    <IconButton>
-                      <LocalOfferIcon
-                        sx={{ fontSize: "32px", color: "#555" }}
-                      />
-                    </IconButton>
-                    <Typography
-                      variant="h6"
+          {Object.entries(vouchersByType).map(([type, vouchers]) => (
+            <Box key={type} sx={{ mb: 9 }}>
+              <Typography
+                variant="h5"
+                component="h2"
+                gutterBottom
+                sx={{
+                  color: voucherTypeColors[type] || voucherTypeColors.Other,
+                  fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
+                }}
+              >
+                {type} Vouchers
+              </Typography>
+              <Grid container spacing={4}>
+                {vouchers.map((voucher) => (
+                  <Grid item xs={12} sm={6} md={4} key={voucher._id}>
+                    <Paper
+                      elevation={3}
                       sx={{
-                        fontWeight: "bold",
-                        marginBottom: "8px",
-                        marginLeft: "8px",
-                        color: "#333",
+                        p: { xs: 2, sm: 2.5, md: 3 },
+                        height: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        borderRadius: "12px",
+                        transition: "all 0.3s ease-in-out",
+                        borderTop: `4px solid ${
+                          voucherTypeColors[type] || voucherTypeColors.Other
+                        }`,
+                        "&:hover": {
+                          transform: "translateY(-5px)",
+                          boxShadow: "0 12px 20px rgba(0, 0, 0, 0.1)",
+                        },
                       }}
                     >
-                      {voucher.title}
-                    </Typography>
-                  </Box>
-
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ marginTop: "8px", color: "#666" }}
-                  >
-                    {voucher.description}
-                  </Typography>
-
-                  <Typography
-                    variant="h5"
-                    sx={{
-                      marginTop: "16px",
-                      fontWeight: "bold",
-                      color: "#1976D2", // Primary blue for discount highlight
-                    }}
-                  >
-                    {voucher.discount}
-                  </Typography>
-
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      marginTop: "8px",
-                      color: "#888",
-                    }}
-                  >
-                    {voucher.expiryDate}
-                  </Typography>
-                </CardContent>
-
-                <CardActions>
-                  <StyledButton
-                    variant="contained"
-                    startIcon={<RedeemIcon />}
-                    fullWidth
-                  >
-                    Redeem
-                  </StyledButton>
-                </CardActions>
-              </StyledCard>
-            </Grid>
+                      <Box>
+                        <Typography
+                          variant="h6"
+                          component="h3"
+                          gutterBottom
+                          color="primary"
+                          sx={{
+                            fontSize: {
+                              xs: "1rem",
+                              sm: "1.2rem",
+                              md: "1.5rem",
+                            },
+                          }}
+                        >
+                          {voucher.nameVoucher}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{
+                            fontSize: {
+                              xs: "0.8rem",
+                              sm: "0.9rem",
+                              md: "1rem",
+                            },
+                          }}
+                        >
+                          Value: <strong>{voucher.exclusive} VNĐ</strong>
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{
+                            fontSize: {
+                              xs: "0.8rem",
+                              sm: "0.9rem",
+                              md: "1rem",
+                            },
+                          }}
+                        >
+                          Expires: <strong>{formatDate(voucher.expiry)}</strong>
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          mt: 3,
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          component="p"
+                          sx={{
+                            color:
+                              voucherTypeColors[type] ||
+                              voucherTypeColors.Other,
+                            fontSize: {
+                              xs: "1rem",
+                              sm: "1.2rem",
+                              md: "1.5rem",
+                            },
+                          }}
+                          fontWeight="bold"
+                        >
+                          {voucher.discount}% OFF
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          onClick={() => handleClaimVoucher(voucher._id)}
+                          sx={{
+                            backgroundColor:
+                              voucherTypeColors[type] ||
+                              voucherTypeColors.Other,
+                            color: "white",
+                            borderRadius: "20px",
+                            textTransform: "none",
+                            fontWeight: "bold",
+                            fontSize: {
+                              xs: "0.8rem",
+                              sm: "1rem",
+                              md: "1.2rem",
+                            },
+                            padding: {
+                              xs: "6px 12px",
+                              sm: "8px 16px",
+                              md: "10px 20px",
+                            },
+                            boxShadow: `0 4px 6px ${
+                              voucherTypeColors[type] || voucherTypeColors.Other
+                            }33`,
+                            "&:hover": {
+                              backgroundColor:
+                                voucherTypeColors[type] ||
+                                voucherTypeColors.Other,
+                              boxShadow: `0 6px 8px ${
+                                voucherTypeColors[type] ||
+                                voucherTypeColors.Other
+                              }4D`,
+                            },
+                          }}
+                        >
+                          Claim Now
+                        </Button>
+                      </Box>
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
           ))}
-        </Grid>
-      </Container>
-    </Box>
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 };
 

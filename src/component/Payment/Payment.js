@@ -271,6 +271,7 @@ const Payment = () => {
           />
 
           <VoucherSection
+            subTotal={subTotal}
             vouchers={vouchers}
             selectedVoucher={selectedVoucher}
             setSelectedVoucher={setSelectedVoucher}
