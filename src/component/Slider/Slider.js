@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, IconButton, useTheme, useMediaQuery } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import Image from "next/image";
 import Slder1 from "../../../public/Slider/Slider1.jpg";
@@ -14,8 +8,8 @@ import Slder3 from "../../../public/Slider/Slider3.jpg";
 
 const BannerSlider = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Kiểm tra nếu là mobile
-  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md")); // Kiểm tra nếu là tablet
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   const banners = [
     {
@@ -45,7 +39,7 @@ const BannerSlider = () => {
         position: "relative",
         width: "100%",
         maxWidth: "1400px",
-        margin: "60px auto",
+        margin: "5rem auto 2rem auto",
         overflow: "hidden",
         height: { xs: "200px", sm: "400px", md: "500px", lg: "600px" },
       }}
@@ -67,7 +61,7 @@ const BannerSlider = () => {
           >
             <Image
               src={banner.imageUrl}
-              alt={banner.title}
+              alt="slider"
               style={{
                 width: "100%",
                 height: "100%",

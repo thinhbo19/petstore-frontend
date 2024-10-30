@@ -68,10 +68,9 @@ export default function Home({ dogs, cats, prods }) {
           backgroundColor: "#DAD6D6",
           borderRadius: "10px",
           padding: { xs: "10px", md: "20px" },
-          marginTop: "30px",
           width: { xs: "90%", sm: "80%", md: "70%" },
           maxWidth: "600px",
-          margin: "30px auto",
+          margin: "10px auto",
           textAlign: "center",
         }}
       >
@@ -99,7 +98,13 @@ export default function Home({ dogs, cats, prods }) {
       </Box>
 
       {/* Feature section */}
-      <Box sx={{ backgroundColor: "#F5F5F5", padding: "20px 0" }}>
+      <Box
+        sx={{
+          backgroundColor: "#F5F5F5",
+          padding: "20px 0",
+          marginTop: "30px",
+        }}
+      >
         <Grid container spacing={3} justifyContent="center">
           {features.map((feature, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
