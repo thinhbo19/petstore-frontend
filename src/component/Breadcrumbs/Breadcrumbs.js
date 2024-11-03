@@ -17,6 +17,8 @@ const BreadcrumbsComponent = () => {
     return null;
   } else if (pathName.startsWith("/voucher")) {
     return null;
+  } else if (pathName.startsWith("/spa-services")) {
+    return null;
   }
   const breadcrumbsLinks = pathName
     .split("/")
