@@ -39,6 +39,7 @@ const TableData = ({
           </TableCell>
           <TableCell>ID</TableCell>
           <TableCell>Name service</TableCell>
+          <TableCell>Type</TableCell>
           <TableCell>Price</TableCell>
           <TableCell>Action</TableCell>
         </TableRow>
@@ -54,7 +55,8 @@ const TableData = ({
             </TableCell>
             <TableCell>{index + 1 + page * rowsPerPage}</TableCell>
             <TableCell>{item.nameService}</TableCell>
-            <TableCell>{item.price}</TableCell>
+            <TableCell>{item.type}</TableCell>
+            <TableCell>{item.price.toLocaleString("vi")} VNĐ</TableCell>
             <TableCell>
               <IconButton color="primary" onClick={() => onEdit(item._id)}>
                 <EditIcon />

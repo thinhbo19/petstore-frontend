@@ -1,6 +1,6 @@
 // SearchBar.js
 import React from "react";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, ButtonGroup } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ActionButtons from "./ActionButtons";
 
@@ -10,6 +10,8 @@ const SearchBar = ({
   onAdd,
   selectedIds,
   onDeleteAll,
+  selectedType,
+  onSelectType,
 }) => (
   <div style={{ marginBottom: "20px", display: "flex", alignItems: "center" }}>
     <TextField
@@ -28,6 +30,23 @@ const SearchBar = ({
     >
       Add
     </Button>
+
+    <ButtonGroup style={{ marginLeft: "10px" }}>
+      <Button
+        variant={selectedType === "Spa" ? "contained" : "outlined"}
+        color="primary"
+        onClick={() => onSelectType("Spa")}
+      >
+        Spa
+      </Button>
+      <Button
+        variant={selectedType === "Hotel" ? "contained" : "outlined"}
+        color="primary"
+        onClick={() => onSelectType("Hotel")}
+      >
+        Hotel
+      </Button>
+    </ButtonGroup>
     <ActionButtons selectedIds={selectedIds} onDeleteAll={onDeleteAll} />
   </div>
 );

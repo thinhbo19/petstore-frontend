@@ -23,6 +23,7 @@ const ServiceAdminComp = () => {
   const [idEdit, setIdEdit] = useState(null);
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openAddDialogEdit, setOpenAddDialogEdit] = useState(false);
+  const [selectedType, setSelectedType] = useState("Spa");
 
   const fetchData = async () => {
     try {
@@ -56,6 +57,10 @@ const ServiceAdminComp = () => {
   };
   const handleCloseAddDialogEdit = () => {
     setOpenAddDialogEdit(false);
+  };
+
+  const handleSelectType = (type) => {
+    setSelectedType(type);
   };
 
   const handleDeleteAll = async () => {
@@ -138,9 +143,13 @@ const ServiceAdminComp = () => {
     setPage(0);
   };
 
-  const filteredDataList = dataList.filter((item) =>
-    item.nameService.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredDataList = dataList
+    .filter(
+      (item) =>
+        item.nameService.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.type.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((item) => item.type === selectedType);
 
   const paginatedDataList = filteredDataList.slice(
     page * rowsPerPage,
@@ -157,6 +166,8 @@ const ServiceAdminComp = () => {
         onAdd={handleAdd}
         selectedIds={selectedIds}
         onDeleteAll={handleDeleteAll}
+        selectedType={selectedType}
+        onSelectType={handleSelectType}
       />
       <TableData
         dataList={paginatedDataList}

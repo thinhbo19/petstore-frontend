@@ -6,6 +6,10 @@ import {
   DialogTitle,
   TextField,
   Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -21,6 +25,7 @@ const AddData = ({
   setLoading,
 }) => {
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
   const [price, setPrice] = useState("");
   const [htmlDescription, setHtmlDescription] = useState("");
   const editorRef = useRef(null);
@@ -28,7 +33,9 @@ const AddData = ({
   const handleChange = (event) => {
     setName(event.target.value);
   };
-
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
+  };
   const handleChangePrice = (event) => {
     setPrice(event.target.value);
   };
@@ -38,7 +45,7 @@ const AddData = ({
     try {
       await axios.post(
         `${apiUrlService}/`,
-        { nameService: name, price: price, description: htmlDescription },
+        { nameService: name, price: price, description: htmlDescription, type },
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -50,6 +57,7 @@ const AddData = ({
       setName("");
       setPrice("");
       setHtmlDescription("");
+      setType("");
       onClose();
     } catch (error) {
       console.log(error);
@@ -74,8 +82,14 @@ const AddData = ({
           value={name}
           onChange={handleChange}
         />
+        <FormControl fullWidth margin="dense" variant="outlined">
+          <InputLabel>Type</InputLabel>
+          <Select label="Type" value={type} onChange={handleTypeChange}>
+            <MenuItem value="Spa">Spa</MenuItem>
+            <MenuItem value="Hotel">Hotel</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
-          autoFocus
           margin="dense"
           name="price"
           label="Price"
