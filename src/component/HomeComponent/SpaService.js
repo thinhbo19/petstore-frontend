@@ -17,7 +17,7 @@ import {
 } from "../OverlayText/OverlayText";
 import SpaHotel, { Hotel, Spa } from "../Spa&Hotel/SpaHotel";
 
-const SpaService = () => {
+const SpaService = ({ spas, hotels }) => {
   const [loading, setLoading] = useState(false);
   const [activeButton, setActiveButton] = useState("hotel");
 
@@ -115,8 +115,8 @@ const SpaService = () => {
           </Button>
         </Box>
 
-        {activeButton === "spa" && <Spa />}
-        {activeButton === "hotel" && <Hotel />}
+        {activeButton === "spa" && <Spa spas={spas} />}
+        {activeButton === "hotel" && <Hotel hotels={hotels} />}
       </Container>
     </Box>
   );
