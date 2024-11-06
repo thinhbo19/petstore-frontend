@@ -34,6 +34,7 @@ const BreadcrumbsComponent = () => {
   return (
     <Breadcrumbs
       sx={{
+        display: { xs: "none", sm: "flex" },
         marginBottom: "15px",
         marginTop: "6rem",
         marginLeft: "2rem",
