@@ -129,7 +129,6 @@ const OrderDetail = ({ orderId }) => {
         return "default";
     }
   };
-
   const handleRatingSubmit = async (star, comment, feedback_img) => {
     try {
       const formData = new FormData();
@@ -409,7 +408,11 @@ const OrderDetail = ({ orderId }) => {
                 },
                 {
                   title: "Coupon",
-                  value: `${orderDetail.coupon.nameVoucher}`,
+                  value: `${
+                    orderDetail.coupon !== null
+                      ? orderDetail.coupon.nameVoucher
+                      : "No voucher"
+                  }`,
                 },
                 { title: "Address", value: orderDetail.address },
                 {

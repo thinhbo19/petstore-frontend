@@ -27,7 +27,7 @@ export default function OrderHistoryPage() {
       if (userId) {
         try {
           const res = await getAllOrderUser(userId, accessToken);
-          setOrderData(res);
+          setOrderData(res.reverse());
         } catch (error) {
           console.error(error);
         }
@@ -47,7 +47,6 @@ export default function OrderHistoryPage() {
     (page - 1) * itemsPerPage,
     page * itemsPerPage
   );
-
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
 
   const handlePageChange = (event, value) => {
