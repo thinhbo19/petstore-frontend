@@ -79,7 +79,10 @@ const BreedShopForm = ({ nameSpecies, data, catData, dogData }) => {
       >
         <div style={{ textAlign: "left" }} className="all__item">
           <Button
-            variant="outlined"
+            sx={{
+              border: "1px solid #FB5431",
+              color: "#FB5431",
+            }}
             startIcon={<SortIcon />}
             onClick={toggleDrawer(true)}
           >

@@ -250,8 +250,12 @@ const OrderDetail = ({ orderId }) => {
         pauseOnHover
         className="custom-toast-container"
       />
-      <Typography variant="h4" gutterBottom>
-        Order Details
+      <Typography
+        sx={{ textAlign: "center", width: "100%", fontWeight: "bold" }}
+        variant="h5"
+        gutterBottom
+      >
+        ORDER DETAIL
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
@@ -397,7 +401,7 @@ const OrderDetail = ({ orderId }) => {
             <Grid container spacing={2}>
               {[
                 { title: "Order ID", value: orderDetail._id },
-                { title: "Customer", value: orderDetail.OrderBy.username },
+                { title: "Username", value: orderDetail.OrderBy.username },
                 {
                   title: "Contact",
                   value: `${orderDetail.OrderBy.mobile} - ${orderDetail.OrderBy.email}`,

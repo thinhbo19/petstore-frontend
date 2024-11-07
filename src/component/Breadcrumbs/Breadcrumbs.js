@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Link, Typography, Breadcrumbs } from "@mui/material";
+import { Link, Typography, Breadcrumbs, Box } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 
 const BreadcrumbsComponent = () => {
@@ -32,54 +32,31 @@ const BreadcrumbsComponent = () => {
     });
 
   return (
-    <Breadcrumbs
+    <Box
       sx={{
-        display: { xs: "none", sm: "flex" },
-        marginBottom: "15px",
-        marginTop: "6rem",
-        marginLeft: "2rem",
-        fontSize: {
-          xs: "0.75rem",
-          sm: "0.875rem",
-          md: "0.875rem",
-          lg: "1rem",
-        },
+        marginTop: { xs: "5rem", sm: "6rem" },
       }}
-      aria-label="breadcrumb"
     >
-      <Link
-        color="inherit"
-        href="/"
-        onClick={(e) => {
-          e.preventDefault();
-          router.push("/");
+      <Breadcrumbs
+        sx={{
+          display: { xs: "none", sm: "flex" },
+          marginBottom: "15px",
+          marginLeft: "2rem",
+          fontSize: {
+            xs: "0.75rem",
+            sm: "0.875rem",
+            md: "0.875rem",
+            lg: "1rem",
+          },
         }}
-        sx={{ textDecoration: "none" }}
+        aria-label="breadcrumb"
       >
-        <Typography
-          sx={{
-            fontWeight: "bold",
-            textTransform: "uppercase",
-            fontSize: {
-              xs: "0.75rem",
-              sm: "0.875rem",
-              md: "0.875rem",
-              lg: "1rem",
-            },
-          }}
-          color="textPrimary"
-        >
-          HOME
-        </Typography>
-      </Link>
-      {breadcrumbsLinks.map((link, index) => (
         <Link
-          key={index}
           color="inherit"
-          href={link.href}
+          href="/"
           onClick={(e) => {
             e.preventDefault();
-            router.push(link.href);
+            router.push("/");
           }}
           sx={{ textDecoration: "none" }}
         >
@@ -96,11 +73,39 @@ const BreadcrumbsComponent = () => {
             }}
             color="textPrimary"
           >
-            {link.label}
+            HOME
           </Typography>
         </Link>
-      ))}
-    </Breadcrumbs>
+        {breadcrumbsLinks.map((link, index) => (
+          <Link
+            key={index}
+            color="inherit"
+            href={link.href}
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(link.href);
+            }}
+            sx={{ textDecoration: "none" }}
+          >
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                fontSize: {
+                  xs: "0.75rem",
+                  sm: "0.875rem",
+                  md: "0.875rem",
+                  lg: "1rem",
+                },
+              }}
+              color="textPrimary"
+            >
+              {link.label}
+            </Typography>
+          </Link>
+        ))}
+      </Breadcrumbs>
+    </Box>
   );
 };
 

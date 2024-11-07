@@ -261,7 +261,6 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
         >
           {/* Button "View Products By Price" */}
           <Button
-            variant="outlined"
             startIcon={<SortIcon />}
             onClick={toggleDrawer(true)}
             sx={{
@@ -269,7 +268,8 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
                 xs: "10px",
                 sm: 0,
               },
-              color: "black",
+              border: "1px solid #FB5431",
+              color: "#FB5431",
             }}
           >
             View Products By Price
@@ -298,7 +298,7 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
               Showing {currentData.length} results
             </Typography>
             <Button
-              sx={{ color: "black" }}
+              sx={{ border: "1px solid #FB5431", color: "#FB5431" }}
               variant="outlined"
               onClick={handleMenuClick}
               endIcon={<ArrowDropDownIcon />}
