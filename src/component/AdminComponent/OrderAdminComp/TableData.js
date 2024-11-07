@@ -73,7 +73,7 @@ const TableData = ({
               />
             </TableCell>
             <TableCell>{item._id}</TableCell>
-            <TableCell>{item.OrderBy.username}</TableCell>
+            <TableCell>{item.OrderBy?.username}</TableCell>
             <TableCell>{item.paymentMethod}</TableCell>
             <TableCell>{formatDate(item.updatedAt)}</TableCell>
             <TableCell
