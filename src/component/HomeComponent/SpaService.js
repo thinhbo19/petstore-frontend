@@ -15,7 +15,7 @@ import {
   OverlayText1,
   OverlayText2,
 } from "../OverlayText/OverlayText";
-import SpaHotel, { Hotel, Spa } from "../Spa&Hotel/SpaHotel";
+import { Hotel, Spa } from "../Spa&Hotel/SpaHotel";
 
 const SpaService = ({ spas, hotels }) => {
   const [loading, setLoading] = useState(false);

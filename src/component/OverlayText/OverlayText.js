@@ -83,7 +83,7 @@ export function OverlayText1({ IMG }) {
             textShadow: "2px 2px 8px rgba(0, 0, 0, 0.7)",
           }}
         >
-          ❌❌❌ HOTEL SERVICES
+          HOTEL SERVICES
         </Typography>
         <Typography
           sx={{
@@ -177,7 +177,7 @@ export function OverlayText2({ IMG }) {
             textShadow: "2px 2px 8px rgba(0, 0, 0, 0.7)",
           }}
         >
-          ❌❌❌ SPA SERVICES
+          SPA SERVICES
         </Typography>
         <Typography
           sx={{

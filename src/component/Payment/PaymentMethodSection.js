@@ -14,7 +14,7 @@ import MoMoImg from "../../../public/MoMo_Logo.png";
 
 const PaymentMethodSection = ({
   totalAmount,
-  handleThanhToanPayPal,
+  handlePayPal,
   handlePayOCD,
   handleVNPay,
 }) => {
@@ -85,7 +85,7 @@ const PaymentMethodSection = ({
       >
         <Pay
           isElectronicEnabled={onlinePayment}
-          paymentSuccess={handleThanhToanPayPal}
+          paymentSuccess={handlePayPal}
           amount={Math.round(totalAmount / 25000)}
           currency={"USD"}
         />

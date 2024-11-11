@@ -10,14 +10,164 @@ import {
   FormControl,
   InputLabel,
   OutlinedInput,
+  FormControlLabel,
+  CircularProgress,
 } from "@mui/material";
 import React, { useState } from "react";
 import SpaIcon from "@mui/icons-material/Spa";
 import BedIcon from "@mui/icons-material/Bed";
 import Image from "next/image";
+import Pay from "../Pay/Pay";
+import VNPayImg from "../../../public/VNpay.png";
+import MoMoImg from "../../../public/MoMo_Logo.png";
+import { selectUid } from "@/src/services/Redux/useSlice";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { apiUrlBooking } from "@/src/services/config";
+
+const handlePayOCD = async (
+  setLoading,
+  router,
+  user,
+  pet,
+  image,
+  services,
+  Note,
+  bookingDate,
+  totalPrice,
+  paymentMethod
+) => {
+  try {
+    setLoading(true);
+    const formData = new FormData();
+
+    formData.append("user", user);
+    formData.append("pet[name]", pet.name);
+    formData.append("pet[breed]", pet.breed);
+    formData.append("pet[age]", pet.age);
+    formData.append("pet[gender]", pet.gender);
+    formData.append("pet[deworming]", pet.deworming);
+    formData.append("pet[vaccination]", pet.vaccination);
+    formData.append("Note", Note);
+    formData.append("bookingDate", bookingDate);
+    formData.append("totalPrice", totalPrice);
+    formData.append("paymentMethod", paymentMethod);
+
+    services.forEach((serviceId) => {
+      formData.append("services", serviceId);
+    });
+
+    image.forEach((img) => {
+      formData.append("images", img);
+    });
+
+    const response = await axios.post(`${apiUrlBooking}/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    if (response.data.success) {
+      Swal.fire({
+        title: "Successfully!",
+        text: "You have successfully placed your order!",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      }).then(() => {
+        router.push(`/booking-detail/${response.data.data._id}`);
+      });
+    } else {
+      Swal.fire({
+        title: "Failed",
+        text: response.data.message || "Something went wrong.",
+        icon: "error",
+      });
+    }
+  } catch (error) {
+    Swal.fire({
+      title: "Error",
+      text: error.response?.data?.message || "Server error occurred.",
+      icon: "error",
+    });
+    console.error("Error:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handlePayPal = async (
+  setLoading,
+  router,
+  user,
+  pet,
+  image,
+  services,
+  Note,
+  bookingDate,
+  totalPrice,
+  paymentMethod
+) => {
+  setLoading(true);
+  try {
+    const formData = new FormData();
+
+    formData.append("user", user);
+    formData.append("pet[name]", pet.name);
+    formData.append("pet[breed]", pet.breed);
+    formData.append("pet[age]", pet.age);
+    formData.append("pet[gender]", pet.gender);
+    formData.append("pet[deworming]", pet.deworming);
+    formData.append("pet[vaccination]", pet.vaccination);
+    formData.append("Note", Note);
+    formData.append("bookingDate", bookingDate);
+    formData.append("totalPrice", totalPrice);
+    formData.append("paymentMethod", paymentMethod);
+
+    services.forEach((serviceId) => {
+      formData.append("services", serviceId);
+    });
+
+    image.forEach((img) => {
+      formData.append("images", img);
+    });
+
+    const res = await axios.post(`${apiUrlBooking}/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    if (res.data.success) {
+      Swal.fire({
+        title: "Successfully!",
+        text: "You have successfully placed your order.!",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      }).then(() => {
+        router.push(`/booking-detail/${res.data.data._id}`);
+      });
+    } else {
+      Swal.fire({
+        title: "Failed",
+        icon: "error",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
 
 export function Spa({ spas }) {
   const [expandedService, setExpandedService] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const uid = useSelector(selectUid);
+  const router = useRouter();
 
   const [petName, setPetName] = useState("");
   const [petBreed, setPetBreed] = useState("");
@@ -26,10 +176,37 @@ export function Spa({ spas }) {
   const [deworming, setDeworming] = useState("");
   const [vaccination, setVaccination] = useState("");
   const [selectedSpas, setSelectedSpas] = useState([]);
+  const [Note, setNote] = useState("");
   const [bookingDate, setBookingDate] = useState(null);
   const [totalPrice, setTotalPrice] = useState("");
   const [publicPrice, setPublicPrice] = useState("");
   const [image, setImage] = useState([]);
+
+  const pet = {
+    name: petName,
+    breed: petBreed,
+    age: petAge,
+    gender: petGender,
+    deworming: deworming,
+    vaccination: vaccination,
+  };
+
+  const [cashOnDelivery, setCashOnDelivery] = useState(false);
+  const [onlinePayment, setOnlinePayment] = useState(false);
+
+  const handleCashOnDeliveryChange = (event) => {
+    setCashOnDelivery(event.target.checked);
+    if (event.target.checked) {
+      setOnlinePayment(false);
+    }
+  };
+
+  const handleOnlinePaymentChange = (event) => {
+    setOnlinePayment(event.target.checked);
+    if (event.target.checked) {
+      setCashOnDelivery(false);
+    }
+  };
 
   const handleSpasChange = (event) => {
     setSelectedSpas(event.target.value);
@@ -47,12 +224,25 @@ export function Spa({ spas }) {
       return total + (spa ? spa.price : 0);
     }, 0);
     setTotalPrice(price);
-    setPublicPrice(price.toLocaleString("vi"));
+    setPublicPrice(price);
   };
 
   const toggleService = (index) => {
     setExpandedService(expandedService === index ? null : index);
   };
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -174,7 +364,6 @@ export function Spa({ spas }) {
         >
           Book a Spa Service for Your Pet
         </Typography>
-
         <TextField
           label="Pet Name"
           variant="outlined"
@@ -182,7 +371,6 @@ export function Spa({ spas }) {
           onChange={(e) => setPetName(e.target.value)}
           required
         />
-
         {image.length > 0 && (
           <Box sx={{ marginTop: 2, display: "flex", flexWrap: "wrap" }}>
             {image.map((image, index) => (
@@ -197,7 +385,6 @@ export function Spa({ spas }) {
             ))}
           </Box>
         )}
-
         <Button variant="contained" component="label">
           Upload Pet Image
           <input
@@ -208,7 +395,6 @@ export function Spa({ spas }) {
             onChange={handleImageChange}
           />
         </Button>
-
         <TextField
           label="Breed"
           variant="outlined"
@@ -216,7 +402,6 @@ export function Spa({ spas }) {
           onChange={(e) => setPetBreed(e.target.value)}
           required
         />
-
         <TextField
           label="Age"
           variant="outlined"
@@ -225,7 +410,6 @@ export function Spa({ spas }) {
           onChange={(e) => setPetAge(e.target.value)}
           required
         />
-
         <FormControl variant="outlined" fullWidth>
           <InputLabel>Gender</InputLabel>
           <Select
@@ -238,7 +422,6 @@ export function Spa({ spas }) {
             <MenuItem value="Female">Female</MenuItem>
           </Select>
         </FormControl>
-
         <TextField
           label="Deworming (months)"
           variant="outlined"
@@ -246,7 +429,6 @@ export function Spa({ spas }) {
           value={deworming}
           onChange={(e) => setDeworming(e.target.value)}
         />
-
         <TextField
           label="Vaccination (months)"
           variant="outlined"
@@ -254,7 +436,6 @@ export function Spa({ spas }) {
           value={vaccination}
           onChange={(e) => setVaccination(e.target.value)}
         />
-
         <FormControl fullWidth>
           <InputLabel>Services</InputLabel>
           <Select
@@ -263,13 +444,16 @@ export function Spa({ spas }) {
             value={selectedSpas}
             onChange={handleSpasChange}
             input={<OutlinedInput />}
-            renderValue={(selected) =>
-              selected
-                .map(
-                  (spaId) => spas.find((spa) => spa._id === spaId)?.nameService
-                )
-                .join(", ")
-            }
+            renderValue={(selected) => (
+              <div style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+                {selected
+                  .map(
+                    (spaId) =>
+                      spas.find((spa) => spa._id === spaId)?.nameService
+                  )
+                  .join(",\n")}
+              </div>
+            )}
           >
             {spas.map((spa) => (
               <MenuItem key={spa._id} value={spa._id}>
@@ -283,7 +467,6 @@ export function Spa({ spas }) {
             ))}
           </Select>
         </FormControl>
-
         <TextField
           label="Booking Date"
           type="date"
@@ -293,7 +476,6 @@ export function Spa({ spas }) {
             shrink: true,
           }}
         />
-
         <TextField
           label="Total Price (VNĐ)"
           variant="outlined"
@@ -301,10 +483,103 @@ export function Spa({ spas }) {
           value={publicPrice}
           InputProps={{ readOnly: true }}
         />
+        <TextField
+          label="Note"
+          variant="outlined"
+          type="text"
+          value={Note}
+          onChange={(e) => setNote(e.target.value)}
+        />
 
-        <Button variant="contained" color="primary" type="submit">
-          Confirm Booking
-        </Button>
+        <Typography variant="h5" gutterBottom>
+          Payment Method
+        </Typography>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={cashOnDelivery}
+              onChange={handleCashOnDeliveryChange}
+            />
+          }
+          label="Payment upon receipt"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={onlinePayment}
+              onChange={handleOnlinePaymentChange}
+            />
+          }
+          label="Electronic payment"
+        />
+        {cashOnDelivery && (
+          <Button
+            onClick={() =>
+              handlePayOCD(
+                setLoading,
+                router,
+                uid,
+                pet,
+                image,
+                selectedSpas,
+                Note,
+                bookingDate,
+                totalPrice,
+                "PaymentDelivery"
+              )
+            }
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 1 }}
+          >
+            Confirm Booking
+          </Button>
+        )}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 2,
+            mt: 2,
+            justifyContent: { xs: "center", md: "left" },
+            alignItems: { xs: "center", md: "flex-start" },
+          }}
+        >
+          <Pay
+            isElectronicEnabled={onlinePayment}
+            paymentSuccess={() =>
+              handlePayPal(
+                setLoading,
+                router,
+                uid,
+                pet,
+                image,
+                selectedSpas,
+                Note,
+                bookingDate,
+                totalPrice,
+                "PayPal"
+              )
+            }
+            amount={Math.round(totalPrice / 25000)}
+            currency={"USD"}
+          />
+          {onlinePayment && (
+            <Box
+              sx={{
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                "&:hover": {
+                  transform: "scale(1.1)",
+                },
+              }}
+              onClick={() => handleVNPay()}
+            >
+              <Image src={VNPayImg} width={120} height={50} alt="VNPay" />
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );
