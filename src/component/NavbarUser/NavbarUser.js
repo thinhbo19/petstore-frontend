@@ -44,7 +44,6 @@ const NavbarUser = () => {
         width: "100%",
         backgroundColor: "white",
         borderRadius: "10px",
-        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
       }}
     >
       {[
@@ -77,16 +76,21 @@ const NavbarUser = () => {
           key={href}
           sx={{
             marginBottom: "20px",
-            backgroundColor: isActive(href) ? "#e0e0e0" : "transparent",
+            backgroundColor: isActive(href) ? "#F7452E" : "transparent",
             "&:hover": {
-              backgroundColor: "#f0f0f0",
+              backgroundColor: "#F7452E",
             },
-            fontWeight: isActive(href) ? "bold" : "normal",
+            borderRadius: "0 20px 20px 0",
           }}
         >
           <Link href={href} style={linkStyles(href)}>
             <ListItemIcon>
-              {React.cloneElement(icon, { sx: { fontSize: "2rem" } })}
+              {React.cloneElement(icon, {
+                sx: {
+                  fontSize: "2rem",
+                  color: isActive(href) ? "white" : "black",
+                },
+              })}
             </ListItemIcon>
             <Typography
               sx={{
@@ -95,8 +99,10 @@ const NavbarUser = () => {
                   xs: "1rem",
                   sm: "1rem",
                   md: "0.8rem",
-                  lg: "1rem",
+                  lg: "0.9rem",
                 },
+                fontWeight: "bold",
+                color: isActive(href) ? "white" : "black",
               }}
             >
               {text}
@@ -115,6 +121,7 @@ const NavbarUser = () => {
           width: "35px",
           height: "35px",
           backgroundColor: "#ededed",
+          marginTop: "15px",
         }}
         onClick={toggleDrawer}
       >

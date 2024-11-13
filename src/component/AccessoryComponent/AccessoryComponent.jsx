@@ -283,9 +283,8 @@ const AccessoryComponent = ({ categoryData, groupedProducts }) => {
                       alt={product.nameProduct}
                       image={product.images[0]}
                       sx={{
-                        height: 150,
-                        objectFit: "contain",
-                        padding: 1,
+                        height: { xs: 120, sm: 130, md: 180 },
+                        objectFit: "cover",
                       }}
                     />
                     <CardContent sx={{ padding: 2 }}>

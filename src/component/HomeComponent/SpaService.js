@@ -57,7 +57,7 @@ const SpaService = ({ spas, hotels }) => {
               textAlign: "center",
               fontWeight: "bold",
               fontSize: { xs: "1rem", sm: "1.5rem", md: "2rem" },
-              textShadow: "2px 2px 8px rgba(0, 0, 0, 0.5)",
+              textShadow: "2px 2px 8px rgba(0, 0, 0, 0.2)",
               lineHeight: 1.2,
             }}
             component="h2"
@@ -115,8 +115,11 @@ const SpaService = ({ spas, hotels }) => {
           </Button>
         </Box>
 
-        {activeButton === "spa" && <Spa spas={spas} />}
-        {activeButton === "hotel" && <Hotel hotels={hotels} />}
+        {activeButton === "spa" ? (
+          <Spa spas={spas} />
+        ) : (
+          <Hotel hotels={hotels} />
+        )}
       </Container>
     </Box>
   );
