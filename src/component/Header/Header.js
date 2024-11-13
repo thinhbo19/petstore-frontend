@@ -214,7 +214,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
     <AppBar
       position="static"
       sx={{
-        backgroundColor: "#fafafa",
+        backgroundColor: "#ededed",
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.4)",
         color: "black",
         flexGrow: 1,
