@@ -130,6 +130,7 @@ const OrderDetail = ({ orderId }) => {
     }
   };
   const handleRatingSubmit = async (star, comment, feedback_img) => {
+    setLoading(true);
     try {
       const formData = new FormData();
       formData.append("star", star);
@@ -153,7 +154,15 @@ const OrderDetail = ({ orderId }) => {
             },
           }
         );
-        toast.success(`Review successfully`);
+
+        Swal.fire({
+          icon: "success",
+          title: "Rating Successfully!",
+          text: "Thank you for your purchase",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
       } else if (res === "Prod") {
         await axios.post(
           `${apiUrlProduct}/rating/${selectedProductId}`,
@@ -164,7 +173,14 @@ const OrderDetail = ({ orderId }) => {
             },
           }
         );
-        toast.success(`Review successfully`);
+        Swal.fire({
+          icon: "success",
+          title: "Rating Successfully!",
+          text: "Thank you for your purchase",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
       } else {
         console.error(
           "Error fetching data: Invalid response from getProdOrPet"
@@ -175,6 +191,8 @@ const OrderDetail = ({ orderId }) => {
         "Error fetching data:",
         error.response ? error.response.data : error.message
       );
+    } finally {
+      setLoading(false);
     }
   };
 
