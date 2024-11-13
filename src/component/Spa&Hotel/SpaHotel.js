@@ -19,7 +19,6 @@ import BedIcon from "@mui/icons-material/Bed";
 import Image from "next/image";
 import Pay from "../Pay/Pay";
 import VNPayImg from "../../../public/VNpay.png";
-import MoMoImg from "../../../public/MoMo_Logo.png";
 import { selectUid } from "@/src/services/Redux/useSlice";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -156,6 +155,57 @@ const handlePayPal = async (
         icon: "error",
       });
     }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleVNPay = async (
+  setLoading,
+  router,
+  user,
+  pet,
+  image,
+  services,
+  Note,
+  bookingDate,
+  totalPrice,
+  paymentMethod,
+  accessToken
+) => {
+  setLoading(true);
+  try {
+    const formData = new FormData();
+
+    formData.append("user", user);
+    formData.append("pet[name]", pet.name);
+    formData.append("pet[breed]", pet.breed);
+    formData.append("pet[age]", pet.age);
+    formData.append("pet[gender]", pet.gender);
+    formData.append("pet[deworming]", pet.deworming);
+    formData.append("pet[vaccination]", pet.vaccination);
+    formData.append("Note", Note);
+    formData.append("bookingDate", bookingDate);
+    formData.append("totalPrice", totalPrice);
+    formData.append("paymentMethod", paymentMethod);
+    formData.append("bankCode", "NCB");
+
+    services.forEach((serviceId) => {
+      formData.append("services", serviceId);
+    });
+
+    image.forEach((img) => {
+      formData.append("images", img);
+    });
+
+    const res = await axios.post(`${apiUrlBooking}/createUrl`, formData, {
+      headers: {
+        token: `Bearer ${accessToken}`,
+      },
+    });
+    router.push(res.data.paymentUrl);
   } catch (error) {
     console.log(error);
   } finally {
@@ -574,7 +624,20 @@ export function Spa({ spas }) {
                   transform: "scale(1.1)",
                 },
               }}
-              onClick={() => handleVNPay()}
+              onClick={() =>
+                handleVNPay(
+                  setLoading,
+                  router,
+                  uid,
+                  pet,
+                  image,
+                  selectedSpas,
+                  Note,
+                  bookingDate,
+                  totalPrice,
+                  "VNPay"
+                )
+              }
             >
               <Image src={VNPayImg} width={120} height={50} alt="VNPay" />
             </Box>
