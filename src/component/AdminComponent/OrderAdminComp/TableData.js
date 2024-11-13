@@ -57,10 +57,8 @@ const TableData = ({
           <TableCell sx={{ fontWeight: "bold" }}>Order By</TableCell>
           <TableCell sx={{ fontWeight: "bold" }}>Payment Method</TableCell>
           <TableCell sx={{ fontWeight: "bold" }}>Date</TableCell>
-          <TableCell sx={{ textAlign: "center", fontWeight: "bold" }}>
-            Action
-          </TableCell>
-          <TableCell></TableCell>
+          <TableCell sx={{ fontWeight: "bold" }}>Status</TableCell>
+          <TableCell sx={{ fontWeight: "bold" }}>Action</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -76,13 +74,8 @@ const TableData = ({
             <TableCell>{item.OrderBy?.username}</TableCell>
             <TableCell>{item.paymentMethod}</TableCell>
             <TableCell>{formatDate(item.updatedAt)}</TableCell>
-            <TableCell
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+
+            <TableCell>
               {item.status === "Processing" ? (
                 <Button
                   variant="contained"
@@ -104,6 +97,7 @@ const TableData = ({
                 </Typography>
               )}
             </TableCell>
+
             <TableCell>
               <IconButton color="primary" onClick={() => onEdit(item._id)}>
                 <EditIcon />
