@@ -39,11 +39,15 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
         sx={{
           fontWeight: "bold",
           fontSize: { xs: "14px", sm: "16px", md: "16px" },
-          backgroundColor: isActivePath(pathName, activePathsHome)
-            ? "#F7452E"
-            : "",
+          backgroundColor:
+            isActivePath(pathName, activePathsHome) || pathName === "/"
+              ? "#F7452E"
+              : "",
           borderRadius: "20px",
-          color: isActivePath(pathName, activePathsHome) ? "white" : "black",
+          color:
+            isActivePath(pathName, activePathsHome) || pathName === "/"
+              ? "white"
+              : "black",
         }}
         aria-label="Home"
       >
