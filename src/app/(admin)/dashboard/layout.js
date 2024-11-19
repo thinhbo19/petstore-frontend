@@ -25,7 +25,7 @@ import { useDispatch } from "react-redux";
 import { setLogout } from "@/src/services/Redux/useSlice";
 import ArticleIcon from "@mui/icons-material/Article";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
-
+import BarChartIcon from "@mui/icons-material/BarChart";
 const drawerWidth = 240;
 
 export default function AdminLayout({ children }) {
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }) {
             boxSizing: "border-box",
             overflowY: "auto",
             "&::-webkit-scrollbar": {
-              width: "8px",
+              width: "3px",
             },
             "&::-webkit-scrollbar-thumb": {
               backgroundColor: "#888",
@@ -66,6 +66,24 @@ export default function AdminLayout({ children }) {
         className="design_scrollbar"
       >
         <Toolbar />
+
+        <Divider />
+        <List>
+          {["Statistical"].map((text) => (
+            <ListItem
+              button
+              key={text}
+              component={Link}
+              href={`/dashboard/${generateSlug(text)}`}
+            >
+              <ListItemIcon>
+                <BarChartIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
         <Divider />
         <List>
           {["Species", "Breed", "Pets"].map((text) => (
