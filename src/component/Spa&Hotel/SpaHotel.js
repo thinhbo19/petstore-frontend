@@ -473,14 +473,14 @@ export function Spa({ spas }) {
           </Select>
         </FormControl>
         <TextField
-          label="Deworming (months)"
+          label="Deworming (time)"
           variant="outlined"
           type="number"
           value={deworming}
           onChange={(e) => setDeworming(e.target.value)}
         />
         <TextField
-          label="Vaccination (months)"
+          label="Vaccination (time)"
           variant="outlined"
           type="number"
           value={vaccination}
@@ -649,6 +649,86 @@ export function Spa({ spas }) {
 }
 
 export function Hotel({ hotels }) {
+  const [expandedService, setExpandedService] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const uid = useSelector(selectUid);
+  const router = useRouter();
+
+  const [petName, setPetName] = useState("");
+  const [petBreed, setPetBreed] = useState("");
+  const [petAge, setPetAge] = useState("");
+  const [petGender, setPetGender] = useState("");
+  const [deworming, setDeworming] = useState("");
+  const [vaccination, setVaccination] = useState("");
+  const [selectedSpas, setSelectedSpas] = useState([]);
+  const [Note, setNote] = useState("");
+  const [bookingDate, setBookingDate] = useState(null);
+  const [totalPrice, setTotalPrice] = useState("");
+  const [publicPrice, setPublicPrice] = useState("");
+  const [image, setImage] = useState([]);
+
+  const pet = {
+    name: petName,
+    breed: petBreed,
+    age: petAge,
+    gender: petGender,
+    deworming: deworming,
+    vaccination: vaccination,
+  };
+
+  const [cashOnDelivery, setCashOnDelivery] = useState(false);
+  const [onlinePayment, setOnlinePayment] = useState(false);
+
+  const handleCashOnDeliveryChange = (event) => {
+    setCashOnDelivery(event.target.checked);
+    if (event.target.checked) {
+      setOnlinePayment(false);
+    }
+  };
+
+  const handleOnlinePaymentChange = (event) => {
+    setOnlinePayment(event.target.checked);
+    if (event.target.checked) {
+      setCashOnDelivery(false);
+    }
+  };
+
+  const handleSpasChange = (event) => {
+    setSelectedSpas(event.target.value);
+    calculateTotalPrice(event.target.value);
+  };
+
+  const handleImageChange = (event) => {
+    const files = Array.from(event.target.files);
+    setImage(files);
+  };
+
+  const calculateTotalPrice = (selectedSpas) => {
+    const price = selectedSpas.reduce((total, spaId) => {
+      const spa = hotels.find((hot) => hot._id === spaId);
+      return total + (spa ? spa.price : 0);
+    }, 0);
+    setTotalPrice(price);
+    setPublicPrice(price);
+  };
+
+  const toggleService = (index) => {
+    setExpandedService(expandedService === index ? null : index);
+  };
+
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
@@ -659,10 +739,11 @@ export function Hotel({ hotels }) {
         flexDirection: { xs: "column", md: "row" },
       }}
     >
+      {/* info */}
       <Box sx={{ flex: "1" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <BedIcon
-            sx={{ fontSize: { xs: "1rem", sm: "1.5rem", md: "2rem" } }}
+            sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem", md: "2rem" } }}
           />
           <Typography
             component="h1"
@@ -675,8 +756,336 @@ export function Hotel({ hotels }) {
             HOTEL SERVICES
           </Typography>
         </Box>
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            fontSize: { xs: "0.6rem", sm: "1rem", md: "1.2rem" },
+            textShadow: "2px 2px 8px rgba(0, 0, 0, 0.4)",
+            color: "#6C6969",
+            mt: 1,
+          }}
+        >
+          Treat your pet to a luxurious spa day! Our professional groomers
+          provide top-notch services to keep your furry friend looking and
+          feeling their best.
+        </Typography>
+        {/* data spa */}
+        <Box sx={{ flex: "1" }}>
+          {hotels.map((hot, index) => (
+            <Box
+              key={index}
+              sx={{ margin: "10px 0", width: { xs: "100%", md: "80%" } }}
+            >
+              <Button
+                onClick={() => toggleService(index)}
+                sx={{
+                  width: "100%",
+                  justifyContent: "space-between",
+                  backgroundColor: expandedService === index ? "#ccc" : "#fff",
+                  border: "1px solid #6C6969",
+                  borderRadius: "8px",
+                  padding: "10px",
+                  color: "black",
+                  textAlign: "left",
+                  "&:hover": {
+                    backgroundColor: "#e0e0e0",
+                  },
+                }}
+              >
+                <Typography
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontWeight: "bold",
+                    fontSize: { xs: "0.8rem", sm: "1.2rem" },
+                  }}
+                >
+                  {hot.nameService}
+                  <Typography
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: { xs: "0.6rem", sm: "1rem" },
+                      marginLeft: "10px",
+                      color: "red",
+                    }}
+                  >
+                    ({hot.price.toLocaleString("vi")} VNĐ)
+                  </Typography>
+                </Typography>
+                <Typography>{expandedService === index ? "▲" : "▼"}</Typography>
+              </Button>
+              {expandedService === index && (
+                <Typography
+                  sx={{
+                    marginTop: "5px",
+                    padding: "0 10px",
+                    fontSize: { xs: "0.8rem", sm: "1rem" },
+                  }}
+                  dangerouslySetInnerHTML={{ __html: hot.description }}
+                />
+              )}
+            </Box>
+          ))}
+        </Box>{" "}
       </Box>
-      <Box sx={{ flex: "1" }}>ad</Box>
+
+      <Box
+        component="form"
+        sx={{
+          flex: "1",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "8px",
+          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            padding: 3,
+            gap: 2,
+            margin: "auto",
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold", mb: 2, textAlign: "center" }}
+          >
+            Book a Hotel For Your Pet
+          </Typography>
+          <TextField
+            label="Pet Name"
+            variant="outlined"
+            value={petName}
+            onChange={(e) => setPetName(e.target.value)}
+            required
+          />
+          {image.length > 0 && (
+            <Box sx={{ marginTop: 2, display: "flex", flexWrap: "wrap" }}>
+              {image.map((image, index) => (
+                <Box key={index} sx={{ margin: 1 }}>
+                  <Image
+                    src={URL.createObjectURL(image)}
+                    alt={`Image preview ${index}`}
+                    width={100}
+                    height={100}
+                  />
+                </Box>
+              ))}
+            </Box>
+          )}
+          <Button variant="contained" component="label">
+            Upload Pet Image
+            <input
+              type="file"
+              hidden
+              accept="image/*"
+              multiple
+              onChange={handleImageChange}
+            />
+          </Button>
+          <TextField
+            label="Breed"
+            variant="outlined"
+            value={petBreed}
+            onChange={(e) => setPetBreed(e.target.value)}
+            required
+          />
+          <TextField
+            label="Age"
+            variant="outlined"
+            type="number"
+            value={petAge}
+            onChange={(e) => setPetAge(e.target.value)}
+            required
+          />
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel>Gender</InputLabel>
+            <Select
+              label="Gender"
+              value={petGender}
+              onChange={(e) => setPetGender(e.target.value)}
+              required
+            >
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            label="Deworming (time)"
+            variant="outlined"
+            type="number"
+            value={deworming}
+            onChange={(e) => setDeworming(e.target.value)}
+          />
+          <TextField
+            label="Vaccination (time)"
+            variant="outlined"
+            type="number"
+            value={vaccination}
+            onChange={(e) => setVaccination(e.target.value)}
+          />
+          <FormControl fullWidth>
+            <InputLabel>Services</InputLabel>
+            <Select
+              label="Services"
+              multiple
+              value={selectedSpas}
+              onChange={handleSpasChange}
+              input={<OutlinedInput />}
+              renderValue={(selected) => (
+                <div
+                  style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                >
+                  {selected
+                    .map(
+                      (spaId) =>
+                        hotels.find((hot) => hot._id === spaId)?.nameService
+                    )
+                    .join(",\n")}
+                </div>
+              )}
+            >
+              {hotels.map((hot) => (
+                <MenuItem key={hot._id} value={hot._id}>
+                  <Checkbox checked={selectedSpas.includes(hot._id)} />
+                  <ListItemText
+                    primary={`${hot.nameService} (${hot.price.toLocaleString(
+                      "vi"
+                    )} VNĐ)`}
+                  />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            label="Booking Date"
+            type="date"
+            value={bookingDate}
+            onChange={(e) => setBookingDate(e.target.value)}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+          <TextField
+            label="Total Price (VNĐ)"
+            variant="outlined"
+            type="number"
+            value={publicPrice}
+            InputProps={{ readOnly: true }}
+          />
+          <TextField
+            label="Note"
+            variant="outlined"
+            type="text"
+            value={Note}
+            onChange={(e) => setNote(e.target.value)}
+          />
+
+          <Typography variant="h5" gutterBottom>
+            Payment Method
+          </Typography>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={cashOnDelivery}
+                onChange={handleCashOnDeliveryChange}
+              />
+            }
+            label="Payment upon receipt"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={onlinePayment}
+                onChange={handleOnlinePaymentChange}
+              />
+            }
+            label="Electronic payment"
+          />
+          {cashOnDelivery && (
+            <Button
+              onClick={() =>
+                handlePayOCD(
+                  setLoading,
+                  router,
+                  uid,
+                  pet,
+                  image,
+                  selectedSpas,
+                  Note,
+                  bookingDate,
+                  totalPrice,
+                  "PaymentDelivery"
+                )
+              }
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 1 }}
+            >
+              Confirm Booking
+            </Button>
+          )}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: 2,
+              mt: 2,
+              justifyContent: { xs: "center", md: "left" },
+              alignItems: { xs: "center", md: "flex-start" },
+            }}
+          >
+            <Pay
+              isElectronicEnabled={onlinePayment}
+              paymentSuccess={() =>
+                handlePayPal(
+                  setLoading,
+                  router,
+                  uid,
+                  pet,
+                  image,
+                  selectedSpas,
+                  Note,
+                  bookingDate,
+                  totalPrice,
+                  "PayPal"
+                )
+              }
+              amount={Math.round(totalPrice / 25000)}
+              currency={"USD"}
+            />
+            {onlinePayment && (
+              <Box
+                sx={{
+                  cursor: "pointer",
+                  transition: "transform 0.3s",
+                  "&:hover": {
+                    transform: "scale(1.1)",
+                  },
+                }}
+                onClick={() =>
+                  handleVNPay(
+                    setLoading,
+                    router,
+                    uid,
+                    pet,
+                    image,
+                    selectedSpas,
+                    Note,
+                    bookingDate,
+                    totalPrice,
+                    "VNPay"
+                  )
+                }
+              >
+                <Image src={VNPayImg} width={120} height={50} alt="VNPay" />
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }
