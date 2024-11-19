@@ -33,6 +33,7 @@ import { removeFavorite } from "@/src/services/Redux/FavoriteSlice";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import { addCartTemp } from "@/src/services/Redux/CartTempSlice";
 import { useRouter } from "next/navigation";
+import { InlineShareButtons } from "sharethis-reactjs";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.productID === product._id);
@@ -482,6 +483,29 @@ const ProdReviews = ({ prodData, accessToken }) => {
                 color={isFavorite(prodData, favorites) ? "red" : "black"}
               />
             </IconButton>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "center", md: "left" },
+            }}
+          >
+            {" "}
+            <InlineShareButtons
+              config={{
+                alignment: "left",
+                color: "social",
+                enabled: true,
+                font_size: 16,
+                labels: "cta",
+                language: "en",
+                networks: ["messenger", "facebook", "twitter"],
+                padding: 12,
+                radius: 4,
+                size: 40,
+              }}
+            />
           </Box>
         </Grid>
       </Grid>
