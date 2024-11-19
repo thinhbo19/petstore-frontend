@@ -444,68 +444,74 @@ const ProdReviews = ({ prodData, accessToken }) => {
             </Button>
           </Box>
 
-          {/* Buy Now and Favorite buttons */}
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: { xs: "center", md: "left" },
-              flexDirection: { xs: "row", md: "row" },
-              gap: 2,
-              marginBottom: 2,
+              display: { xs: "block", md: "flex" },
             }}
           >
-            <Box>
-              <Button
-                variant="contained"
-                sx={{
-                  fontWeight: "bold",
-                  backgroundColor: "#0C89F7",
-                  "&:hover": {
-                    backgroundColor: "#0C89F2",
-                  },
-                  padding: { xs: "6px", sm: "8px", md: "10px" }, // Responsive padding
-                  fontSize: { xs: "0.8rem", sm: "1rem" }, // Responsive font size
-                }}
-                disabled={prodData.sold}
-                onClick={() => handleBuyNow()}
-              >
-                Buy Now
-              </Button>
-            </Box>
-
-            <IconButton onClick={() => handleLikeClick()}>
-              <FontAwesomeIcon
-                icon={
-                  isFavorite(prodData, favorites) ? solidHeart : regularHeart
-                }
-                size="lg"
-                color={isFavorite(prodData, favorites) ? "red" : "black"}
-              />
-            </IconButton>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: { xs: "center", md: "left" },
-            }}
-          >
-            {" "}
-            <InlineShareButtons
-              config={{
-                alignment: "left",
-                color: "social",
-                enabled: true,
-                font_size: 16,
-                labels: "cta",
-                language: "en",
-                networks: ["messenger", "facebook", "twitter"],
-                padding: 12,
-                radius: 4,
-                size: 40,
+            {/* Buy Now and Favorite buttons */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: { xs: "center", md: "left" },
+                flexDirection: { xs: "row", md: "row" },
+                gap: 2,
+                marginBottom: 2,
               }}
-            />
+            >
+              <Box>
+                <Button
+                  variant="contained"
+                  sx={{
+                    fontWeight: "bold",
+                    backgroundColor: "#0C89F7",
+                    "&:hover": {
+                      backgroundColor: "#0C89F2",
+                    },
+                    padding: { xs: "6px", sm: "8px", md: "10px" }, // Responsive padding
+                    fontSize: { xs: "0.8rem", sm: "1rem" }, // Responsive font size
+                  }}
+                  disabled={prodData.sold}
+                  onClick={() => handleBuyNow()}
+                >
+                  Buy Now
+                </Button>
+              </Box>
+
+              <IconButton onClick={() => handleLikeClick()}>
+                <FontAwesomeIcon
+                  icon={
+                    isFavorite(prodData, favorites) ? solidHeart : regularHeart
+                  }
+                  size="lg"
+                  color={isFavorite(prodData, favorites) ? "red" : "black"}
+                />
+              </IconButton>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: { xs: "center", md: "left" },
+              }}
+            >
+              {" "}
+              <InlineShareButtons
+                config={{
+                  alignment: "left",
+                  color: "social",
+                  enabled: true,
+                  font_size: 16,
+                  labels: "cta",
+                  language: "en",
+                  networks: ["messenger", "facebook", "twitter"],
+                  padding: 12,
+                  radius: 4,
+                  size: 40,
+                }}
+              />
+            </Box>
           </Box>
         </Grid>
       </Grid>

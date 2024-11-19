@@ -407,112 +407,118 @@ const PetInfo = ({ petData, accessToken }) => {
 
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: { xs: "center", md: "left" },
-              flexDirection: { xs: "row", md: "row" },
-              gap: 2,
-              marginBottom: 2,
+              display: { xs: "block", md: "flex" },
             }}
           >
             <Box
               sx={{
-                backgroundColor: "#eeeeee",
-                color: "black",
                 display: "flex",
                 alignItems: "center",
-                borderRadius: "4px",
+                justifyContent: { xs: "center", md: "left" },
+                flexDirection: { xs: "row", md: "row" },
+                gap: 2,
+                marginBottom: 2,
+                marginRight: 2,
               }}
             >
-              <IconButton
-                onClick={handleDecrease}
-                sx={{
-                  color: "black",
-                  "&:hover": { backgroundColor: "#f7f7f7" },
-                  fontSize: { xs: "1rem", sm: "1.2rem" },
-                }}
-                disabled={petData.sold}
-              >
-                <RemoveIcon />
-              </IconButton>
               <Box
                 sx={{
-                  fontWeight: "bold",
-                  margin: "0 12px",
-                  fontSize: { xs: "1rem", sm: "1.2rem" },
-                }}
-              >
-                {petData.sold ? 0 : quantity}
-              </Box>
-              <IconButton
-                onClick={handleIncrease}
-                sx={{
+                  backgroundColor: "#eeeeee",
                   color: "black",
-                  "&:hover": { backgroundColor: "#f7f7f7" },
-                  fontSize: { xs: "1rem", sm: "1.2rem" },
+                  display: "flex",
+                  alignItems: "center",
+                  borderRadius: "4px",
                 }}
-                disabled={petData.sold}
               >
-                <AddIcon />
-              </IconButton>
-            </Box>
+                <IconButton
+                  onClick={handleDecrease}
+                  sx={{
+                    color: "black",
+                    "&:hover": { backgroundColor: "#f7f7f7" },
+                    fontSize: { xs: "1rem", sm: "1.2rem" },
+                  }}
+                  disabled={petData.sold}
+                >
+                  <RemoveIcon />
+                </IconButton>
+                <Box
+                  sx={{
+                    fontWeight: "bold",
+                    margin: "0 12px",
+                    fontSize: { xs: "1rem", sm: "1.2rem" },
+                  }}
+                >
+                  {petData.sold ? 0 : quantity}
+                </Box>
+                <IconButton
+                  onClick={handleIncrease}
+                  sx={{
+                    color: "black",
+                    "&:hover": { backgroundColor: "#f7f7f7" },
+                    fontSize: { xs: "1rem", sm: "1.2rem" },
+                  }}
+                  disabled={petData.sold}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Box>
 
-            <Button
-              variant="contained"
-              sx={{
-                fontWeight: "bold",
-                backgroundColor: "#F7482E",
-                "&:hover": {
-                  backgroundColor: "#D63A2E",
-                },
-                fontSize: { xs: "0.9rem", sm: "1rem" },
-              }}
-              onClick={() => handleCart()}
-              disabled={petData.sold}
-            >
-              Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
-            </Button>
-          </Box>
-
-          {/* Buy Now and Favorite buttons */}
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: { xs: "center", md: "left" },
-              flexDirection: { xs: "row", md: "row" },
-              gap: 2,
-              marginBottom: 2,
-            }}
-          >
-            <Box>
               <Button
                 variant="contained"
                 sx={{
                   fontWeight: "bold",
-                  backgroundColor: "#0C89F7",
+                  backgroundColor: "#F7482E",
                   "&:hover": {
-                    backgroundColor: "#0C89F2",
+                    backgroundColor: "#D63A2E",
                   },
-                  padding: { xs: "6px", sm: "8px", md: "10px" },
-                  fontSize: { xs: "0.8rem", sm: "1rem" },
+                  fontSize: { xs: "0.9rem", sm: "1rem" },
                 }}
+                onClick={() => handleCart()}
                 disabled={petData.sold}
-                onClick={() => handleBuyNow()}
               >
-                Buy Now
+                Add To Cart <AddShoppingCartIcon sx={{ marginLeft: "10px" }} />
               </Button>
             </Box>
 
-            <IconButton onClick={() => handleLikeClick()}>
-              <FontAwesomeIcon
-                icon={
-                  isFavorite(petData, favorites) ? solidHeart : regularHeart
-                }
-                size="lg"
-                color={isFavorite(petData, favorites) ? "red" : "black"}
-              />
-            </IconButton>
+            {/* Buy Now and Favorite buttons */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: { xs: "center", md: "left" },
+                flexDirection: { xs: "row", md: "row" },
+                gap: 2,
+                marginBottom: 2,
+              }}
+            >
+              <Box>
+                <Button
+                  variant="contained"
+                  sx={{
+                    fontWeight: "bold",
+                    backgroundColor: "#0C89F7",
+                    "&:hover": {
+                      backgroundColor: "#0C89F2",
+                    },
+                    fontSize: { xs: "0.9rem", sm: "1rem" },
+                  }}
+                  disabled={petData.sold}
+                  onClick={() => handleBuyNow()}
+                >
+                  Buy Now
+                </Button>
+              </Box>
+
+              <IconButton onClick={() => handleLikeClick()}>
+                <FontAwesomeIcon
+                  icon={
+                    isFavorite(petData, favorites) ? solidHeart : regularHeart
+                  }
+                  size="lg"
+                  color={isFavorite(petData, favorites) ? "red" : "black"}
+                />
+              </IconButton>
+            </Box>
           </Box>
 
           <Box
