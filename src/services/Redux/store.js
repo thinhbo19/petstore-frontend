@@ -1,4 +1,3 @@
-// redux/store.js
 import { configureStore } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
 import userReducer from "./useSlice";
@@ -9,18 +8,25 @@ import FavoriteProductSlice from "./FavoriteProductSlice";
 import CartSlice from "./CartSlice";
 import CartTempSlice from "./CartTempSlice";
 
-const persistConfig = {
-  key: "root",
+const userPersistConfig = {
+  key: "user",
   storage,
+  whitelist: ["login", "accessToken"],
 };
 
 const rootReducer = combineReducers({
-  user: userReducer,
+  user: persistReducer(userPersistConfig, userReducer),
   favorites: FavoriteSlice,
   favoriteProducts: FavoriteProductSlice,
   cart: CartSlice,
   cartTemp: CartTempSlice,
 });
+
+const persistConfig = {
+  key: "root",
+  storage,
+  blacklist: ["favorites", "favoriteProducts", "cart", "cartTemp"],
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
