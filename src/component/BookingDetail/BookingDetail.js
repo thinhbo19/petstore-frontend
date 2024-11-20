@@ -32,7 +32,12 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/toast.css";
 import axios from "axios";
-import { apiUrlOrder, apiUrlPets, apiUrlProduct } from "@/src/services/config";
+import {
+  apiUrlBooking,
+  apiUrlOrder,
+  apiUrlPets,
+  apiUrlProduct,
+} from "@/src/services/config";
 import { getSimplePets } from "@/src/services/apiPet";
 import { getProdOrPet, getSimpleProd } from "@/src/services/apiProduct";
 import RatingForm from "../RatingForm/RatingForm";
@@ -83,8 +88,8 @@ const BookingDetail = ({ bookingId }) => {
   const handleChangeStatus = async (status) => {
     setLoading(true);
     try {
-      await axios.patch(
-        `${apiUrlOrder}/update/${orderDetail?._id}`,
+      await axios.put(
+        `${apiUrlBooking}/status/${orderDetail?._id}`,
         {
           status: status,
         },
