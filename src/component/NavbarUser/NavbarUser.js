@@ -16,6 +16,7 @@ import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LockIcon from "@mui/icons-material/Lock";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Link from "next/link";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { usePathname } from "next/navigation";
@@ -53,6 +54,11 @@ const NavbarUser = () => {
           href: "/profile/order-history",
           icon: <HistoryIcon />,
           text: "Order History",
+        },
+        {
+          href: "/profile/booking-history",
+          icon: <CalendarMonthIcon />,
+          text: "Booking History",
         },
         {
           href: "/profile/voucher",

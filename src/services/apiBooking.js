@@ -40,3 +40,31 @@ export const getAllBooking = async () => {
     throw error;
   }
 };
+
+export const getAllBookingUser = async (userID, accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlBooking}/user/${userID}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.data;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};
+
+export const getBookingID = async (bookingId, accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlBooking}/${bookingId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.data;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};

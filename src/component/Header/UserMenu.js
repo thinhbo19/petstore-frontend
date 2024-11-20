@@ -11,6 +11,7 @@ import {
 import { handleLogin, handleLogout } from "@/src/hooks/useLogout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import { handleChangePage } from "@/src/hooks/useChangePage";
@@ -82,7 +83,7 @@ const UserMenu = ({
               handleMobileMenuClose();
             }}
           >
-            <AccountCircleIcon /> Profile
+            <AccountCircleIcon sx={{ marginRight: "5px" }} /> Profile
           </MenuItem>,
           admin === "Admin" && (
             <MenuItem
@@ -93,7 +94,7 @@ const UserMenu = ({
                 handleMobileMenuClose();
               }}
             >
-              <DashboardIcon />
+              <DashboardIcon sx={{ marginRight: "5px" }} />
               Dashboard
             </MenuItem>
           ),
@@ -105,7 +106,19 @@ const UserMenu = ({
               handleMobileMenuClose();
             }}
           >
-            <LibraryBooksIcon /> Order History
+            <LibraryBooksIcon sx={{ marginRight: "5px" }} />
+            Order History
+          </MenuItem>,
+          <MenuItem
+            key="order-history"
+            onClick={() => {
+              handleChangePage(router, "booking-history");
+              handleMenuClose();
+              handleMobileMenuClose();
+            }}
+          >
+            <CalendarMonthIcon sx={{ marginRight: "5px" }} />
+            Booking
           </MenuItem>,
           <MenuItem
             key="logout"
@@ -115,7 +128,7 @@ const UserMenu = ({
               handleMobileMenuClose();
             }}
           >
-            <LogoutIcon /> Log Out
+            <LogoutIcon sx={{ marginRight: "5px" }} /> Log Out
           </MenuItem>,
         ]
       ) : (

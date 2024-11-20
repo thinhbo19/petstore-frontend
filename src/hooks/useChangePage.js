@@ -51,6 +51,9 @@ export const handleChangePage = (router, item) => {
     case "order-history":
       router.push("/profile/order-history");
       break;
+    case "booking-history":
+      router.push("/profile/booking-history");
+      break;
     default:
       console.log("Invalid item");
   }

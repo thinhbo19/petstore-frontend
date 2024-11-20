@@ -15,6 +15,8 @@ const BreadcrumbsComponent = () => {
     return null;
   } else if (pathName.startsWith("/order-detail")) {
     return null;
+  } else if (pathName.startsWith("/booking-detail")) {
+    return null;
   } else if (pathName.startsWith("/voucher")) {
     return null;
   } else if (pathName.startsWith("/spa-services")) {
