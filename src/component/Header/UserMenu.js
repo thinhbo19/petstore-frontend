@@ -110,7 +110,7 @@ const UserMenu = ({
             Order History
           </MenuItem>,
           <MenuItem
-            key="order-history"
+            key="booking-history"
             onClick={() => {
               handleChangePage(router, "booking-history");
               handleMenuClose();

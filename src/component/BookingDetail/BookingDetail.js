@@ -1,8 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getOneOrder } from "@/src/services/apiOrder";
-import { selectCart, removeCart } from "@/src/services/Redux/CartSlice";
+import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
 import {
   Box,
@@ -11,13 +9,9 @@ import {
   Paper,
   Grid,
   List,
-  ListItem,
-  ListItemText,
   Chip,
   Alert,
   Divider,
-  ListItemAvatar,
-  Avatar,
   Button,
   Modal,
   Table,
@@ -32,14 +26,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/toast.css";
 import axios from "axios";
-import {
-  apiUrlBooking,
-  apiUrlOrder,
-  apiUrlPets,
-  apiUrlProduct,
-} from "@/src/services/config";
-import { getSimplePets } from "@/src/services/apiPet";
-import { getProdOrPet, getSimpleProd } from "@/src/services/apiProduct";
+import { apiUrlBooking, apiUrlService } from "@/src/services/config";
 import RatingForm from "../RatingForm/RatingForm";
 import { getBookingID } from "@/src/services/apiBooking";
 import { formatDate } from "@/src/hooks/useFormatTime";
@@ -55,7 +42,6 @@ const BookingDetail = ({ bookingId }) => {
   const [isRatingFormOpen, setIsRatingFormOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
   const pathName = usePathname();
-  console.log(orderDetail);
 
   const handleOpenRatingForm = (id) => {
     setIsRatingFormOpen(true);
@@ -70,6 +56,11 @@ const BookingDetail = ({ bookingId }) => {
       setLoading(true);
       const res = await getBookingID(bookingId, accessToken);
       const orderData = res;
+      const ratingsData = res.services.map((ser) => ({
+        _id: ser._id,
+        rating: ser.rating,
+      }));
+      setRatings(ratingsData);
       setOrderDetail(orderData);
     } catch (error) {
       console.error(error);
@@ -122,6 +113,7 @@ const BookingDetail = ({ bookingId }) => {
         return "default";
     }
   };
+
   const handleRatingSubmit = async (star, comment, feedback_img) => {
     setLoading(true);
     try {
@@ -136,49 +128,25 @@ const BookingDetail = ({ bookingId }) => {
         return;
       }
 
-      const res = await getProdOrPet(selectedProductId);
-      if (res === "Pet") {
-        await axios.post(
-          `${apiUrlPets}/rating/${selectedProductId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+      await axios.post(
+        `${apiUrlService}/rating/${selectedProductId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-        Swal.fire({
-          icon: "success",
-          title: "Rating Successfully!",
-          text: "Thank you for your purchase",
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-        });
-      } else if (res === "Prod") {
-        await axios.post(
-          `${apiUrlProduct}/rating/${selectedProductId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        Swal.fire({
-          icon: "success",
-          title: "Rating Successfully!",
-          text: "Thank you for your purchase",
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-        });
-      } else {
-        console.error(
-          "Error fetching data: Invalid response from getProdOrPet"
-        );
-      }
+      Swal.fire({
+        icon: "success",
+        title: "Rating Successfully!",
+        text: "Thank you for your purchase",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+      fetchData();
     } catch (error) {
       console.error(
         "Error fetching data:",
@@ -240,6 +208,7 @@ const BookingDetail = ({ bookingId }) => {
       </Box>
     );
   }
+
   return (
     <Box
       sx={{
@@ -487,7 +456,6 @@ const BookingDetail = ({ bookingId }) => {
                         (r) => r.postBy === orderDetail.user._id
                       )
                   );
-
                 return (
                   <Box key={index}>
                     <Box
@@ -510,11 +478,11 @@ const BookingDetail = ({ bookingId }) => {
                         </Typography>
                       </Box>
                       {orderDetail.status === "Completed" &&
-                        pathName !== `/dashboard/booking/${orderId}` && (
+                        pathName !== `/dashboard/booking/${bookingId}` && (
                           <Button
                             variant="contained"
                             color="primary"
-                            onClick={() => handleOpenRatingForm(product.id)}
+                            onClick={() => handleOpenRatingForm(ser._id)}
                           >
                             {userHasReviewed ? "Change Rating" : "Rating"}
                           </Button>
