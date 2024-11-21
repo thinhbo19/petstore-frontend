@@ -29,7 +29,6 @@ const BookingAdminComp = () => {
   const fetchData = async () => {
     try {
       const res = await getAllBooking();
-      console.log(res);
       setDataList(res.reverse());
     } catch (error) {
       console.log(error);
@@ -161,7 +160,7 @@ const BookingAdminComp = () => {
   const filteredDataList = dataList.filter((item) => {
     const matchesSearchTerm =
       item._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.user?.username.toLowerCase().includes(searchTerm.toLowerCase());
+      item.user.username.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
       selectedStatus === "All" || item.status === selectedStatus;
