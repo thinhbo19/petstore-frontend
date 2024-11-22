@@ -68,3 +68,13 @@ export const getBookingID = async (bookingId, accessToken) => {
     throw error;
   }
 };
+
+export const getRatingsByType = async (type) => {
+  try {
+    const res = await axios.get(`${apiUrlService}/ratings/${type}`);
+    return res.data.ratings;
+  } catch (error) {
+    console.error("Error fetching species:", error);
+    throw error;
+  }
+};
