@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { generateSlug } from "@/src/services/slugifyConfig";
+import { usePathname } from "next/navigation";
 
 const DrawerPet = ({
   breedName,
@@ -29,6 +30,9 @@ const DrawerPet = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredDogData, setFilteredDogData] = useState(dogData);
   const [filteredCatData, setFilteredCatData] = useState(catData);
+  const pathName = usePathname();
+  const parts = pathName.split("/");
+  const category = parts[2];
 
   const formatString = (input) => {
     return input
@@ -42,32 +46,29 @@ const DrawerPet = ({
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
+
     setFilteredDogData(
-      dogData.filter((dog) =>
+      dogData?.filter((dog) =>
         dog.nameBreed.toLowerCase().includes(query.toLowerCase())
-      )
+      ) || []
     );
+
     setFilteredCatData(
-      catData.filter((cat) =>
+      catData?.filter((cat) =>
         cat.nameBreed.toLowerCase().includes(query.toLowerCase())
-      )
+      ) || []
     );
   };
 
   useEffect(() => {
-    const hasFilteredDogData = filteredDogData.length > 0;
-    const hasFilteredCatData = filteredCatData.length > 0;
-
-    if (hasFilteredDogData && hasFilteredCatData) {
+    if (category === "dog" && filteredDogData.length) {
       setExpanded("panel1");
-    } else if (hasFilteredDogData) {
-      setExpanded("panel1");
-    } else if (hasFilteredCatData) {
+    } else if (category === "cat" && filteredCatData.length) {
       setExpanded("panel2");
     } else {
       setExpanded(false);
     }
-  }, [searchQuery, filteredDogData, filteredCatData]);
+  }, [category, filteredDogData, filteredCatData]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -96,34 +97,44 @@ const DrawerPet = ({
             ),
           }}
         />
-
         <Box sx={{ width: 220, padding: 2 }}>
           <Typography gutterBottom>Giá</Typography>
           <Slider
-            value={priceRange}
+            value={priceRange || [0, 20000000]}
             onChange={handlePriceChange}
             valueLabelDisplay="auto"
             min={0}
             max={20000000}
             aria-labelledby="price-slider"
           />
+
           <Typography>
             {`Price from ${priceRange[0].toLocaleString(
               "vi"
             )} to ${priceRange[1].toLocaleString("vi")}`}
           </Typography>
         </Box>
-
         {/* Accordion cho Dog */}
         {filteredDogData.length > 0 && (
           <Accordion
             expanded={expanded === "panel1"}
             onChange={handleChange("panel1")}
+            sx={{
+              borderRadius: "10px",
+            }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={
+                <ExpandMoreIcon
+                  sx={{ color: category === "dog" ? "white" : "black" }}
+                />
+              }
               aria-controls="panel1a-content"
               id="panel1a-header"
+              sx={{
+                backgroundColor: category === "dog" ? "#FA5130" : "white",
+                borderRadius: "10px",
+              }}
             >
               <Typography
                 component={Link}
@@ -131,7 +142,7 @@ const DrawerPet = ({
                 sx={{
                   fontWeight: "bold",
                   textDecoration: "none",
-                  color: "black",
+                  color: category === "dog" ? "white" : "black",
                 }}
               >
                 DOG
@@ -159,18 +170,27 @@ const DrawerPet = ({
             </AccordionDetails>
           </Accordion>
         )}
-
         <Divider sx={{ marginY: 2 }} />
-
         {filteredCatData.length > 0 && (
           <Accordion
             expanded={expanded === "panel2"}
             onChange={handleChange("panel2")}
+            sx={{
+              borderRadius: "10px",
+            }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={
+                <ExpandMoreIcon
+                  sx={{ color: category === "cat" ? "white" : "black" }}
+                />
+              }
               aria-controls="panel2a-content"
               id="panel2a-header"
+              sx={{
+                backgroundColor: category === "cat" ? "#FA5130" : "white",
+                borderRadius: "10px",
+              }}
             >
               <Typography
                 component={Link}
@@ -178,7 +198,7 @@ const DrawerPet = ({
                 sx={{
                   fontWeight: "bold",
                   textDecoration: "none",
-                  color: "black",
+                  color: category === "cat" ? "white" : "black",
                 }}
               >
                 CAT
@@ -205,7 +225,7 @@ const DrawerPet = ({
               ))}
             </AccordionDetails>
           </Accordion>
-        )}
+        )}{" "}
       </Box>
     </Drawer>
   );

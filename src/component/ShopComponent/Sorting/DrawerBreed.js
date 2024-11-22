@@ -51,11 +51,22 @@ const DrawerBreed = ({
         <Accordion
           expanded={expanded === "panel1"}
           onChange={handleChange("panel1")}
+          sx={{
+            borderRadius: "10px",
+          }}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: nameSpecies === "dog" ? "white" : "black" }}
+              />
+            }
             aria-controls="panel1a-content"
             id="panel1a-header"
+            sx={{
+              backgroundColor: nameSpecies === "dog" ? "#FA5130" : "white",
+              borderRadius: "10px",
+            }}
           >
             <Typography
               component={Link}
@@ -63,7 +74,7 @@ const DrawerBreed = ({
               sx={{
                 fontWeight: "bold",
                 textDecoration: "none",
-                color: "black",
+                color: nameSpecies === "dog" ? "white" : "black",
               }}
             >
               DOG
@@ -94,11 +105,22 @@ const DrawerBreed = ({
         <Accordion
           expanded={expanded === "panel2"}
           onChange={handleChange("panel2")}
+          sx={{
+            borderRadius: "10px",
+          }}
         >
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
+            expandIcon={
+              <ExpandMoreIcon
+                sx={{ color: nameSpecies === "cat" ? "white" : "black" }}
+              />
+            }
             aria-controls="panel2a-content"
             id="panel2a-header"
+            sx={{
+              backgroundColor: nameSpecies === "cat" ? "#FA5130" : "white",
+              borderRadius: "10px",
+            }}
           >
             <Typography
               component={Link}
@@ -106,7 +128,7 @@ const DrawerBreed = ({
               sx={{
                 fontWeight: "bold",
                 textDecoration: "none",
-                color: "black",
+                color: nameSpecies === "cat" ? "white" : "black",
               }}
             >
               CAT
