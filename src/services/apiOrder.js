@@ -42,3 +42,45 @@ export const getOneOrder = async (orderId, accessToken) => {
     throw error;
   }
 };
+
+export const totalPriceOrder = async (accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlOrder}/totalPrice`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.totalPrice;
+  } catch (error) {
+    console.error("Error fetching:", error);
+    throw error;
+  }
+};
+
+export const mostPurchasedProduct = async (accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlOrder}/most-purchased`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.product;
+  } catch (error) {
+    console.error("Error fetching:", error);
+    throw error;
+  }
+};
+
+export const totalSalesByMonth = async (accessToken, year) => {
+  try {
+    const res = await axios.get(`${apiUrlOrder}/total-sales-by-month/${year}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.data;
+  } catch (error) {
+    console.error("Error fetching:", error);
+    throw error;
+  }
+};

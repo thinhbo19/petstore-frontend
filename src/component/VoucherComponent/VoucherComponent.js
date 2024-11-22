@@ -181,7 +181,7 @@ const VoucherComponent = () => {
             />
           </Paper>
 
-          {Object.entries(vouchersByType).map(([type, vouchers]) => (
+          {Object.entries(vouchersByType)?.map(([type, vouchers]) => (
             <Box key={type} sx={{ mb: 9 }}>
               <Typography
                 variant="h5"
@@ -195,7 +195,7 @@ const VoucherComponent = () => {
                 {type} Vouchers
               </Typography>
               <Grid container spacing={4}>
-                {vouchers.map((voucher) => (
+                {vouchers?.map((voucher) => (
                   <Grid item xs={12} sm={6} md={4} key={voucher._id}>
                     <Paper
                       elevation={3}
