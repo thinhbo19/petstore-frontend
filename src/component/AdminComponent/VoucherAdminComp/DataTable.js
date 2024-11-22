@@ -10,6 +10,7 @@ import {
   Paper,
   Checkbox,
   IconButton,
+  Chip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -43,6 +44,7 @@ const DataTable = ({
           <TableCell>Discount</TableCell>
           <TableCell>Exclusive</TableCell>
           <TableCell>Expiry</TableCell>
+          <TableCell>Status</TableCell>
           <TableCell>Action</TableCell>
         </TableRow>
       </TableHead>
@@ -60,6 +62,16 @@ const DataTable = ({
             <TableCell>{item.discount}%</TableCell>
             <TableCell>{item.exclusive.toLocaleString("vi")} VNĐ</TableCell>
             <TableCell>{formatDate(item.expiry)}</TableCell>
+            <TableCell>
+              <Chip
+                label={item.status ? "Expired" : "Still Valid"}
+                color={item.status ? "error" : "success"}
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "0.85rem",
+                }}
+              />
+            </TableCell>
             <TableCell>
               <IconButton color="primary" onClick={() => onEdit(item._id)}>
                 <EditIcon />

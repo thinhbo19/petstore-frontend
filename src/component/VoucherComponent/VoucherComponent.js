@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import VoucherIMG from "../../../public/Slider/Brown Minimalist Pet Shop Promotion Banner.png";
-import { getAllVouchers } from "@/src/services/apiVocher";
+import { getAllVouchersClient } from "@/src/services/apiVocher";
 import { formatDate } from "@/src/hooks/useFormatTime";
 import { useSelector } from "react-redux";
 import { selectAccessToken } from "@/src/services/Redux/useSlice";
@@ -62,7 +62,7 @@ const VoucherComponent = () => {
 
   const fetchData = async () => {
     try {
-      const allVouchers = await getAllVouchers();
+      const allVouchers = await getAllVouchersClient();
 
       if (accessToken) {
         const userVoucherList = await getVouchersUser(accessToken);

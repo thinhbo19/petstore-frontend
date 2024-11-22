@@ -11,6 +11,16 @@ export const getAllVouchers = async () => {
   }
 };
 
+export const getAllVouchersClient = async () => {
+  try {
+    const res = await axios.get(`${apiUrlVoucher}/client`);
+    return res.data.data;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 export const postVoucher = async (accessToken, formData) => {
   try {
     const res = await axios.post(`${apiUrlVoucher}/addVoucher`, formData, {
