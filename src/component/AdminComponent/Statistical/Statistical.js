@@ -23,11 +23,13 @@ import {
   totalPriceOrder,
   mostPurchasedProduct,
   totalSalesByMonth,
+  getAllOrders,
 } from "@/src/services/apiOrder";
 import {
   totalPriceBooking,
   mostPurchasedService,
   totalSalesByMonthBooking,
+  getAllBooking,
 } from "@/src/services/apiBooking";
 import exportToExcel from "./exportToExcel";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -37,9 +39,11 @@ const Statistical = ({ users }) => {
   const [status, setStatus] = useState("All");
   const [year, setYear] = useState(new Date().getFullYear());
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [bestProd, setBestProd] = useState(null);
+  const [topProd, setTopProd] = useState([]);
+  const [topBooking, setTopBooking] = useState([]);
   const [loading, setLoading] = useState(false);
   const [monthlySales, setMonthlySales] = useState([]);
+  const [orderLength, setOrderLength] = useState(0);
 
   const handleChangeStatus = (newStatus) => setStatus(newStatus);
   const handleYearChange = (event) => setYear(event.target.value);
@@ -47,6 +51,9 @@ const Statistical = ({ users }) => {
   const fetchData = async () => {
     setLoading(true);
     try {
+      const orders = await getAllOrders(accessToken);
+      const bookings = await getAllBooking(accessToken);
+
       const priceOrder = await totalPriceOrder(accessToken);
       const priceBooking = await totalPriceBooking(accessToken);
       const mostProd = await mostPurchasedProduct(accessToken);
@@ -64,17 +71,19 @@ const Statistical = ({ users }) => {
           totalSales: prod.totalSales + (booking?.totalSales || 0),
         };
       });
-
+      setTopProd(mostProd);
+      setTopBooking(mostService);
       if (status === "All") {
+        setOrderLength(orders.length + bookings.length);
         setMonthlySales(totalMonthlyRevenue);
         setTotalRevenue(priceOrder + priceBooking);
       } else if (status === "Purchase") {
         setTotalRevenue(priceOrder);
-        setBestProd(mostProd);
+        setOrderLength(orders.length);
         setMonthlySales(totalMonthProd);
       } else if (status === "Booking") {
+        setOrderLength(bookings.length);
         setTotalRevenue(priceBooking);
-        setBestProd(mostService);
         setMonthlySales(totalMonthBooking);
       }
     } catch (error) {
@@ -117,7 +126,22 @@ const Statistical = ({ users }) => {
             </CardContent>
           </Card>
         </Grid>
-
+        {/* Number of orders*/}
+        <Grid item xs={12} sm={6} md={4}>
+          <Card sx={{ height: "100%" }}>
+            <CardHeader
+              title={`All Orders ${
+                status === "Purchase" ? "Product" : "Booking"
+              }`}
+            />
+            <CardContent>
+              <Typography variant="h6">Number of Orders</Typography>
+              <Typography variant="h4" sx={{ color: "primary.main" }}>
+                {orderLength}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
         {/* Revenue Card */}
         <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ height: "100%" }}>
@@ -130,31 +154,89 @@ const Statistical = ({ users }) => {
             </CardContent>
           </Card>
         </Grid>
+      </Grid>
 
-        {/* Best Selling Products/Services */}
-        <Grid item xs={12} sm={6} md={4}>
+      <Grid container spacing={3} sx={{ marginTop: "10px" }}>
+        <Grid item xs={12} sm={6} md={6}>
           <Card sx={{ height: "100%" }}>
-            <CardHeader
-              title={
-                status === "All"
-                  ? "All"
-                  : status === "Best Selling Products"
-                  ? "Purchase"
-                  : "Best Service"
-              }
-            />
+            <CardHeader title="Top Product" />
             <CardContent>
-              <Typography variant="h6">
-                Top{" "}
-                {status === "All"
-                  ? "All"
-                  : status === "Product"
-                  ? "Purchase"
-                  : "Booking"}
-              </Typography>
-              <Typography variant="h5" sx={{ color: "warning.main" }}>
-                {bestProd?.name}
-              </Typography>
+              {topProd && topProd.length > 0 ? (
+                topProd.map((product, index) => (
+                  <Box
+                    key={product.id}
+                    display="flex"
+                    alignItems="center"
+                    mb={2}
+                    sx={{
+                      border: "1px solid #e0e0e0",
+                      padding: "8px",
+                      borderRadius: "8px",
+                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={product.img}
+                      alt={product.name}
+                      sx={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: "50%",
+                        marginRight: 2,
+                      }}
+                    />
+                    <Box>
+                      <Typography variant="body1" fontWeight="bold">
+                        {index + 1}. {product.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Total Purchased: {product.totalPurchased}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No products available.
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={6}>
+          <Card sx={{ height: "100%" }}>
+            <CardHeader title="Top Service" />
+            <CardContent>
+              {topBooking && topBooking.length > 0 ? (
+                topBooking.map((service, index) => (
+                  <Box
+                    key={service.id}
+                    display="flex"
+                    mb={2}
+                    sx={{
+                      border: "1px solid #e0e0e0",
+                      padding: "8px",
+                      borderRadius: "8px",
+                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography variant="body1" fontWeight="bold">
+                      {index + 1}. {service.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Total Purchased: {service.totalPurchased}
+                    </Typography>
+                  </Box>
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No products available.
+                </Typography>
+              )}
             </CardContent>
           </Card>
         </Grid>

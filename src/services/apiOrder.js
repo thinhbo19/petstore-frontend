@@ -64,7 +64,7 @@ export const mostPurchasedProduct = async (accessToken) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    return res.data.product;
+    return res.data.products;
   } catch (error) {
     console.error("Error fetching:", error);
     throw error;

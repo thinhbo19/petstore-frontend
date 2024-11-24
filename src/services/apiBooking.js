@@ -31,7 +31,7 @@ export const mostPurchasedService = async (accessToken) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-    return res.data.service;
+    return res.data.services;
   } catch (error) {
     console.error("Error fetching:", error);
     throw error;
