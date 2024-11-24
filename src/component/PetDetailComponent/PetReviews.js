@@ -51,15 +51,8 @@ const ReviewItem = ({ review }) => (
         <Avatar>{review.username.charAt(0).toUpperCase()}</Avatar>
         <ListItemText
           primary={
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography
-                variant="subtitle1"
-                sx={{ fontWeight: "bold", marginRight: 1 }}
-              >
+            <Box display="flex" flexDirection="column" marginBottom="10px">
+              <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                 {review.username}
               </Typography>
               <Rating
@@ -69,6 +62,13 @@ const ReviewItem = ({ review }) => (
                 size="small"
                 aria-label={`User rating: ${review.star}`}
               />
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ mt: 1 }}
+              >
+                {formatDate(review.dateComment)}
+              </Typography>
             </Box>
           }
           secondary={
@@ -80,17 +80,15 @@ const ReviewItem = ({ review }) => (
                   ...customScrollbarStyle,
                 }}
               >
-                <Typography variant="body2" color="text.secondary">
+                <Typography
+                  sx={{ color: "black" }}
+                  variant="body2"
+                  color="text.secondary"
+                >
                   {review.comment}
                 </Typography>
               </Box>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ mt: 1 }}
-              >
-                {formatDate(review.dateComment)}
-              </Typography>
+
               {review.feedback_img && review.feedback_img.length > 0 && (
                 <Grid container spacing={2} sx={{ mt: 2 }}>
                   {review.feedback_img.map((imgUrl, idx) => (
@@ -173,51 +171,61 @@ const PetReviews = ({ reviews }) => {
   return (
     <Box
       sx={{
-        maxWidth: isSmallScreen ? "100%" : isMediumScreen ? "80%" : "600px",
+        maxWidth: isSmallScreen ? "100%" : isMediumScreen ? "100%" : "800px",
         margin: "auto",
         padding: isSmallScreen ? 1 : 2,
       }}
     >
-      <Box display="flex" flexDirection="column" alignItems="center" mb={4}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          User Reviews
-        </Typography>
-        <Rating
-          value={averageRating || 0}
-          precision={0.1}
-          readOnly
-          size="large"
-          aria-label={`Average rating: ${averageRating.toFixed(1)}`}
-        />
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-          {averageRating > 0 ? averageRating.toFixed(1) : "0"} out of 5 (
-          {totalReviews} reviews)
-        </Typography>
-      </Box>
-      <Box display="flex" justifyContent="center" mb={3}>
-        <ButtonGroup
-          variant="outlined"
-          color="primary"
-          sx={{
-            flexDirection: "row",
-          }}
-        >
-          <Button
-            onClick={() => setSelectedStar(null)}
-            sx={getButtonStyle(null)}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: "center",
+          justifyContent: "space-around",
+          width: "100%",
+        }}
+      >
+        <Box display="flex" flexDirection="column" alignItems="center" mb={4}>
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            User Reviews
+          </Typography>
+          <Rating
+            value={averageRating || 0}
+            precision={0.1}
+            readOnly
+            size="large"
+            aria-label={`Average rating: ${averageRating.toFixed(1)}`}
+          />
+          <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+            {averageRating > 0 ? averageRating.toFixed(1) : "0"} out of 5 (
+            {totalReviews} reviews)
+          </Typography>
+        </Box>
+        <Box display="flex" justifyContent="center" mb={3}>
+          <ButtonGroup
+            variant="outlined"
+            color="primary"
+            sx={{
+              flexDirection: "row",
+            }}
           >
-            All
-          </Button>
-          {[1, 2, 3, 4, 5].map((star) => (
             <Button
-              key={star}
-              onClick={() => setSelectedStar(star)}
-              sx={getButtonStyle(star)}
+              onClick={() => setSelectedStar(null)}
+              sx={getButtonStyle(null)}
             >
-              {star} Star
+              All
             </Button>
-          ))}
-        </ButtonGroup>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Button
+                key={star}
+                onClick={() => setSelectedStar(star)}
+                sx={getButtonStyle(star)}
+              >
+                {star} Star
+              </Button>
+            ))}
+          </ButtonGroup>
+        </Box>
       </Box>
 
       {totalReviews === 0 ? (
