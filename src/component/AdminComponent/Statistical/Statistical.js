@@ -12,6 +12,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Button,
 } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
 import CustomButtons from "./CustomButtons";
@@ -28,6 +29,8 @@ import {
   mostPurchasedService,
   totalSalesByMonthBooking,
 } from "@/src/services/apiBooking";
+import exportToExcel from "./exportToExcel";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const Statistical = ({ users }) => {
   const accessToken = useSelector(selectAccessToken);
@@ -157,20 +160,45 @@ const Statistical = ({ users }) => {
         </Grid>
       </Grid>
 
-      <FormControl fullWidth sx={{ margin: 3, width: "20%" }}>
-        <InputLabel id="select-year-label">Select Year</InputLabel>
-        <Select
-          labelId="select-year-label"
-          value={year}
-          onChange={handleYearChange}
+      <Box
+        sx={{
+          margin: "25px 0",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <FormControl fullWidth sx={{ width: "10%" }}>
+          <InputLabel id="select-year-label">Select Year</InputLabel>
+          <Select
+            labelId="select-year-label"
+            value={year}
+            onChange={handleYearChange}
+          >
+            {Array.from({ length: 5 }, (_, i) => (
+              <MenuItem key={i} value={2024 - i}>
+                {2024 - i}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button
+          variant="contained"
+          color="success"
+          startIcon={<DownloadIcon />}
+          size="large"
+          sx={{
+            textTransform: "none",
+            fontWeight: "bold",
+            padding: "5px 15px",
+            boxShadow: "0 3px 5px rgba(0,0,0,0.2)",
+            textAlign: "right",
+          }}
+          onClick={() => exportToExcel(monthlySales, totalRevenue)}
         >
-          {Array.from({ length: 5 }, (_, i) => (
-            <MenuItem key={i} value={2024 - i}>
-              {2024 - i}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          Export to Excel
+        </Button>
+      </Box>
+
       <Box sx={{ margin: "10px 0" }}>
         <Typography variant="h6" gutterBottom>
           Monthly Sales Chart
@@ -181,7 +209,7 @@ const Statistical = ({ users }) => {
               data: monthlySales.map((sale) => sale.totalSales),
             },
           ]}
-          height={300}
+          height={500}
           xAxis={[
             {
               data: [

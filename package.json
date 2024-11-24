@@ -28,6 +28,7 @@
     "aos": "^2.3.4",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
+    "file-saver": "^2.0.5",
     "firebase": "^10.13.1",
     "he": "^1.2.0",
     "html-react-parser": "^5.1.16",
@@ -50,7 +51,8 @@
     "socket.io-client": "^4.7.5",
     "sweetalert2": "^11.12.2",
     "swiper": "^11.1.15",
-    "tinymce": "^7.3.0"
+    "tinymce": "^7.3.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "eslint": "^9.9.0"
