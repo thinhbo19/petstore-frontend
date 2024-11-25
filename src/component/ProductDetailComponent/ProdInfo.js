@@ -489,29 +489,29 @@ const ProdReviews = ({ prodData, accessToken }) => {
                 />
               </IconButton>
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: { xs: "center", md: "left" },
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: { xs: "center", md: "left" },
+            }}
+          >
+            {" "}
+            <InlineShareButtons
+              config={{
+                alignment: "left",
+                color: "social",
+                enabled: true,
+                font_size: 16,
+                labels: "cta",
+                language: "en",
+                networks: ["messenger", "facebook", "twitter"],
+                padding: 12,
+                radius: 4,
+                size: 40,
               }}
-            >
-              {" "}
-              <InlineShareButtons
-                config={{
-                  alignment: "left",
-                  color: "social",
-                  enabled: true,
-                  font_size: 16,
-                  labels: "cta",
-                  language: "en",
-                  networks: ["messenger", "facebook", "twitter"],
-                  padding: 12,
-                  radius: 4,
-                  size: 40,
-                }}
-              />
-            </Box>
+            />
           </Box>
         </Grid>
       </Grid>
