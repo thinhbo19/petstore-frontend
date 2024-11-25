@@ -84,3 +84,17 @@ export const totalSalesByMonth = async (accessToken, year) => {
     throw error;
   }
 };
+
+export const topUsersByOrders = async (accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlOrder}/most-users`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.data;
+  } catch (error) {
+    console.error("Error fetching:", error);
+    throw error;
+  }
+};

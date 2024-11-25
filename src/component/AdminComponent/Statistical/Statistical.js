@@ -24,6 +24,7 @@ import {
   mostPurchasedProduct,
   totalSalesByMonth,
   getAllOrders,
+  topUsersByOrders,
 } from "@/src/services/apiOrder";
 import {
   totalPriceBooking,
@@ -44,6 +45,7 @@ const Statistical = ({ users }) => {
   const [loading, setLoading] = useState(false);
   const [monthlySales, setMonthlySales] = useState([]);
   const [orderLength, setOrderLength] = useState(0);
+  const [mostUsers, setMostUsers] = useState([]);
 
   const handleChangeStatus = (newStatus) => setStatus(newStatus);
   const handleYearChange = (event) => setYear(event.target.value);
@@ -71,6 +73,9 @@ const Statistical = ({ users }) => {
           totalSales: prod.totalSales + (booking?.totalSales || 0),
         };
       });
+
+      const resUser = await topUsersByOrders(accessToken);
+      setMostUsers(resUser);
       setTopProd(mostProd);
       setTopBooking(mostService);
       if (status === "All") {
@@ -114,7 +119,6 @@ const Statistical = ({ users }) => {
     <Box sx={{ padding: "2rem", maxWidth: "1200px", margin: "auto" }}>
       <CustomButtons handleChangeStatus={handleChangeStatus} />
       <Grid container spacing={3}>
-        {/* Overview Card */}
         <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ height: "100%" }}>
             <CardHeader title="Overview" />
@@ -126,7 +130,6 @@ const Statistical = ({ users }) => {
             </CardContent>
           </Card>
         </Grid>
-        {/* Number of orders*/}
         <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ height: "100%" }}>
             <CardHeader
@@ -142,7 +145,6 @@ const Statistical = ({ users }) => {
             </CardContent>
           </Card>
         </Grid>
-        {/* Revenue Card */}
         <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ height: "100%" }}>
             <CardHeader title="Revenue" />
@@ -157,7 +159,55 @@ const Statistical = ({ users }) => {
       </Grid>
 
       <Grid container spacing={3} sx={{ marginTop: "10px" }}>
-        <Grid item xs={12} sm={6} md={6}>
+        <Grid item xs={12} sm={6} md={4}>
+          <Card sx={{ height: "100%" }}>
+            <CardHeader title="Top User" />
+            <CardContent>
+              {mostUsers && mostUsers?.length > 0 ? (
+                mostUsers?.map((user, index) => (
+                  <Box
+                    key={user.userId}
+                    display="flex"
+                    alignItems="center"
+                    mb={2}
+                    sx={{
+                      border: "1px solid #e0e0e0",
+                      padding: "8px",
+                      borderRadius: "8px",
+                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src={user.Avatar}
+                      alt={user.name}
+                      sx={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: "50%",
+                        marginRight: 2,
+                      }}
+                    />
+                    <Box>
+                      <Typography variant="body1" fontWeight="bold">
+                        {index + 1}. {user.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Order Count: {user.orderCount}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ))
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No products available.
+                </Typography>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ height: "100%" }}>
             <CardHeader title="Top Product" />
             <CardContent>
@@ -205,7 +255,7 @@ const Statistical = ({ users }) => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={6}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card sx={{ height: "100%" }}>
             <CardHeader title="Top Service" />
             <CardContent>
