@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 import { removeCart } from "@/src/services/Redux/CartSlice";
 import { useRouter } from "next/navigation";
 import { getCurrentVoucher } from "@/src/services/apiVocher";
+import { addNotification } from "@/src/services/Redux/NotificationSlice";
 
 const Payment = () => {
   const cartUser = useSelector(selectCart);
@@ -102,7 +103,10 @@ const Payment = () => {
       );
       if (res.data.success) {
         for (const product of cartData) {
-          if (cartUser.length !== 0) {
+          const matchingProduct = cartUser.find(
+            (item) => item.id === product.id
+          );
+          if (matchingProduct) {
             await axios.delete(`${apiUrlUser}/allOneCart`, {
               data: {
                 id: product.id,
@@ -112,7 +116,14 @@ const Payment = () => {
             dispatch(removeCart(product.id));
           }
         }
-
+        dispatch(
+          addNotification({
+            notification: "You have placed your order successfully!",
+            href: `/order-detail/${res.data.data._id}`,
+            status: false,
+            id: res.data.data._id,
+          })
+        );
         Swal.fire({
           title: "Successfully!",
           text: "You have successfully placed your order.!",
@@ -135,6 +146,7 @@ const Payment = () => {
       setLoading(false);
     }
   };
+
   const handlePayOCD = async () => {
     setLoading(true);
     try {
@@ -162,7 +174,10 @@ const Payment = () => {
       );
       if (res.data.success) {
         for (const product of cartData) {
-          if (cartUser.length !== 0) {
+          const matchingProduct = cartUser.find(
+            (item) => item.id === product.id
+          );
+          if (matchingProduct) {
             await axios.delete(`${apiUrlUser}/allOneCart`, {
               data: {
                 id: product.id,
@@ -172,6 +187,15 @@ const Payment = () => {
             dispatch(removeCart(product.id));
           }
         }
+
+        dispatch(
+          addNotification({
+            notification: "You have placed your order successfully!",
+            href: `/order-detail/${res.data.data._id}`,
+            status: false,
+            id: res.data.data._id,
+          })
+        );
 
         Swal.fire({
           title: "Successfully!",

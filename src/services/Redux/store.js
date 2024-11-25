@@ -7,25 +7,22 @@ import FavoriteSlice from "./FavoriteSlice";
 import FavoriteProductSlice from "./FavoriteProductSlice";
 import CartSlice from "./CartSlice";
 import CartTempSlice from "./CartTempSlice";
-
-const userPersistConfig = {
-  key: "user",
-  storage,
-  whitelist: ["login", "accessToken"],
-};
+import NotificationSlice from "./NotificationSlice";
 
 const rootReducer = combineReducers({
-  user: persistReducer(userPersistConfig, userReducer),
+  user: userReducer,
   favorites: FavoriteSlice,
   favoriteProducts: FavoriteProductSlice,
   cart: CartSlice,
   cartTemp: CartTempSlice,
+  notification: NotificationSlice,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["favorites", "favoriteProducts", "cart", "cartTemp"],
+  // blacklist: ["favorites", "favoriteProducts", "cart", "cartTemp"],
+  // whitelist: ["login", "accessToken"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

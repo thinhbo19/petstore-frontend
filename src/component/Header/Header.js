@@ -34,6 +34,7 @@ import SearchResults from "./Popover/SearchResults";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import { useRouter } from "next/navigation";
 import { selectCart } from "@/src/services/Redux/CartSlice";
+import { selectNotification } from "@/src/services/Redux/NotificationSlice";
 
 const Header = ({ allDog, allCat, allPets, allProds }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -53,6 +54,11 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
   const [anchorElCart, setAnchorElCart] = useState(null);
   const [anchorElFavorite, setAnchorElFavorite] = useState(null);
   const [anchorElNotification, setAnchorElNotification] = useState(null);
+
+  const notificationData = useSelector(selectNotification);
+  const notificationUnRead = notificationData.filter(
+    (not) => not.status === false
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
@@ -302,7 +308,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
               onClick={handleMenuNotificationOpen}
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={notificationData?.length} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -383,6 +389,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
         notificationMenuId={notificationMenuId}
         openNotification={openNotification}
         handleMenuNotificationClose={handleMenuNotificationClose}
+        notificationData={notificationUnRead}
       />
       <HomeMenu
         anchorElHome={anchorElHome}

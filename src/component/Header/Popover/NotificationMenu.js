@@ -2,16 +2,16 @@ import React from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
-import Image from "next/image";
-import TextImage from "../../../../public/Breed/Dog/anh-meo-Bengal-5.jpg";
 import Link from "next/link";
-import { Box } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 const NotificationMenu = ({
   anchorElNotification,
   notificationMenuId,
   openNotification,
   handleMenuNotificationClose,
+  notificationData,
 }) => {
   return (
     <Menu
@@ -52,46 +52,86 @@ const NotificationMenu = ({
         },
       }}
     >
-      <MenuItem sx={{ alignItems: "center", gap: 1.5 }}>
-        <Image src={TextImage} width={50} height={50} />
-        <Box
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "right",
+          alignItems: "center",
+        }}
+      >
+        <Button sx={{ color: "#FB5730", fontSize: "0.8rem" }}>
+          <NotificationsIcon sx={{ color: "#FB5730", fontSize: "1rem" }} /> Read
+          All
+        </Button>
+      </Box>
+      {notificationData.length === 0 ? (
+        <MenuItem
           sx={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            maxWidth: "300px",
-            overflow: "hidden",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 1.5,
+            minHeight: "100px",
           }}
         >
           <Typography
             variant="inherit"
-            noWrap
             sx={{
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              flexGrow: 1,
+              textAlign: "center",
+              color: "gray",
             }}
           >
-            A very long text that overflows
+            No notifications
           </Typography>
-          <Typography
-            variant="inherit"
+        </MenuItem>
+      ) : (
+        notificationData.map((notification, index) => (
+          <MenuItem
+            key={index}
             sx={{
-              textAlign: "right",
-              fontWeight: "bold",
+              alignItems: "center",
+              gap: 1.5,
+              backgroundColor:
+                notification.status === false ? "#ededed" : "white",
             }}
           >
-            1.900.000đ
-          </Typography>
-        </Box>
-      </MenuItem>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                overflow: "hidden",
+              }}
+            >
+              <Typography
+                variant="inherit"
+                noWrap
+                sx={{
+                  overflow: "hidden",
+                  whiteSpace: "normal",
+                  wordWrap: "initial",
+                  flexGrow: 1,
+                }}
+              >
+                {notification.notification}{" "}
+              </Typography>
+            </Box>
+            <Divider></Divider>
+          </MenuItem>
+        ))
+      )}
 
-      <MenuItem sx={{ textAlign: "right", justifyContent: "flex-end" }}>
-        <Link style={{ fontSize: "0.8rem", color: "black" }} href="/cart">
-          More
-        </Link>
-      </MenuItem>
+      {/* {notificationData.length > 0 && (
+        <MenuItem sx={{ textAlign: "right", justifyContent: "flex-end" }}>
+          <Link
+            style={{ fontSize: "0.8rem", color: "black" }}
+            href="/profile/notification"
+          >
+            More
+          </Link>
+        </MenuItem>
+      )} */}
     </Menu>
   );
 };
