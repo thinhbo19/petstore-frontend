@@ -28,16 +28,20 @@ export const getCurrentUser = async (accessToken) => {
   }
 };
 export const getUsersForChat = async (accessToken, uid) => {
-  try {
-    const res = await axios.get(`${apiUrlUser}/userCurrent/?_id=${uid}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return res.data.message;
-  } catch (error) {
-    console.error("Error fetching species:", error);
-    throw error;
+  if (accessToken) {
+    try {
+      const res = await axios.get(`${apiUrlUser}/userCurrent/?_id=${uid}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return res.data.message;
+    } catch (error) {
+      console.error("Error fetching species:", error);
+      throw error;
+    }
+  } else {
+    return;
   }
 };
 export const patchIsBlockedUser = async (accessToken, uid, isBlocked) => {

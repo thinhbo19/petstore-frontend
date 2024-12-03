@@ -62,7 +62,7 @@ export const getOneChat = async (chatId, senderId) => {
     const res = await axios.get(`${apiUrlChat}/findone/${chatId}`);
     const chat = res.data[0];
 
-    const recId = chat.members.find((member) => member !== senderId);
+    const recId = chat.members?.find((member) => member !== senderId);
 
     return { recId, chat };
   } catch (error) {
@@ -77,6 +77,16 @@ export const getLatestMess = async (chatId) => {
     return res.data;
   } catch (error) {
     console.error("Error fetching species:", error);
+    throw error;
+  }
+};
+
+export const findOneChat = async (adminId, userid) => {
+  try {
+    const res = await axios.get(`${apiUrlChat}/find/${adminId}/${userid}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching:", error);
     throw error;
   }
 };

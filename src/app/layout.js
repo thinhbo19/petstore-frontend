@@ -1,3 +1,4 @@
+import ChatBox from "../component/ChatBox/ChatBox";
 import DeleteCartTemp from "../component/DeleteCartTemp/DeleteCartTemp";
 import ReduxProvider from "../component/providers/Redux";
 import "./layout.css";
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
       <body>
         <ReduxProvider>
           {children}
+          <ChatBox />
           <DeleteCartTemp />
         </ReduxProvider>
       </body>
