@@ -27,13 +27,13 @@ import { getFavorites } from "@/src/services/apiUser";
 import Swal from "sweetalert2";
 import { apiUrlUser } from "@/src/services/config";
 import axios from "axios";
-import {
-  addProductFavorite,
-  removeProductFavorite,
-} from "@/src/services/Redux/FavoriteProductSlice";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { removeFavorite } from "@/src/services/Redux/FavoriteSlice";
+import {
+  addFavorite,
+  removeFavorite,
+} from "@/src/services/Redux/FavoriteSlice";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.productID === product._id);
@@ -107,11 +107,10 @@ const AccessoryComponent = ({ categoryData, groupedProducts }) => {
           res.data.message ===
           "The product has been successfully removed from your favorite list"
         ) {
-          dispatch(removeProductFavorite(accessory._id));
           dispatch(removeFavorite(accessory._id));
           toast.success(res.data.message);
         } else {
-          dispatch(addProductFavorite(accessory));
+          dispatch(addFavorite({ item: accessory, type: "Product" }));
           toast.success(res.data.message);
         }
       } catch (error) {

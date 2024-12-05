@@ -26,10 +26,9 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { addCart } from "@/src/services/Redux/CartSlice";
 import {
-  addProductFavorite,
-  removeProductFavorite,
-} from "@/src/services/Redux/FavoriteProductSlice";
-import { removeFavorite } from "@/src/services/Redux/FavoriteSlice";
+  addFavorite,
+  removeFavorite,
+} from "@/src/services/Redux/FavoriteSlice";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import { addCartTemp } from "@/src/services/Redux/CartTempSlice";
 import { useRouter } from "next/navigation";
@@ -97,10 +96,9 @@ const ProdReviews = ({ prodData, accessToken }) => {
           "The product has been successfully removed from your favorite list"
         ) {
           dispatch(removeFavorite(prodData._id));
-          dispatch(removeProductFavorite(prodData._id));
           toast.success(res.data.message);
         } else {
-          dispatch(addProductFavorite(prodData));
+          dispatch(addFavorite({ item: prodData, type: "Product" }));
           toast.success(res.data.message);
         }
       } catch (error) {

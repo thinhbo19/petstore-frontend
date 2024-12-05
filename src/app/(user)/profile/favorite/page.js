@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
-import { generateSlug } from "@/src/services/slugifyConfig";
 import {
   addFavorite,
   removeFavorite,
@@ -24,7 +23,8 @@ import { apiUrlUser } from "@/src/services/config";
 import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreIcon from "@mui/icons-material/More";
-import { selectProductFavorites } from "@/src/services/Redux/FavoriteProductSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function isFavorite(product, favorites) {
   return favorites.some((favorite) => favorite.petID === product._id);
@@ -33,9 +33,7 @@ function isFavorite(product, favorites) {
 export default function FavoritesPage() {
   const accessToken = useSelector(selectAccessToken);
   const dispatch = useDispatch();
-  const favoritesPetsData = useSelector(selectFavorites);
-  const favoritesProductData = useSelector(selectProductFavorites);
-  const favoritesData = [...favoritesPetsData, ...favoritesProductData];
+  const favoritesData = useSelector(selectFavorites);
   const [favorites, setFavorites] = useState([]);
 
   const [page, setPage] = useState(1);
@@ -61,43 +59,65 @@ export default function FavoritesPage() {
     } else {
       const isCurrentlyFavorite = isFavorite(petData, favorites);
       const updatedFavorites = isCurrentlyFavorite
-        ? favorites.filter((f) => f.petID !== petData.petID)
-        : [...favorites, { petID: petData.petID, ...petData }];
-
+        ? favorites.filter((f) => f.favId !== petData.favId)
+        : [...favorites, { favId: petData.favId, ...petData }];
       setFavorites(updatedFavorites);
       try {
-        const res = await axios.put(
-          `${apiUrlUser}/favoritePet`,
-          {
-            petID: petData.petID,
-            imgPet: petData.imgPet,
-            namePet: petData.namePet,
-            nameBreed: petData.nameBreed,
-            nameSpecies: petData.nameSpecies,
-            age: petData.age,
-            gender: petData.gender,
-            price: petData.price,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
+        if (petData.type === "Pet") {
+          const res = await axios.put(
+            `${apiUrlUser}/favoritePet`,
+            {
+              petID: petData.favId,
+              imgPet: petData.imgPet,
+              namePet: petData.name,
+              nameBreed: petData.breed,
+              nameSpecies: petData.species,
+              price: petData.price,
             },
-          }
-        );
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
 
-        if (
-          res.data.message ===
-          "The pet has been successfully removed from your favorite list"
-        ) {
-          dispatch(removeFavorite(petData.petID));
+          if (
+            res.data.message ===
+            "The pet has been successfully removed from your favorite list"
+          ) {
+            dispatch(removeFavorite(petData.favId));
+            toast.success(res.data.message);
+          } else {
+            dispatch(addFavorite({ item: petData, type: "Pet" }));
+            toast.success(res.data.message);
+          }
         } else {
-          dispatch(addFavorite(petData));
+          const res = await axios.put(
+            `${apiUrlUser}/favoriteProduct`,
+            {
+              productID: petData.favId,
+              images: petData.images,
+              nameProduct: petData.nameProduct,
+              nameCate: petData.category,
+              price: petData.price,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          if (
+            res.data.message ===
+            "The product has been successfully removed from your favorite list"
+          ) {
+            dispatch(removeFavorite(petData.favId));
+            toast.success(res.data.message);
+          } else {
+            dispatch(addFavorite({ item: petData, type: "Product" }));
+            toast.success(res.data.message);
+          }
         }
-        Swal.fire({
-          title: "SUCCESSFULLY",
-          text: res.data.message,
-          icon: "success",
-        });
       } catch (error) {
         console.log(error);
         Swal.fire({
@@ -118,7 +138,19 @@ export default function FavoritesPage() {
         textAlign: "left",
       }}
     >
-      {favoritesData.length === 0 ? (
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="custom-toast-container"
+      />
+      {favoritesData?.length === 0 ? (
         <Typography
           variant="h6"
           sx={{ textAlign: "center", marginTop: "2rem" }}
@@ -128,7 +160,7 @@ export default function FavoritesPage() {
       ) : (
         <>
           <Grid container spacing={3}>
-            {currentItems.map((favorite, index) => (
+            {currentItems?.map((favorite, index) => (
               <Grid item xs={12} sm={6} md={6} key={index}>
                 <Card
                   sx={{
@@ -153,8 +185,8 @@ export default function FavoritesPage() {
                       height: { xs: 180, md: 150 },
                       objectFit: "cover",
                     }}
-                    src={favorite.imgPet || favorite.images}
-                    alt={favorite.namePet || favorite.images}
+                    src={favorite.img}
+                    alt={favorite.name}
                   />
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Typography
@@ -164,11 +196,10 @@ export default function FavoritesPage() {
                         color: "text.primary",
                       }}
                     >
-                      {favorite.namePet || favorite.nameProduct}
+                      {favorite.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary" noWrap>
-                      {favorite.nameBreed - favorite.nameSpecies ||
-                        favorite.category}
+                      {favorite.type}
                     </Typography>
                     <Typography
                       variant="body1"
@@ -194,20 +225,7 @@ export default function FavoritesPage() {
                       >
                         Remove
                       </Button>
-                      <Link
-                        href={
-                          favorite.petID
-                            ? `/shop/${generateSlug(
-                                favorite.nameSpecies
-                              )}/${generateSlug(
-                                favorite.nameBreed
-                              )}/${generateSlug(favorite.namePet)}`
-                            : `/accessory/${generateSlug(
-                                favorite.nameCate
-                              )}/${generateSlug(favorite.nameProduct)}`
-                        }
-                        passHref
-                      >
+                      <Link href={favorite.href} passHref>
                         <Button
                           variant="outlined"
                           color="primary"

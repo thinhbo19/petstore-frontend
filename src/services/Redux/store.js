@@ -4,7 +4,6 @@ import userReducer from "./useSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import FavoriteSlice from "./FavoriteSlice";
-import FavoriteProductSlice from "./FavoriteProductSlice";
 import CartSlice from "./CartSlice";
 import CartTempSlice from "./CartTempSlice";
 import NotificationSlice from "./NotificationSlice";
@@ -12,7 +11,6 @@ import NotificationSlice from "./NotificationSlice";
 const rootReducer = combineReducers({
   user: userReducer,
   favorites: FavoriteSlice,
-  favoriteProducts: FavoriteProductSlice,
   cart: CartSlice,
   cartTemp: CartTempSlice,
   notification: NotificationSlice,

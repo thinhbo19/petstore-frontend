@@ -90,8 +90,6 @@ const PetInfo = ({ petData, accessToken }) => {
             namePet: petData.namePet,
             nameBreed: petData.petBreed.nameBreed,
             nameSpecies: petData.petBreed.nameSpecies,
-            age: petData.age,
-            gender: petData.gender,
             price: petData.price,
           },
           {
@@ -108,7 +106,7 @@ const PetInfo = ({ petData, accessToken }) => {
           dispatch(removeFavorite(petData._id));
           toast.success(res.data.message);
         } else {
-          dispatch(addFavorite(petData));
+          dispatch(addFavorite({ item: petData, type: "Pet" }));
           toast.success(res.data.message);
         }
       } catch (error) {

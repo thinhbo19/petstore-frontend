@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import Image from "next/image";
 import Link from "next/link";
 import { Box } from "@mui/material";
-import { generateSlug } from "@/src/services/slugifyConfig";
 
 const FavoriteMenu = ({
   favoritesData,
@@ -66,15 +65,7 @@ const FavoriteMenu = ({
         sortedFavorites.map((favorite, index) => (
           <MenuItem key={index} sx={{ alignItems: "center", gap: 1.5 }}>
             <Link
-              href={
-                favorite.petID
-                  ? `/shop/${generateSlug(favorite.nameSpecies)}/${generateSlug(
-                      favorite.nameBreed
-                    )}/${generateSlug(favorite.namePet)}`
-                  : `/accessory/${generateSlug(
-                      favorite.nameCate
-                    )}/${generateSlug(favorite.nameProduct)}`
-              }
+              href={favorite.href}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -85,10 +76,10 @@ const FavoriteMenu = ({
               }}
             >
               <Image
-                src={favorite.imgPet || favorite.images}
+                src={favorite.img}
                 width={50}
                 height={50}
-                alt={favorite.namePet || favorite.images}
+                alt={favorite.name}
               />
               <Box
                 sx={{
@@ -111,7 +102,7 @@ const FavoriteMenu = ({
                     marginLeft: "5px",
                   }}
                 >
-                  {favorite.namePet || favorite.nameProduct}
+                  {favorite.name}
                 </Typography>
                 <Typography
                   variant="inherit"

@@ -118,8 +118,6 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
             namePet: pet.namePet,
             nameBreed: pet.petBreed.nameBreed,
             nameSpecies: pet.petBreed.nameSpecies,
-            age: pet.age,
-            gender: pet.gender,
             price: pet.price,
           },
           {
@@ -136,7 +134,7 @@ const PetShopForm = ({ breedName, dataBreed, catData, dogData }) => {
           dispatch(removeFavorite(pet._id));
           toast.success(res.data.message);
         } else {
-          dispatch(addFavorite(pet));
+          dispatch(addFavorite({ item: pet, type: "Pet" }));
           toast.success(res.data.message);
         }
       } catch (error) {

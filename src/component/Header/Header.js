@@ -27,7 +27,6 @@ import NotificationMenu from "./Popover/NotificationMenu";
 import HomeMenu from "./Popover/HomeMenu";
 import PetsMenu from "./Popover/PetsMenu";
 import { selectFavorites } from "@/src/services/Redux/FavoriteSlice";
-import { selectProductFavorites } from "@/src/services/Redux/FavoriteProductSlice";
 import SearchIcon from "@mui/icons-material/Search";
 import { Search, SearchIconWrapper, StyledInputBase } from "./SearchBar";
 import SearchResults from "./Popover/SearchResults";
@@ -45,10 +44,10 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
   const [anchorElHome, setAnchorElHome] = useState(null);
   const [anchorElPets, setAnchorElPets] = useState(null);
   const favoritesPetsData = useSelector(selectFavorites);
-  const favoritesProductData = useSelector(selectProductFavorites);
-  const favoritesData = favoritesPetsData
-    .concat(favoritesProductData)
-    .sort((a, b) => new Date(b.createAt) - new Date(a.createAt));
+
+  const favoritesData = [...favoritesPetsData].sort(
+    (a, b) => new Date(b.createAt) - new Date(a.createAt)
+  );
   const cartData = useSelector(selectCart);
 
   const [anchorElCart, setAnchorElCart] = useState(null);
