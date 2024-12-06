@@ -31,9 +31,34 @@ import {
   mostPurchasedService,
   totalSalesByMonthBooking,
   getAllBooking,
+  topUsersByBooking,
 } from "@/src/services/apiBooking";
 import exportToExcel from "./exportToExcel";
 import DownloadIcon from "@mui/icons-material/Download";
+
+const combineUsers = (resUser, resUserBooking) => {
+  const combinedMap = new Map();
+
+  resUser.forEach((user) => {
+    const key = `${user.userId}-${user.name}`;
+    if (combinedMap.has(key)) {
+      combinedMap.get(key).orderCount += user.orderCount;
+    } else {
+      combinedMap.set(key, { ...user });
+    }
+  });
+
+  resUserBooking.forEach((user) => {
+    const key = `${user.userId}-${user.name}`;
+    if (combinedMap.has(key)) {
+      combinedMap.get(key).orderCount += user.orderCount;
+    } else {
+      combinedMap.set(key, { ...user });
+    }
+  });
+
+  return Array.from(combinedMap.values());
+};
 
 const Statistical = ({ users }) => {
   const accessToken = useSelector(selectAccessToken);
@@ -75,18 +100,24 @@ const Statistical = ({ users }) => {
       });
 
       const resUser = await topUsersByOrders(accessToken);
-      setMostUsers(resUser);
+      const resUserBooking = await topUsersByBooking(accessToken);
+
+      const mostUsersData = combineUsers(resUser, resUserBooking);
+
       setTopProd(mostProd);
       setTopBooking(mostService);
       if (status === "All") {
         setOrderLength(orders.length + bookings.length);
         setMonthlySales(totalMonthlyRevenue);
         setTotalRevenue(priceOrder + priceBooking);
+        setMostUsers(mostUsersData);
       } else if (status === "Purchase") {
+        setMostUsers(resUser);
         setTotalRevenue(priceOrder);
         setOrderLength(orders.length);
         setMonthlySales(totalMonthProd);
       } else if (status === "Booking") {
+        setMostUsers(resUserBooking);
         setOrderLength(bookings.length);
         setTotalRevenue(priceBooking);
         setMonthlySales(totalMonthBooking);
@@ -166,7 +197,7 @@ const Statistical = ({ users }) => {
               {mostUsers && mostUsers?.length > 0 ? (
                 mostUsers?.map((user, index) => (
                   <Box
-                    key={user.userId}
+                    key={user.id || `${user.name}-${index}`}
                     display="flex"
                     alignItems="center"
                     mb={2}

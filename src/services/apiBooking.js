@@ -55,6 +55,20 @@ export const totalSalesByMonthBooking = async (accessToken, year) => {
   }
 };
 
+export const topUsersByBooking = async (accessToken) => {
+  try {
+    const res = await axios.get(`${apiUrlBooking}/most-users`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return res.data.data;
+  } catch (error) {
+    console.error("Error fetching:", error);
+    throw error;
+  }
+};
+
 export const getAllSpaServices = async () => {
   try {
     const res = await axios.get(`${apiUrlService}/spa`);
