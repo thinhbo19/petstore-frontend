@@ -329,7 +329,7 @@ const CartPage = () => {
                   sx={{ color: "red", fontWeight: "bold" }}
                   variant="h6"
                 >
-                  {subtotal} VNĐ
+                  {subtotal.toLocaleString("vi")} VNĐ
                 </Typography>
               </Grid>
             </Grid>
@@ -380,7 +380,7 @@ const CartPage = () => {
                   sx={{ color: "red", fontWeight: "bold" }}
                   variant="h6"
                 >
-                  {subtotal} VNĐ
+                  {subtotal.toLocaleString("vi")} VNĐ
                 </Typography>
               </Grid>
             </Grid>

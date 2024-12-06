@@ -18,6 +18,8 @@ import { removeCart } from "@/src/services/Redux/CartSlice";
 import { useRouter } from "next/navigation";
 import { getCurrentVoucher } from "@/src/services/apiVocher";
 import { addNotification } from "@/src/services/Redux/NotificationSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Payment = () => {
   const cartUser = useSelector(selectCart);
@@ -51,7 +53,7 @@ const Payment = () => {
     };
 
     fetchAddresses();
-  }, []);
+  }, [accessToken]);
 
   useEffect(() => {
     const fetchTotalPrice = async () => {
@@ -78,6 +80,11 @@ const Payment = () => {
 
   const handlePayPal = async () => {
     setLoading(true);
+    if (selectedAddress === "") {
+      toast.info("You have not choose address!");
+      setLoading(false);
+      return;
+    }
     try {
       const res = await axios.post(
         `${apiUrlOrder}/order`,
@@ -146,9 +153,13 @@ const Payment = () => {
       setLoading(false);
     }
   };
-
   const handlePayOCD = async () => {
     setLoading(true);
+    if (selectedAddress === "") {
+      toast.info("You have not choose address!");
+      setLoading(false);
+      return;
+    }
     try {
       const res = await axios.post(
         `${apiUrlOrder}/order`,
@@ -221,6 +232,11 @@ const Payment = () => {
   };
   const handleVNPay = async () => {
     setLoading(true);
+    if (selectedAddress === "") {
+      toast.info("You have not choose address!");
+      setLoading(false);
+      return;
+    }
     try {
       const res = await axios.post(
         `${apiUrlOrder}/createUrl`,
@@ -275,6 +291,18 @@ const Payment = () => {
         justifyContent: "center",
       }}
     >
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="custom-toast-container"
+      />
       <Grid container spacing={4} sx={{ width: "95%" }}>
         <Grid item xs={12} md={6}>
           <ProductList
