@@ -45,11 +45,12 @@ const BreadcrumbsComponent = () => {
           marginBottom: "15px",
           marginLeft: "2rem",
           fontSize: {
-            xs: "0.75rem",
-            sm: "0.875rem",
-            md: "0.875rem",
-            lg: "1rem",
+            xs: "0.45rem",
+            sm: "0.575rem",
+            md: "0.675rem",
+            lg: "0.775rem",
           },
+          color: "#CABAB0",
         }}
         aria-label="breadcrumb"
       >
@@ -67,13 +68,13 @@ const BreadcrumbsComponent = () => {
               fontWeight: "bold",
               textTransform: "uppercase",
               fontSize: {
-                xs: "0.75rem",
-                sm: "0.875rem",
-                md: "0.875rem",
-                lg: "1rem",
+                xs: "0.45rem",
+                sm: "0.575rem",
+                md: "0.675rem",
+                lg: "0.775rem",
               },
+              color: "#CABAB0",
             }}
-            color="textPrimary"
           >
             HOME
           </Typography>
@@ -94,11 +95,12 @@ const BreadcrumbsComponent = () => {
                 fontWeight: "bold",
                 textTransform: "uppercase",
                 fontSize: {
-                  xs: "0.75rem",
-                  sm: "0.875rem",
-                  md: "0.875rem",
-                  lg: "1rem",
+                  xs: "0.45rem",
+                  sm: "0.575rem",
+                  md: "0.675rem",
+                  lg: "0.775rem",
                 },
+                color: "#CABAB0",
               }}
               color="textPrimary"
             >

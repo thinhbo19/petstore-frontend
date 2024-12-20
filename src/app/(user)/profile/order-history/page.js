@@ -9,6 +9,7 @@ import {
   Grid,
   Pagination,
 } from "@mui/material";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -53,6 +54,8 @@ export default function OrderHistoryPage() {
     setPage(value);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  console.log(filteredOrders);
 
   return (
     <Box
@@ -113,14 +116,33 @@ export default function OrderHistoryPage() {
             <Box
               key={order._id}
               sx={{
-                border: "1px solid #F7452E",
+                boxShadow: 3,
                 padding: "1rem",
                 marginBottom: "1rem",
                 borderRadius: "8px",
-                backgroundColor: "rgba(247, 69, 46, 0.05)",
+                backgroundColor: "#F5F5F5",
                 textAlign: "left",
               }}
             >
+              {order.products?.map((prod, index) => (
+                <Image
+                  key={index}
+                  src={prod.img}
+                  alt={prod.name}
+                  width={100}
+                  height={100}
+                  style={{
+                    borderRadius: "8px",
+                    width: "100%",
+                    maxWidth: "100px",
+                    height: "auto",
+                    maxHeight: "100px",
+                    margin: "10px",
+                  }}
+                  sizes="(max-width: 1200px) 100px, (max-width: 900px) 80px, (max-width: 600px) 60px, 50px"
+                />
+              ))}
+
               <Grid
                 container
                 justifyContent="space-between"
@@ -139,6 +161,7 @@ export default function OrderHistoryPage() {
                   >
                     Order ID: {order._id}
                   </Typography>
+
                   <Typography
                     sx={{
                       fontSize: { xs: "0.8rem", sm: "1rem", md: "1.2rem" },

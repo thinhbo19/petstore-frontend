@@ -9,9 +9,9 @@ import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import MenuIcon from "@mui/icons-material/Menu";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import MenuItems from "./MenuItems";
 import MobileMenu from "./MobileMenu";
 import UserMenu from "./UserMenu";
@@ -289,7 +289,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
               color="inherit"
             >
               <Badge badgeContent={cartData?.length} color="error">
-                <ShoppingCartIcon />
+                <ShoppingCartOutlinedIcon />
               </Badge>
             </IconButton>
 
@@ -299,7 +299,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
               color="inherit"
             >
               <Badge badgeContent={favoritesData?.length} color="error">
-                <FavoriteIcon />
+                <FavoriteBorderOutlinedIcon />
               </Badge>
             </IconButton>
             <IconButton
@@ -308,7 +308,7 @@ const Header = ({ allDog, allCat, allPets, allProds }) => {
               color="inherit"
             >
               <Badge badgeContent={notificationData?.length} color="error">
-                <NotificationsIcon />
+                <NotificationsOutlinedIcon />
               </Badge>
             </IconButton>
             <IconButton

@@ -37,6 +37,7 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
       <MenuItem
         onClick={handleMenuHomeOpen}
         sx={{
+          fontFamily: "Quicksand",
           fontWeight: "bold",
           fontSize: { xs: "14px", sm: "16px", md: "16px" },
           backgroundColor:
@@ -56,6 +57,7 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
       <MenuItem
         onClick={handleMenuPetsOpen}
         sx={{
+          fontFamily: "Quicksand",
           fontWeight: "bold",
           fontSize: { xs: "14px", sm: "16px", md: "16px" },
           backgroundColor: isActivePath(pathName, activePathsPets)
@@ -71,6 +73,7 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
       <MenuItem
         onClick={() => handleChangePage(router, "Voucher")}
         sx={{
+          fontFamily: "Quicksand",
           fontWeight: "bold",
           fontSize: { xs: "14px", sm: "16px", md: "16px" },
           backgroundColor: isActivePath(pathName, activePathsVoucher)
@@ -86,6 +89,7 @@ const MenuItems = ({ handleMenuHomeOpen, handleMenuPetsOpen }) => {
       <MenuItem
         onClick={() => handleChangePage(router, "More")}
         sx={{
+          fontFamily: "Quicksand",
           fontWeight: "bold",
           fontSize: { xs: "14px", sm: "16px", md: "16px" },
           backgroundColor: isActivePath(pathName, activePathsMore)

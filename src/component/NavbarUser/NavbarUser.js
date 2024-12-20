@@ -35,6 +35,9 @@ const NavbarUser = () => {
     textDecoration: "none",
     color: "black",
     width: "100%",
+    "&:hover": {
+      color: "white",
+    },
   });
 
   const isActive = (href) => pathName === href;
@@ -95,6 +98,9 @@ const NavbarUser = () => {
                 sx: {
                   fontSize: "2rem",
                   color: isActive(href) ? "white" : "black",
+                  "&:hover": {
+                    color: "white",
+                  },
                 },
               })}
             </ListItemIcon>

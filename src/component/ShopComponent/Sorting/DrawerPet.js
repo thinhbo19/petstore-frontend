@@ -121,6 +121,7 @@ const DrawerPet = ({
             onChange={handleChange("panel1")}
             sx={{
               borderRadius: "10px",
+              marginTop: "10px",
             }}
           >
             <AccordionSummary
