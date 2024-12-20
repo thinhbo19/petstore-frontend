@@ -16,6 +16,7 @@ const SearchBar = ({
   onDeleteAll,
   selectedStatus,
   onStatusChange,
+  handleOpenService,
 }) => (
   <div style={{ marginBottom: "20px", display: "flex", alignItems: "center" }}>
     <TextField
@@ -40,8 +41,22 @@ const SearchBar = ({
       </Select>
     </FormControl>
 
-    <Button variant="contained" color="success" style={{ marginRight: "20px" }}>
-      Create Booking
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => handleOpenService("Hotel Booking")}
+      style={{ marginRight: "20px" }}
+    >
+      Create Hotel Booking
+    </Button>
+
+    <Button
+      variant="contained"
+      color="secondary"
+      onClick={() => handleOpenService("Spa Service")}
+      style={{ marginRight: "20px" }}
+    >
+      Create Spa Service
     </Button>
 
     <ActionButtons selectedIds={selectedIds} onDeleteAll={onDeleteAll} />

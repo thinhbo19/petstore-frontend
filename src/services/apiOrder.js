@@ -67,7 +67,7 @@ export const mostPurchasedProduct = async (accessToken) => {
     return res.data.products;
   } catch (error) {
     console.error("Error fetching:", error);
-    throw error;
+    return [];
   }
 };
 

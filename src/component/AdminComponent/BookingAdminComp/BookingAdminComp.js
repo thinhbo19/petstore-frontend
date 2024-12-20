@@ -14,8 +14,10 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../../styles/toast.css";
 import { Box, CircularProgress } from "@mui/material";
 import { getAllBooking } from "@/src/services/apiBooking";
+import BookingForm from "./BookingForm";
+import { getAllUsers } from "@/src/services/apiUser";
 
-const BookingAdminComp = () => {
+const BookingAdminComp = ({ spas, hotels }) => {
   const accessToken = useSelector(selectAccessToken);
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
@@ -25,16 +27,21 @@ const BookingAdminComp = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("All");
+  const [openService, setOpenService] = useState(null);
+  const [users, setUsers] = useState([]);
 
   const fetchData = async () => {
     try {
       const res = await getAllBooking();
+      const resUsers = await getAllUsers(accessToken);
+      const Users = resUsers.filter((user) => user.role === "User");
+
       setDataList(res.reverse());
+      setUsers(Users);
     } catch (error) {
       console.log(error);
     }
   };
-
   useEffect(() => {
     if (accessToken) {
       fetchData();
@@ -157,6 +164,14 @@ const BookingAdminComp = () => {
     }
   };
 
+  const handleOpenService = (type) => {
+    setOpenService(type);
+  };
+
+  const handleCloseService = () => {
+    setOpenService(null);
+  };
+
   const filteredDataList = dataList.filter((item) => {
     const matchesSearchTerm =
       item._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -187,7 +202,7 @@ const BookingAdminComp = () => {
   }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", position: "relative" }}>
       <div style={{ marginBottom: "20px" }}>
         <h2 style={{ textTransform: "uppercase" }}>Booking Management</h2>
       </div>
@@ -203,6 +218,17 @@ const BookingAdminComp = () => {
         pauseOnHover
         className="custom-toast-container"
       />
+      {openService && (
+        <BookingForm
+          type={openService}
+          open={!!openService}
+          onClose={handleCloseService}
+          users={users}
+          spas={spas}
+          hotels={hotels}
+        />
+      )}
+
       <SearchBar
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
@@ -210,6 +236,7 @@ const BookingAdminComp = () => {
         onDeleteAll={handleDeleteAll}
         selectedStatus={selectedStatus}
         onStatusChange={handleStatusChange}
+        handleOpenService={handleOpenService}
       />
       <TableData
         dataList={paginatedDataList}
