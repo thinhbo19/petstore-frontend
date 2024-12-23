@@ -133,7 +133,7 @@ export default function ProfilePage() {
   return (
     <Box
       sx={{
-        padding: "0 1rem",
+        padding: "0 0 0 1rem",
         maxWidth: "600px",
         margin: "auto",
         textAlign: "center",

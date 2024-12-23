@@ -53,37 +53,55 @@ const HomeMenu = ({
     >
       <MenuItem
         sx={{ fontWeight: "bold" }}
-        onClick={() => handleChangePage(router, "About Us")}
+        onClick={() => {
+          handleChangePage(router, "About Us");
+          handleMenuHomeClose();
+        }}
       >
         About Us
       </MenuItem>
       <MenuItem
         sx={{ fontWeight: "bold" }}
-        onClick={() => handleChangePage(router, "Spa&Hotel Services")}
+        onClick={() => {
+          handleChangePage(router, "Spa&Hotel Services");
+          handleMenuHomeClose();
+        }}
       >
         Spa&Hotel Services
       </MenuItem>
       <MenuItem
         sx={{ fontWeight: "bold" }}
-        onClick={() => handleChangePage(router, "Warranty Policy")}
+        onClick={() => {
+          handleChangePage(router, "Warranty Policy");
+          handleMenuHomeClose();
+        }}
       >
         Warranty Policy
       </MenuItem>
       <MenuItem
         sx={{ fontWeight: "bold" }}
-        onClick={() => handleChangePage(router, "0% Installment Policy")}
+        onClick={() => {
+          handleChangePage(router, "0% Installment Policy");
+          handleMenuHomeClose();
+        }}
       >
         0% Installment Policy
       </MenuItem>
       <MenuItem
         sx={{ fontWeight: "bold" }}
-        onClick={() => handleChangePage(router, "News")}
+        onClick={() => {
+          handleChangePage(router, "News");
+          handleMenuHomeClose();
+        }}
       >
         News
       </MenuItem>
       <MenuItem
         sx={{ fontWeight: "bold" }}
-        onClick={() => handleChangePage(router, "Contact")}
+        onClick={() => {
+          handleChangePage(router, "Contact");
+          handleMenuHomeClose();
+        }}
       >
         Contact Us
       </MenuItem>

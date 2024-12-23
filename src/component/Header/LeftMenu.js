@@ -54,7 +54,10 @@ const LeftMenu = ({
           sx={{ fontWeight: "bold" }}
           key={option}
           selected={option === "Pyxis"}
-          onClick={() => handleChangePage(router, option)}
+          onClick={() => {
+            handleChangePage(router, option);
+            handleLeftMenuClose();
+          }}
         >
           {option}
         </MenuItem>

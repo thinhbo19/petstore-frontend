@@ -154,6 +154,7 @@ const CategoryComponent = ({ groupedProducts }) => {
           sx={{
             border: "1px solid #FB5431",
             color: "#FB5431",
+            marginTop: "15px",
           }}
           startIcon={<SortIcon />}
           onClick={toggleDrawer(true)}

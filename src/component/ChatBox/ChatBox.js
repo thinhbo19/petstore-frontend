@@ -18,6 +18,7 @@ import {
 } from "@/src/services/Redux/useSlice";
 import { getChat, getMess, postMess } from "@/src/services/apiChat";
 import { Editor } from "@tinymce/tinymce-react";
+import { Box } from "@mui/material";
 
 const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
 
@@ -175,7 +176,7 @@ const ChatBox = () => {
   };
 
   return (
-    <div className="chatbox__container">
+    <Box className="chatbox__container">
       {role === "User" && accessToken && !isOpen && (
         <div className="chatbox__icon__container">
           <FontAwesomeIcon
@@ -237,7 +238,7 @@ const ChatBox = () => {
           </div>
         </div>
       )}
-    </div>
+    </Box>
   );
 };
 

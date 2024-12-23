@@ -194,6 +194,8 @@ const AccessoryComponent = ({ categoryData, groupedProducts }) => {
     return <Loading />;
   }
 
+  console.log(currentData);
+
   return (
     <Container>
       <ToastContainer
@@ -213,6 +215,7 @@ const AccessoryComponent = ({ categoryData, groupedProducts }) => {
         <Button
           sx={{
             border: "1px solid #FB5431",
+            marginTop: "15px",
             color: "#FB5431",
           }}
           startIcon={<SortIcon />}
@@ -237,7 +240,7 @@ const AccessoryComponent = ({ categoryData, groupedProducts }) => {
           <Typography
             variant="h6"
             color="textSecondary"
-            sx={{ margin: "20px auto" }}
+            sx={{ margin: "20px auto", height: "50vh" }}
           >
             No product in this price
           </Typography>
@@ -350,19 +353,21 @@ const AccessoryComponent = ({ categoryData, groupedProducts }) => {
 
       {/* Phân trang */}
       <Divider sx={{ marginY: 2 }} />
-      <Box
-        display="flex"
-        justifyContent="center"
-        sx={{ marginTop: 2, marginBottom: 2 }}
-      >
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-          shape="rounded"
-        />
-      </Box>
+      {currentData.length !== 0 && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          sx={{ marginTop: 2, marginBottom: 2 }}
+        >
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            shape="rounded"
+          />
+        </Box>
+      )}
     </Container>
   );
 };

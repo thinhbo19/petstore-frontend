@@ -201,10 +201,11 @@ export default function OrderHistoryPage() {
                       mt: { xs: 2, md: 0 },
                       width: "50%",
                       maxWidth: { xs: "100%", md: "auto" },
+                      fontSize: { xs: "0.7rem", md: "1rem" },
                     }}
                     onClick={() => router.push(`/order-detail/${order._id}`)}
                   >
-                    See Details
+                    See Detail
                   </Button>
                 </Grid>
               </Grid>
