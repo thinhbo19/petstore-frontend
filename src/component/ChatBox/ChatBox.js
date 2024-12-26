@@ -20,7 +20,7 @@ import { getChat, getMess, postMess } from "@/src/services/apiChat";
 import { Editor } from "@tinymce/tinymce-react";
 import { Box } from "@mui/material";
 
-const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
+const socketUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const ChatBox = () => {
   const [isOpen, setIsOpen] = useState(false);
