@@ -22,7 +22,7 @@ import {
   postMess,
 } from "@/src/services/apiChat";
 
-const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL;
+const socketUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const Staff = () => {
   const uid = useSelector(selectUid);
