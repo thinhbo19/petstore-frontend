@@ -36,6 +36,7 @@ const ChatBox = () => {
   const editorRef = useRef(null);
   const accessToken = useSelector(selectAccessToken);
   const role = useSelector(selectAdmin);
+
   const toggleChatBox = () => {
     setIsOpen((prevIsOpen) => !prevIsOpen);
     if (!isOpen) {
@@ -176,7 +177,10 @@ const ChatBox = () => {
   };
 
   return (
-    <Box className="chatbox__container">
+    <Box
+      className="chatbox__container"
+      sx={{ display: { xs: "none", md: "block" } }}
+    >
       {role === "User" && accessToken && !isOpen && (
         <div className="chatbox__icon__container">
           <FontAwesomeIcon
