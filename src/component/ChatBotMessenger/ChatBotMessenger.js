@@ -6,6 +6,7 @@ import Mess from "../../../public/mess.png";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { selectAccessToken, selectAdmin } from "@/src/services/Redux/useSlice";
+import { Box } from "@mui/material";
 
 const ChatBotMessenger = () => {
   const router = useRouter();
@@ -18,7 +19,10 @@ const ChatBotMessenger = () => {
   return (
     <>
       {accessToken && role === "User" && (
-        <div className="chatbot_mess">
+        <Box
+          sx={{ display: { xs: "none", md: "block" } }}
+          className="chatbot_mess"
+        >
           <Image
             onClick={handlePush}
             src={Mess}
@@ -26,7 +30,7 @@ const ChatBotMessenger = () => {
             width={50}
             height={50}
           />
-        </div>
+        </Box>
       )}
     </>
   );

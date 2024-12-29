@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
         <ReduxProvider>
           {children}
           <ChatBox />
-          {/* <ChatBotMessenger /> */}
+          <ChatBotMessenger />
           <DeleteCartTemp />
         </ReduxProvider>
       </body>
