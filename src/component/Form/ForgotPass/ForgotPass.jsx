@@ -25,7 +25,7 @@ const ForgotPass = ({ handleSubmitForgot, handleRemoveForgot }) => {
             Sign In?
           </p>
         </div>
-        <button onClick={() => handleSubmitForgot(email)}>Confirm</button>
+        <button onClick={(e) => handleSubmitForgot(e, email)}>Confirm</button>
       </form>
     </div>
   );
