@@ -10,22 +10,35 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import SimilarProducts from "./SimilarProducts";
 import { useSelector } from "react-redux";
-import { selectAccessToken, selectUid } from "@/src/services/Redux/useSlice";
+import { selectAccessToken } from "@/src/services/Redux/useSlice";
 import "react-toastify/dist/ReactToastify.css";
+import { getCurrentPetsByName } from "@/src/services/apiPet";
+import formatPetName from "@/src/services/formatPetName";
 
 const PetDetailComponent = ({ petName, petData, similarProducts }) => {
   const description = petData?.description;
-  const reviews = petData.rating;
   const accessToken = useSelector(selectAccessToken);
   const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState([]);
   const [openDescription, setOpenDescription] = useState(false);
   const [openReviews, setOpenReviews] = useState(false);
-  const userId = useSelector(selectUid);
-  console.log(reviews);
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
     }, 500);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getCurrentPetsByName(formatPetName(petName));
+        setReviews(res.pet?.rating);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
   }, []);
 
   if (loading) {
