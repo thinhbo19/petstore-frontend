@@ -15,13 +15,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 const PetDetailComponent = ({ petName, petData, similarProducts }) => {
   const description = petData?.description;
-  const reviews = petData?.rating;
+  const reviews = petData.rating;
   const accessToken = useSelector(selectAccessToken);
   const [loading, setLoading] = useState(true);
   const [openDescription, setOpenDescription] = useState(false);
   const [openReviews, setOpenReviews] = useState(false);
   const userId = useSelector(selectUid);
-
+  console.log(reviews);
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);

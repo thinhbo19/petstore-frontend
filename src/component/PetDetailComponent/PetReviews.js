@@ -48,7 +48,8 @@ const ReviewItem = ({ review }) => (
   <ListItem alignItems="flex-start">
     <Grow in>
       <Stack direction="row" spacing={2} width="100%">
-        <Avatar>{review.username.charAt(0).toUpperCase()}</Avatar>
+        <Avatar src={review.avatar} alt="userAva" />
+
         <ListItemText
           primary={
             <Box display="flex" flexDirection="column" marginBottom="10px">
