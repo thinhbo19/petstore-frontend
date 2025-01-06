@@ -338,8 +338,8 @@ const Statistical = ({ users }) => {
             onChange={handleYearChange}
           >
             {Array.from({ length: 5 }, (_, i) => (
-              <MenuItem key={i} value={2024 - i}>
-                {2024 - i}
+              <MenuItem key={i} value={2025 - i}>
+                {2025 - i}
               </MenuItem>
             ))}
           </Select>
