@@ -18,15 +18,29 @@ import Link from "next/link";
 import { generateSlug } from "@/src/services/slugifyConfig";
 import { formatDate } from "@/src/hooks/useFormatTime";
 import slugify from "slugify";
+import { getAllNews } from "@/src/services/apiNews";
 
-const News = ({ allNews }) => {
+const News = () => {
   const [page, setPage] = useState(1);
+  const [allNews, setAllNews] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredNews, setFilteredNews] = useState(allNews);
 
   const itemsPerPage = 20;
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await getAllNews();
+        setAllNews(res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [allNews]);
 
   useEffect(() => {
     // Lọc bài viết khi searchTerm thay đổi
